@@ -1,4 +1,4 @@
-import { createContext, useState, useContext } from "react";
+/* import { createContext, useState, useContext } from "react";
 
 const AuthContext = createContext();
 
@@ -24,3 +24,4 @@ export const AdminRoute = ({ children }) => {
   const { user } = useAuth();
   return user?.role === "admin" ? children : <Navigate to="/" />;
 };
+ */
