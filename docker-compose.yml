@@ -1,0 +1,13 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: Proyecto_end_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456J_
+      MYSQL_DATABASE: kahua_local
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db_data:/var/lib/mysql
+      - ./Proyecto_end.sql:/docker-entrypoint-initdb.d/Proyecto_end.sql
