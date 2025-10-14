@@ -1,22 +1,35 @@
-import { Navbar, Nav, Container } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Container, Nav, Navbar, Button } from "react-bootstrap";
+import "../assets/styles/Home.css";
 
-function NavbarApp() {
+export default function NavbarApp() {
   return (
-    <Navbar bg="light" expand="lg" className="shadow-sm">
-      <Container>
-        <Navbar.Brand as={Link} to="/">🍹 Kahua - Jugos Naturales</Navbar.Brand>
-        <Navbar.Toggle aria-controls="navbar-nav" />
-        <Navbar.Collapse id="navbar-nav">
-          <Nav className="ms-auto">
-            <Nav.Link as={Link} to="/">Inicio</Nav.Link>
-            <Nav.Link as={Link} to="/cart">Carrito</Nav.Link>
-            <Nav.Link as={Link} to="/login">Iniciar Sesión</Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+    <header className="main-header">
+      <Navbar expand="lg" fixed="top" className="navbar-custom">
+        <Container className="nav-container">
+          <Navbar.Brand href="#" className="logo">
+            Kahua<span>Jugos</span>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mx-auto">
+              <Nav.Link href="#">Inicio</Nav.Link>
+              <Nav.Link href="#">Productos</Nav.Link>
+              <Nav.Link href="#">Nosotros</Nav.Link>
+              <Nav.Link href="#">Beneficios</Nav.Link>
+              <Nav.Link href="#">Contacto</Nav.Link>
+            </Nav>
+            <div className="auth-buttons">
+              <Button variant="outline-primary" className="btn-login">
+                Iniciar Sesión
+              </Button>
+              <Button variant="primary" className="btn-register">
+                Registrarse
+              </Button>
+            </div>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </header>
   );
 }
-
-export default NavbarApp;
