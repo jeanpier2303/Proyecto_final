@@ -1,3 +1,5 @@
+/* Carga */
+
 import React, { useEffect, useState } from 'react';
 import '../assets/styles/Home.css';
 

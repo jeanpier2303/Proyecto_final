@@ -240,7 +240,7 @@ CREATE TABLE `departments` (
   `code` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -251,6 +251,32 @@ LOCK TABLES `departments` WRITE;
 /*!40000 ALTER TABLE `departments` DISABLE KEYS */;
 INSERT INTO `departments` VALUES (1,'Chocó','27'),(2,'Antioquia','05'),(3,'Cundinamarca','25'),(4,'Amazonas','91'),(5,'Arauca','81'),(6,'Atlántico','08'),(7,'Bogotá D.C.','11'),(8,'Bolívar','13'),(9,'Boyacá','15'),(10,'Caldas','17'),(11,'Caquetá','18'),(12,'Casanare','85'),(13,'Cauca','19'),(14,'Cesar','20'),(15,'Córdoba','23'),(16,'Guainía','94'),(17,'Guaviare','95'),(18,'Huila','41'),(19,'La Guajira','44'),(20,'Magdalena','47'),(21,'Meta','50'),(22,'Nariño','52'),(23,'Norte de Santander','54'),(24,'Putumayo','86'),(25,'Quindío','63'),(26,'Risaralda','66'),(27,'San Andrés, Providencia y Santa Catalina','88'),(28,'Santander','68'),(29,'Sucre','70'),(30,'Tolima','73'),(31,'Valle del Cauca','76'),(32,'Vaupés','97'),(33,'Vichada','99');
 /*!40000 ALTER TABLE `departments` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `identification_types`
+--
+
+DROP TABLE IF EXISTS `identification_types`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `identification_types` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `code` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_identification_code` (`code`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `identification_types`
+--
+
+LOCK TABLES `identification_types` WRITE;
+/*!40000 ALTER TABLE `identification_types` DISABLE KEYS */;
+INSERT INTO `identification_types` VALUES (1,'CC','Cédula de ciudadanía'),(2,'TI','Tarjeta de identidad'),(3,'CE','Cédula de extranjería');
+/*!40000 ALTER TABLE `identification_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -547,6 +573,8 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `role_id` int NOT NULL,
+  `identification_type_id` int DEFAULT NULL,
+  `identification_number` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `first_name` varchar(80) COLLATE utf8mb4_unicode_ci NOT NULL,
   `last_name` varchar(80) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -558,6 +586,8 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   KEY `idx_users_role` (`role_id`),
+  KEY `fk_users_identification_type` (`identification_type_id`),
+  CONSTRAINT `fk_users_identification_type` FOREIGN KEY (`identification_type_id`) REFERENCES `identification_types` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk_users_role` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -580,4 +610,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-10-09 23:23:50
+-- Dump completed on 2025-10-15 22:11:31

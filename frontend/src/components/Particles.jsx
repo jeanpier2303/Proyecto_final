@@ -1,3 +1,4 @@
+/* Fragmentos de Frotend */
 import React, { useEffect } from 'react';
 
 const Particles = () => {

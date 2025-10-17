@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from app.db import get_conn
+from app.db import get_db
 from app.schemas.product_schema import Product
 
 router = APIRouter(tags=["Productos"])
@@ -10,7 +10,7 @@ def listar_productos():
     Devuelve todos los productos activos (según tu tabla real).
     """
     try:
-        conn = get_conn()
+        conn = get_db()
         cursor = conn.cursor(dictionary=True)
 
         query = """
