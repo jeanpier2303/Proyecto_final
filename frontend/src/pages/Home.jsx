@@ -1,24 +1,66 @@
+<<<<<<< HEAD:frontend/src/pages/Home.jsx
 import { Row, Col } from 'react-bootstrap';
 import ProductCard from '../components/ProductCard';
+=======
+import React, { useState, useEffect } from "react";
+import NavbarApp from "../../components/NavbarApp";
+import HeroSection from "../../components/HeroSection";
+import BenefitsSection from "../../components/BenefitsSection";
+import Categories from "../../components/Categories";
+import CTASection from "../../components/CTASection";
+import Footer from "../../components/Footer";
+import Particles from "../../components/Particles";
+import Loader from "../../components/Loader";
+import "../../assets/styles/Home.css";
+>>>>>>> 42eb4246beed3ba7d6f23a1cadb647028d46c40d:frontend/src/pages/User/Home.jsx
 
 export default function Home() {
-  // Temporalmente creamos productos falsos (mock)
-  const productos = [
-    { id: 1, name: 'Jugo de Mango', price: 8000, img: '/mango.jpg' },
-    { id: 2, name: 'Jugo de Fresa', price: 8500, img: '/fresa.jpg' },
-    { id: 3, name: 'Jugo Verde', price: 9000, img: '/verde.jpg' },
-  ];
+  const [colorPalette, setColorPalette] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Cargar paleta guardada al inicio
+  useEffect(() => {
+    const savedPalette = localStorage.getItem('kahua-color-palette');
+    if (savedPalette) {
+      setColorPalette(JSON.parse(savedPalette));
+    }
+  }, []);
+
+  // Aplicar paleta de colores
+  useEffect(() => {
+    if (colorPalette) {
+      applyColorPalette(colorPalette);
+    }
+  }, [colorPalette]);
+
+  // Simular tiempo de carga
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000); // 3 segundos de loader
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const applyColorPalette = (palette) => {
+    document.documentElement.style.setProperty('--primary-color', palette.primary);
+    document.documentElement.style.setProperty('--secondary-color', palette.secondary);
+    document.documentElement.style.setProperty('--accent-color', palette.accent);
+    document.documentElement.style.setProperty('--dark-color', palette.dark);
+    document.documentElement.style.setProperty('--light-color', palette.light);
+    document.documentElement.style.setProperty('--text-color', palette.text);
+  };
 
   return (
-    <>
-      <h1 className="text-center text-success mb-4">Nuestros Jugos Naturales</h1>
-      <Row>
-        {productos.map(p => (
-          <Col key={p.id} md={4} className="mb-4">
-            <ProductCard product={p} />
-          </Col>
-        ))}
-      </Row>
-    </>
+    <div className="home-page">
+      {isLoading && <Loader />}
+      <Particles />
+      <NavbarApp />
+      <HeroSection />
+      <BenefitsSection />
+      <Categories />
+      <CTASection />
+      <Footer />
+    </div>
   );
 }
