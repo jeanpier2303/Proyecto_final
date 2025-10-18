@@ -1,13 +1,24 @@
-from sqlalchemy.orm import Session
-from app.models.categoria import Categoria
-from app.schemas.categoria import CategoriaCreate
+from sqlalchemy import text
+from app.db import get_connection
 
-def obtener_categorias(db: Session):
-    return db.query(Categoria).all()
+def obtener_categorias():
+    conn = get_connection()
+    result = conn.execute(text("SELECT * FROM categories"))
+    categorias = [dict(row._mapping) for row in result.fetchall()]
+    conn.close()
+    return categorias
 
-def crear_categoria(db: Session, categoria: CategoriaCreate):
-    nueva_categoria = Categoria(**categoria.dict())
-    db.add(nueva_categoria)
-    db.commit()
-    db.refresh(nueva_categoria)
-    return nueva_categoria
+
+def crear_categoria(categoria):
+    conn = get_connection()
+    sql = text("INSERT INTO categories (name, slug, description) VALUES (:name, :slug, :description)")
+    conn.execute(sql, {
+        "name": categoria.name,
+        "slug": categoria.slug,
+        "description": categoria.description
+    })
+    conn.commit()
+    # devolver la categoría recién creada
+    nueva = conn.execute(text("SELECT * FROM categories ORDER BY id DESC LIMIT 1")).fetchone()
+    conn.close()
+    return dict(nueva._mapping)
