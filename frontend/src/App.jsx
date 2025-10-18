@@ -1,8 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/User/Home";
-//import Product from "./pages/";
+import Home from "./pages/Home";
 import NavbarApp from "./components/NavbarApp";
-import Product from "./pages/User/Product";
+import Product from "./pages/Product";
+import Login from "./pages/Login/Login";
+import RegisterFORM from "./pages/Registro/Register";
 
 function App() {
   return (
@@ -12,6 +13,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/product/:id" element={<Product />} />
+          <Route path="/components/NavbarApp" element={<NavbarApp />} />
+          <Route path="/pages/Login/Login" element={<Login />} />
+          <Route path="/pages/Registro/Register" element={<RegisterFORM />} />
         </Routes>
       </div>
     </Router>

@@ -1,6 +1,7 @@
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
+
 function NavbarApp() {
   return (
     <Navbar bg="light" expand="lg" className="shadow-sm">
@@ -11,7 +12,7 @@ function NavbarApp() {
           <Nav className="ms-auto">
             <Nav.Link as={Link} to="/">Inicio</Nav.Link>
             <Nav.Link as={Link} to="/cart">Carrito</Nav.Link>
-            <Nav.Link as={Link} to="/login">Iniciar Sesión</Nav.Link>
+            <Nav.Link as={Link} to="./pages/Login/Login">Iniciar Sesión</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

@@ -1,5 +1,5 @@
 import { Row, Col } from 'react-bootstrap';
-import ProductCard from '../../components/ProductCard';
+import ProductCard from '../components/ProductCard';
 
 export default function Home() {
   // Temporalmente creamos productos falsos (mock)
