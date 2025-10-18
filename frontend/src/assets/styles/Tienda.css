@@ -1,4 +1,4 @@
-:root{
+/* :root{
   --accent:#6A0DAD;
   --accent-2:#ffbe76;
   --text:#102023;
@@ -14,18 +14,18 @@ body{margin:0;background:linear-gradient(180deg,#fff 0%,var(--bg) 100%);color:va
 a{color:inherit;text-decoration:none}
 .container{max-width:var(--container);margin:0 auto;padding:0 20px}
 
-/* Header */
+/* Header 
 .header{background:var(--accent);padding:16px 0;position:sticky;top:0;z-index:40}
 .header-inner{display:flex;align-items:center;justify-content:space-between}
 .logo{font-weight:800;font-size:22px;color:#032022}
 .logo span{color:#063f3f}
 .header-right{display:flex;align-items:center;gap:12px}
 .top-search{padding:10px 12px;border-radius:28px;border:0;min-width:200px;outline:0}
-
-/* Breadcrumb */
+*/
+/* Breadcrumb 
 .breadcrumb{padding:18px 0 8px 0;color:var(--muted)}
-
-/* Catalog layout */
+*/
+/* Catalog layout 
 .catalog{display:grid;grid-template-columns:280px 1fr;gap:20px;padding:6px 0 40px}
 .filters{background:var(--card);border-radius:12px;padding:14px;box-shadow:var(--shadow)}
 .filters h4{margin:0 0 10px 0}
@@ -35,8 +35,8 @@ a{color:inherit;text-decoration:none}
 .range-row input{width:48%;padding:8px;border-radius:8px;border:1px solid #eee}
 .filter-actions{display:flex;gap:8px;margin-top:8px}
 .page-btn{padding:8px 12px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);cursor:default;background:#fff}
-
-/* Main catalog */
+*/
+/* Main catalog 
 .main-catalog{
   display: flex;
   flex-direction: column;
@@ -44,8 +44,8 @@ a{color:inherit;text-decoration:none}
   align-items: stretch;
   padding-left: 4px;
   padding-right: 4px;
-}
-
+}*/
+/*
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -126,4 +126,4 @@ a{color:inherit;text-decoration:none}
   .grid{grid-template-columns:1fr}
   .header-inner{flex-direction:column;gap:10px;align-items:flex-start}
   .top-search{min-width:120px}
-}
+} */

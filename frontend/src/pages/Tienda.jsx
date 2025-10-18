@@ -1,5 +1,5 @@
 import React from "react";
-import "../../assets/styles/Tienda.css"; 
+import "../assets/styles/Tienda.css"; // ✅ Ruta corregida
 import { Container, Row, Col, Card, Button, Form } from "react-bootstrap";
 
 const productos = [
@@ -77,36 +77,35 @@ export default function Tienda() {
             </div>
           </aside>
 
-            <section className="main-catalog">
+          <section className="main-catalog">
             <div className="topbar">
-                <div className="left">
+              <div className="left">
                 <div id="resultsCount">{productos.length} productos</div>
-                </div>
+              </div>
             </div>
 
             <div className="grid">
-                {productos.map((p) => (
+              {productos.map((p) => (
                 <article key={p.id} className="card">
-                    <div className="card-media">
+                  <div className="card-media">
                     <img src={p.imagen} alt={p.nombre} />
-                    </div>
-                    <div className="card-body">
+                  </div>
+                  <div className="card-body">
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <strong>{p.nombre}</strong>
-                        <div className="badge">{p.categoria}</div>
+                      <strong>{p.nombre}</strong>
+                      <div className="badge">{p.categoria}</div>
                     </div>
                     <div className="muted" style={{ fontSize: "13px" }}>{p.descripcion}</div>
                     <div className="price">${p.precio.toFixed(2)}</div>
                     <div style={{ display: "flex", gap: "8px", marginTop: "6px" }}>
-                        <button className="btn">Ver</button>
-                        <button className="btn btn-primary">Añadir</button>
+                      <button className="btn">Ver</button>
+                      <button className="btn btn-primary">Añadir</button>
                     </div>
-                    </div>
+                  </div>
                 </article>
-                ))}
+              ))}
             </div>
-            </section>
-
+          </section>
         </section>
       </main>
 
