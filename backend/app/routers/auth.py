@@ -1,25 +1,31 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
-from app.db import get_db
-from app.schemas.user_schema import UserRegister, UserLogin, UserResponse
+# app/routers de registro y login
+from fastapi import APIRouter, HTTPException
+from app.schemas.user_schema import UserRegister, UserLogin
 from app.services.auth_service import create_user, authenticate_user
-from app.models.user import User
 
-router = APIRouter(tags=["Autenticación"]) #Ruta a probar en postman
+router = APIRouter(tags=["Autenticación"])
 
-# Registro
-@router.post("/register", response_model=UserResponse)
-def register_user(user: UserRegister, db: Session = Depends(get_db)):
-    existing_user = db.query(User).filter(User.email == user.email).first()
-    if existing_user:
-        raise HTTPException(status_code=400, detail="El correo ya está registrado")
-    new_user = create_user(db, user)
-    return new_user
+#  Registro
+@router.post("/register")
+def register_user(user: UserRegister):
+    new_user = create_user(user)
+    return {"success": True, "data": new_user}
 
 # Login
-@router.post("/login", response_model=UserResponse)
-def login(user: UserLogin, db: Session = Depends(get_db)):
-    user_db = authenticate_user(db, user.email, user.password)
-    if not user_db:
+@router.post("/login")
+def login_user(credentials: UserLogin):
+    user = authenticate_user(credentials.email, credentials.password)
+    if not user:
         raise HTTPException(status_code=401, detail="Credenciales inválidas")
-    return user_db
+    
+    # Se puedes generar un token simple (no JWT aún)
+    return {
+        "success": True,
+        "user": {
+            "id": user["id"],
+            "first_name": user["first_name"],
+            "last_name": user["last_name"],
+            "email": user["email"],
+            "role_id": user["role_id"]
+        }
+    }

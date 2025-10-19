@@ -13,9 +13,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Incluye todos tus routers con el prefijo /api
+#  prefijo /api
 app.include_router(auth.router, prefix="/api/auth")
-app.include_router(productos.router, prefix="/api/productos") # Ruta principal para Productos
+app.include_router(productos.router, prefix="/api/productos") # 
 app.include_router(cart.router, prefix="/api/cart")
 app.include_router(orders.router, prefix="/api/orders")
 app.include_router(admin.router, prefix="/api/admin")
