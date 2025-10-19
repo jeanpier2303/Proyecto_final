@@ -95,7 +95,7 @@ def get_cart_items(db: Session, user_id: int):
 
 
 def update_item(db: Session, item_id: int, qty: int):
-    # If qty <= 0 -> remove item
+    # 
     existing = db.execute(text("SELECT * FROM cart_items WHERE id = :id"), {"id": item_id}).fetchone()
     if not existing:
         return None

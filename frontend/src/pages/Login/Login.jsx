@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Button, Card, Image } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import axios from "axios";
+import { API_URL } from "../../config";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     if (!username || !password) {
@@ -20,21 +23,42 @@ const LoginPage = () => {
       return;
     }
 
-    // Simulación de login
-    if (username === "user" && password === "password") {
-      Swal.fire({
-        icon: "success",
-        title: "Inicio de sesión exitoso",
-        text: "Bienvenido de nuevo 😊",
-        confirmButtonColor: "#9C27B0",
+    try {
+         const response = await axios.post(`${API_URL}/auth/login`, {
+        email: username,
+        password: password,
       });
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Credenciales inválidas",
-        text: "Usuario o contraseña incorrectos.",
-        confirmButtonColor: "#9C27B0",
-      });
+
+      if (response.data.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Inicio de sesión exitoso",
+          text: `Bienvenido de nuevo 😊`,
+          confirmButtonColor: "#9C27B0",
+        });
+
+        // Guardar usuario en localStorage (puedes usar context o Redux después)
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+
+        // Redirigir al dashboard o página principal
+        navigate("/");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        Swal.fire({
+          icon: "error",
+          title: "Credenciales inválidas",
+          text: "Usuario o contraseña incorrectos.",
+          confirmButtonColor: "#9C27B0",
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Error en el servidor",
+          text: "No se pudo conectar con el servidor. Intenta más tarde.",
+          confirmButtonColor: "#9C27B0",
+        });
+      }
     }
   };
 
@@ -43,14 +67,12 @@ const LoginPage = () => {
       <Row className="w-100" style={{ maxWidth: "900px" }}>
         {/* Imagen lateral */}
         <Col md={6} className="d-flex align-items-center justify-content-center">
-          <div>
-            <Image
-              src="/login.jpg"
-              alt="Login"
-              fluid
-              style={{ borderRadius: "15px", maxHeight: "500px" }}
-            />
-          </div>
+          <Image
+            src="/login.jpg"
+            alt="Login"
+            fluid
+            style={{ borderRadius: "15px", maxHeight: "500px" }}
+          />
         </Col>
 
         {/* Formulario */}
@@ -89,12 +111,6 @@ const LoginPage = () => {
               >
                 Continuar
               </Button>
-
-              <div className="d-flex align-items-center mb-3">
-                <hr className="flex-grow-1" />
-                <span className="mx-2 text-muted">o</span>
-                <hr className="flex-grow-1" />
-              </div>
 
               <div className="text-center">
                 <p className="text-muted">

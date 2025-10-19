@@ -5,9 +5,16 @@ from app.routers import auth, cart, orders, admin, categorias, productos
 
 app = FastAPI(title="Proyecto_end - FastAPI")
 
+origins = [
+    "http://localhost:3000",   
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",   
+    "http://127.0.0.1:5173"
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -21,11 +28,6 @@ app.include_router(orders.router, prefix="/api/orders")
 app.include_router(admin.router, prefix="/api/admin")
 app.include_router(categorias.router, prefix="/api/categorias") 
 
-
-# Rutas que NO usarán el prefijo /api (solo la de raíz y las que dejes aquí)
-# ¡IMPORTANTE! Asegúrate que products y categorias no estén duplicadas
-# app.include_router(products.router) # <-- ¡Elimina o comenta esta línea!
-# app.include_router(categorias.router) # <-- ¡Elimina o comenta esta línea!
 
 @app.get("/")
 def root():

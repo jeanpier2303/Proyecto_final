@@ -14,18 +14,23 @@ def register_user(user: UserRegister):
 # Login
 @router.post("/login")
 def login_user(credentials: UserLogin):
-    user = authenticate_user(credentials.email, credentials.password)
-    if not user:
-        raise HTTPException(status_code=401, detail="Credenciales inválidas")
-    
-    # Se puedes generar un token simple (no JWT aún)
-    return {
-        "success": True,
-        "user": {
-            "id": user["id"],
-            "first_name": user["first_name"],
-            "last_name": user["last_name"],
-            "email": user["email"],
-            "role_id": user["role_id"]
+    try:
+        user = authenticate_user(credentials.email, credentials.password)
+        if not user:
+            raise HTTPException(status_code=401, detail="Credenciales inválidas")
+
+        return {
+            "success": True,
+            "user": {
+                "id": user["id"],
+                "first_name": user["first_name"],
+                "last_name": user["last_name"],
+                "email": user["email"],
+                "role_id": user["role_id"]
+            }
         }
-    }
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        # Cualquier otro error se devuelve con un 500
+        raise HTTPException(status_code=500, detail=str(e))
