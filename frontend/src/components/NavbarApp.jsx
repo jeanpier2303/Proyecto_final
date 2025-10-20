@@ -1,55 +1,37 @@
+// components/NavPublic.jsx
 import React, { useState, useEffect } from "react";
-import { Container, Navbar } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import "../assets/styles/Home.css";
+import { Link, useNavigate } from "react-router-dom";
 
-export default function NavbarApp() {
+const NavPublic = () => {
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const handleScroll = () => {
-      const isScrolled = window.scrollY > 50;
-      setScrolled(isScrolled);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <header className="main-header">
-      <Navbar
-        expand="lg"
-        fixed="top"
-        className={`navbar-custom ${scrolled ? "navbar-scrolled" : ""}`}
-      >
-        <Container className="nav-container">
-          <Navbar.Brand as={Link} to="/" className="logo-brand">
-            <img
-              src="/logo.png"
-              alt="Kahua Jugos"
-              className="logo-image"
-              onError={(e) => {
-                e.target.style.display = "none";
-                const fallback = e.target.parentElement.querySelector(".logo-fallback");
-                if (fallback) fallback.style.display = "block";
-              }}
-            />
-            <div className="logo-fallback" style={{ display: "none" }}>
-              Kahua<span>Jugos</span>
-            </div>
-          </Navbar.Brand>
-
-          {/* Botones personalizados con direccionamiento */}
-          <div className="auth-buttons">
-            <Link to="/login" className="btn btn-login">
-              Iniciar Sesión
-            </Link>
-            <Link to="/register" className="btn btn-register">
-              Registrarse
-            </Link>
+    <nav className={`navbar navbar-expand-lg fixed-top navbar-custom ${scrolled ? "navbar-scrolled" : ""}`}>
+      <div className="container">
+        <Link className="navbar-brand logo-brand" to="/">
+          <div className="logo-fallback">
+            Kahua<span>Jugos</span>
           </div>
-        </Container>
-      </Navbar>
-    </header>
+        </Link>
+
+        <div className="auth-buttons">
+          <button className="btn btn-login" onClick={() => navigate("/login")}>
+            Iniciar Sesión
+          </button>
+          <button className="btn btn-register" onClick={() => navigate("/register")}>
+            Registrarse
+          </button>
+        </div>
+      </div>
+    </nav>
   );
-}
+};
+
+export default NavPublic;
