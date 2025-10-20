@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import "../../assets/styles/Auth.css"; // Importamos el CSS mejorado
+import "../../assets/styles/Auth.css"; 
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -62,7 +62,6 @@ const RegisterForm = () => {
       return;
     }
 
-    // Simulación de registro exitoso
     setTimeout(() => {
       Swal.fire({
         icon: "success",
@@ -268,7 +267,6 @@ const RegisterForm = () => {
         </Col>
       </Row>
 
-      {/* Indicador de fuerza de contraseña */}
       {formData.password && (
         <div className="password-strength-final">
           <div className="strength-bars">
@@ -285,7 +283,6 @@ const RegisterForm = () => {
         </div>
       )}
 
-      {/* Términos y condiciones */}
       <div className="terms-section-final">
         <Form.Check
           type="checkbox"
@@ -329,7 +326,6 @@ const RegisterForm = () => {
 
   return (
     <div className="auth-final-container">
-      {/* Fondo animado premium */}
       <div className="premium-background">
         <div className="floating-geometrics">
           <div className="geo-circle geo-1"></div>
@@ -356,7 +352,6 @@ const RegisterForm = () => {
         <Row className="justify-content-center">
           <Col xs={12} sm={10} md={8} lg={6} xl={5}>
             <Card className="auth-card-final">
-              {/* Header elegante */}
               <div className="card-header-final">
                 <div className="header-brand">
                   <div className="brand-logo">
@@ -370,14 +365,12 @@ const RegisterForm = () => {
               </div>
 
               <Card.Body className="card-body-final">
-                {/* Indicador de pasos */}
                 {renderStepIndicator()}
                 
                 <Form onSubmit={handleSubmit} className="auth-form-final">
                   {currentStep === 1 ? renderStep1() : renderStep2()}
                 </Form>
 
-                {/* Enlace de login */}
                 <div className="auth-switch-final">
                   <p className="switch-text">
                     ¿Ya tienes cuenta?{" "}

@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { API_URL } from "../../config";
-import "../../assets/styles/Auth.css"; // Importamos el CSS mejorado
+import "../../assets/styles/Auth.css"; 
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -67,7 +67,6 @@ const LoginPage = () => {
 
   return (
     <div className="auth-final-container">
-      {/* Fondo animado premium */}
       <div className="premium-background">
         <div className="floating-geometrics">
           <div className="geo-circle geo-1"></div>
@@ -94,7 +93,6 @@ const LoginPage = () => {
         <Row className="justify-content-center">
           <Col xs={12} sm={10} md={8} lg={5} xl={4}>
             <Card className="auth-card-final">
-              {/* Header elegante */}
               <div className="card-header-final">
                 <div className="header-brand">
                   <div className="brand-logo">
@@ -109,7 +107,6 @@ const LoginPage = () => {
 
               <Card.Body className="card-body-final">
                 <Form onSubmit={handleLogin} className="auth-form-final">
-                  {/* Campo Email */}
                   <div className="form-group-final">
                     <div className="input-container">
                       <i className="input-icon-final fas fa-envelope"></i>
@@ -125,7 +122,6 @@ const LoginPage = () => {
                     </div>
                   </div>
 
-                  {/* Campo Contraseña */}
                   <div className="form-group-final">
                     <div className="input-container">
                       <i className="input-icon-final fas fa-lock"></i>
@@ -141,19 +137,15 @@ const LoginPage = () => {
                     </div>
                   </div>
 
-                  {/* Opciones adicionales */}
                   <div className="form-options-final">
                     <Form.Check
                       type="checkbox"
                       label="Recordar mi sesión"
                       className="custom-checkbox-final"
                     />
-                    <Link to="/forgot-password" className="forgot-password-link">
-                      ¿Olvidaste tu contraseña?
-                    </Link>
+                    
                   </div>
 
-                  {/* Botón principal CORREGIDO */}
                   <Button
                     type="submit"
                     className={`auth-btn-final login-btn ${isLoading ? 'btn-loading' : ''}`}
@@ -172,29 +164,11 @@ const LoginPage = () => {
                     )}
                   </Button>
 
-                  {/* Separador */}
-                  <div className="divider-final">
-                    <span className="divider-text">o continúa con</span>
-                  </div>
-
-                  {/* Botones sociales */}
-                  <div className="social-buttons-final">
-                    <button type="button" className="social-btn-final google">
-                      <i className="fab fa-google"></i>
-                      Google
-                    </button>
-                    <button type="button" className="social-btn-final facebook">
-                      <i className="fab fa-facebook-f"></i>
-                      Facebook
-                    </button>
-                  </div>
-
-                  {/* Enlace de registro */}
                   <div className="auth-switch-final">
                     <p className="switch-text">
                       ¿No tienes cuenta?{" "}
                       <Link to="/register" className="switch-link-final">
-                        Regístrate gratis
+                        Regístrate aquí
                       </Link>
                     </p>
                   </div>
