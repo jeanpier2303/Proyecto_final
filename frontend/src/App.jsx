@@ -5,6 +5,8 @@ import NavbarApp from "./components/NavbarApp";
 import NavPrivate from "./components/NavPrivate";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register"; 
+import HomePrivate from "./pages/HomePrivate.jsx";
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

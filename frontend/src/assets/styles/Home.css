@@ -1,4 +1,5 @@
-/* Variables de colores y estilos - Paleta Noche */ :root { --primary-color: #9C27B0;
+/* Variables de colores y estilos - Paleta Noche */ 
+:root { --primary-color: #9C27B0;
    --secondary-color: #673AB7; 
    --accent-color: #FF9800;
     --dark-color: #4A148C; 

@@ -1,25 +1,16 @@
-import React, { useState, useEffect } from "react";
-import "../../assets/styles/HomePrivate.css";
-import Logo from "../../assets/Logo-Kahua.png";
-
-// Importar imágenes de productos (debes agregar estas imágenes en tu proyecto)
-// import UvasImg from "../../assets/products/uvas.jpg";
-// import NaranjasImg from "../../assets/products/naranjas.jpg";
-// import MangosImg from "../../assets/products/mangos.jpg";
-// import FresasImg from "../../assets/products/fresas.jpg";
-// import PiñasImg from "../../assets/products/piñas.jpg";
-// import ManzanasImg from "../../assets/products/manzanas.jpg";
-// import ArandanosImg from "../../assets/products/arandanos.jpg";
-// import LimonesImg from "../../assets/products/limones.jpg";
+// frontend/src/pages/HomePrivate.jsx
+import React, { useState, useEffect } from 'react';
+import NavPrivate from '../components/NavPrivate';
+import Footer from '../components/Footer';
+import '../assets/styles/HomePrivate.css';
 
 const HomePrivate = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  
+  // Estados
   const [cart, setCart] = useState([]);
   const [activeCategory, setActiveCategory] = useState('todos');
   const [searchTerm, setSearchTerm] = useState('');
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
+  const [notification, setNotification] = useState({ show: false, message: '' });
 
   // Datos de productos
   const products = [
@@ -28,8 +19,8 @@ const HomePrivate = () => {
       name: 'Uvas Moradas Premium',
       category: 'uvas',
       price: 12.99,
-      image: '/assets/products/uvas.jpg',
-      description: 'Uvas moradas frescas de la mejor calidad, cultivadas en el valle central',
+      image: '🍇',
+      description: 'Uvas moradas frescas de la mejor calidad',
       stock: 25,
       featured: true
     },
@@ -38,8 +29,8 @@ const HomePrivate = () => {
       name: 'Naranjas Dulces',
       category: 'citricos',
       price: 8.50,
-      image: '/assets/products/naranjas.jpg',
-      description: 'Naranjas jugosas y dulces recién cosechadas del pacífico',
+      image: '🍊',
+      description: 'Naranjas jugosas y dulces',
       stock: 40,
       featured: true
     },
@@ -48,8 +39,8 @@ const HomePrivate = () => {
       name: 'Mangos Tropicales',
       category: 'tropicales',
       price: 15.75,
-      image: '/assets/products/mangos.jpg',
-      description: 'Mangos maduros y dulces importados de zonas tropicales',
+      image: '🥭',
+      description: 'Mangos maduros y dulces',
       stock: 18,
       featured: false
     },
@@ -58,8 +49,8 @@ const HomePrivate = () => {
       name: 'Fresas Frescas',
       category: 'berries',
       price: 9.99,
-      image: '/assets/products/fresas.jpg',
-      description: 'Fresas rojas y jugosas cultivadas en tierras altas',
+      image: '🍓',
+      description: 'Fresas rojas y jugosas',
       stock: 30,
       featured: true
     },
@@ -68,8 +59,8 @@ const HomePrivate = () => {
       name: 'Piñas Golden',
       category: 'tropicales',
       price: 11.25,
-      image: '/assets/products/piñas.jpg',
-      description: 'Piñas dulces y aromáticas de la variedad golden',
+      image: '🍍',
+      description: 'Piñas dulces y aromáticas',
       stock: 15,
       featured: false
     },
@@ -78,8 +69,8 @@ const HomePrivate = () => {
       name: 'Manzanas Verdes',
       category: 'manzanas',
       price: 7.80,
-      image: '/assets/products/manzanas.jpg',
-      description: 'Manzanas verdes crujientes de temporada',
+      image: '🍏',
+      description: 'Manzanas verdes crujientes',
       stock: 35,
       featured: false
     },
@@ -88,8 +79,8 @@ const HomePrivate = () => {
       name: 'Arándanos Orgánicos',
       category: 'berries',
       price: 13.50,
-      image: '/assets/products/arandanos.jpg',
-      description: 'Arándanos frescos orgánicos cultivados sin pesticidas',
+      image: '🫐',
+      description: 'Arándanos frescos orgánicos',
       stock: 22,
       featured: true
     },
@@ -98,27 +89,29 @@ const HomePrivate = () => {
       name: 'Limones Jugosos',
       category: 'citricos',
       price: 6.99,
-      image: '/assets/products/limones.jpg',
-      description: 'Limones amarillos jugosos recién cosechados',
+      image: '🍋',
+      description: 'Limones amarillos jugosos',
       stock: 50,
       featured: false
     }
   ];
 
   const categories = [
-    { id: 'todos', name: 'Todos los Productos', icon: 'fas fa-apple-alt' },
-    { id: 'uvas', name: 'Uvas y Pasas', icon: 'fas fa-grapes' },
-    { id: 'citricos', name: 'Cítricos', icon: 'fas fa-lemon' },
-    { id: 'tropicales', name: 'Frutas Tropicales', icon: 'fas fa-pineapple' },
-    { id: 'berries', name: 'Berries', icon: 'fas fa-strawberry' },
-    { id: 'manzanas', name: 'Manzanas y Peras', icon: 'fas fa-apple-alt' }
+    { id: 'todos', name: 'Todos los Productos', icon: '🍎' },
+    { id: 'uvas', name: 'Uvas y Pasas', icon: '🍇' },
+    { id: 'citricos', name: 'Cítricos', icon: '🍊' },
+    { id: 'tropicales', name: 'Frutas Tropicales', icon: '🥭' },
+    { id: 'berries', name: 'Berries', icon: '🫐' },
+    { id: 'manzanas', name: 'Manzanas y Peras', icon: '🍏' }
   ];
 
-  // Efecto para actualizar contador del carrito
-  useEffect(() => {
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    setCartCount(totalItems);
-  }, [cart]);
+  // Filtrar productos
+  const filteredProducts = products.filter(product => {
+    const matchesCategory = activeCategory === 'todos' || product.category === activeCategory;
+    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         product.description.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   // Funciones del carrito
   const addToCart = (productId) => {
@@ -152,66 +145,63 @@ const HomePrivate = () => {
     ));
   };
 
-  const toggleCart = () => {
-    setIsCartOpen(!isCartOpen);
-  };
-
-  const checkout = () => {
-    if (cart.length === 0) return;
-    
-    alert(`¡Gracias por tu compra ${user?.nombres || 'Usuario'}! Total: $${getCartTotal().toFixed(2)}`);
-    setCart([]);
-    setIsCartOpen(false);
-  };
-
   const getCartTotal = () => {
-    return cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
   };
 
+  const getTotalItems = () => {
+    return cart.reduce((total, item) => total + item.quantity, 0);
+  };
+
+  // Notificaciones
   const showNotification = (message) => {
-    // Crear notificación temporal
-    const notification = document.createElement('div');
-    notification.className = 'kahua-notification';
-    notification.textContent = message;
-    document.body.appendChild(notification);
-
-    // Animación de entrada
+    setNotification({ show: true, message });
     setTimeout(() => {
-      notification.classList.add('show');
-    }, 100);
-
-    // Animación de salida
-    setTimeout(() => {
-      notification.classList.remove('show');
-      setTimeout(() => {
-        document.body.removeChild(notification);
-      }, 300);
+      setNotification({ show: false, message: '' });
     }, 3000);
   };
 
-  // Filtrar productos
-  const filteredProducts = products.filter(product => {
-    const matchesCategory = activeCategory === 'todos' || product.category === activeCategory;
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.description.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  // Checkout
+  const handleCheckout = () => {
+    if (cart.length === 0) return;
+    
+    alert(`¡Gracias por tu compra! Total: $${getCartTotal().toFixed(2)}`);
+    setCart([]);
+    setIsCartOpen(false);
+    showNotification('¡Compra realizada exitosamente!');
+  };
+
+  // Efecto para manejar el scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const header = document.querySelector('.sales-header');
+      if (header && window.scrollY > 100) {
+        header.classList.add('scrolled');
+      } else if (header) {
+        header.classList.remove('scrolled');
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div className="kahua-private-home">
+      {/* Navigation */}
+      <NavPrivate />
+
       {/* Hero Section */}
-      <section className="private-hero">
+      <section className="sales-hero" id="inicio">
         <div className="container">
           <div className="hero-content">
-            <div className="welcome-box">
-              <img src={Logo} alt="Kahua" className="welcome-logo" />
-              <h1>¡Bienvenido, {user?.nombres || "Usuario"}!</h1>
-              <p>
-                Nos alegra verte de nuevo en <strong>Kahua</strong>.  
-                Explora nuestros productos naturales y descubre ofertas exclusivas para ti.
-              </p>
-              <button className="btn-primary" onClick={() => document.getElementById('productos').scrollIntoView({ behavior: 'smooth' })}>
-                Ver Productos
+            <div className="welcome-text">
+              <h1>
+                Bienvenido a <span>Kahua</span>
+              </h1>
+              <p>Descubre nuestra selección premium de frutas frescas, directamente del campo a tu mesa</p>
+              <button className="btn-primary">
+                Comprar Ahora
               </button>
             </div>
             
@@ -231,46 +221,50 @@ const HomePrivate = () => {
             </div>
           </div>
         </div>
-        
-        {/* Animación de frutas con imágenes */}
+
+        {/* Animación de frutas */}
         <div className="fruit-animation">
-          <div className="fruit fruit-1">
-            <div className="fruit-placeholder"></div>
-          </div>
-          <div className="fruit fruit-2">
-            <div className="fruit-placeholder"></div>
-          </div>
-          <div className="fruit fruit-3">
-            <div className="fruit-placeholder"></div>
-          </div>
-          <div className="fruit fruit-4">
-            <div className="fruit-placeholder"></div>
-          </div>
+          <div className="fruit fruit-1">🍇</div>
+          <div className="fruit fruit-2">🍊</div>
+          <div className="fruit fruit-3">🥭</div>
+          <div className="fruit fruit-4">🍓</div>
+          <div className="fruit fruit-5">🍍</div>
+          <div className="fruit fruit-6">🫐</div>
+        </div>
+
+        {/* Olas decorativas */}
+        <div className="hero-waves">
+          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="shape-fill"></path>
+          </svg>
         </div>
       </section>
 
       {/* Ofertas Especiales */}
-      <section className="special-offers">
+      <section className="special-offers" id="ofertas">
         <div className="container">
-          <h2>Ofertas Especiales</h2>
+          <div className="section-header">
+            <h2>Ofertas Especiales</h2>
+            <p>Descubre nuestras promociones exclusivas para clientes Kahua</p>
+          </div>
           <div className="offers-grid">
             <div className="offer-card">
-              <div className="offer-badge">20% OFF</div>
+              <div className="offer-badge">20%</div>
               <h3>Oferta de Temporada</h3>
-              <p>20% de descuento en frutas tropicales seleccionadas</p>
+              <p>20% de descuento en frutas tropicales</p>
               <button className="btn-offer">Ver Oferta</button>
             </div>
             <div className="offer-card">
-              <div className="offer-badge">33% OFF</div>
+              <div className="offer-badge">33%</div>
               <h3>Combo Familiar</h3>
               <p>Lleva 3 kilos de frutas variadas por el precio de 2</p>
               <button className="btn-offer">Ver Oferta</button>
             </div>
             <div className="offer-card">
-              <div className="offer-badge">ENVÍO GRATIS</div>
-              <h3>Primera Compra</h3>
-              <p>Envío gratis en tu primer pedido superior a $25.000</p>
-              <button className="btn-offer">Aprovechar</button>
+              <div className="offer-badge">15%</div>
+              <h3>Cliente Premium</h3>
+              <p>Descuento exclusivo para miembros Kahua</p>
+              <button className="btn-offer">Ver Oferta</button>
             </div>
           </div>
         </div>
@@ -280,69 +274,61 @@ const HomePrivate = () => {
       <section className="products-catalog" id="productos">
         <div className="container">
           <div className="catalog-header">
-            <h2>Nuestros Productos</h2>
-            <p>Descubre nuestra selección premium de frutas frescas</p>
-            
-            {/* Búsqueda */}
-            <div className="search-container">
-              <input 
-                type="text" 
-                placeholder="Buscar productos..." 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="search-input"
-              />
-              <button className="search-button">
-                <i className="fas fa-search"></i>
-              </button>
+            <div className="section-header">
+              <h2>Nuestros Productos</h2>
+              <p>Selección premium de frutas frescas y naturales</p>
             </div>
-
-            {/* Filtros de categoría */}
-            <div className="category-filters">
-              {categories.map(category => (
-                <button 
-                  key={category.id}
-                  className={`category-filter ${activeCategory === category.id ? 'active' : ''}`}
-                  onClick={() => setActiveCategory(category.id)}
-                >
-                  <i className={category.icon}></i>
-                  {category.name}
+            
+            <div className="catalog-controls">
+              <div className="search-container">
+                <input 
+                  type="text" 
+                  className="search-input"
+                  placeholder="Buscar productos..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <button className="search-button">
+                  🔍
                 </button>
-              ))}
+              </div>
+
+              <div className="category-filters">
+                {categories.map(category => (
+                  <button
+                    key={category.id}
+                    className={`category-filter ${activeCategory === category.id ? 'active' : ''}`}
+                    onClick={() => setActiveCategory(category.id)}
+                  >
+                    <span className="category-icon">{category.icon}</span>
+                    {category.name}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Grid de productos */}
           <div className="products-grid">
             {filteredProducts.map(product => (
               <div key={product.id} className="product-card">
                 {product.featured && <div className="featured-badge">Destacado</div>}
+                {product.stock < 10 && <div className="discount-badge">¡Últimas unidades!</div>}
                 
                 <div className="product-image">
-                  {/* Espacio para imagen del producto */}
-                  <div className="product-image-placeholder">
-                    <img 
-                      src={product.image} 
-                      alt={product.name}
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        e.target.nextSibling.style.display = 'flex';
-                      }}
-                    />
-                    <div className="image-fallback">
-                      <i className="fas fa-image"></i>
-                      <span>{product.name}</span>
-                    </div>
-                  </div>
+                  <span className="product-emoji">{product.image}</span>
                 </div>
                 
                 <div className="product-info">
                   <h3>{product.name}</h3>
                   <p>{product.description}</p>
+                  
                   <div className="product-meta">
-                    <span className="stock">Disponible: {product.stock}</span>
-                    <span className="price">${product.price.toFixed(2)}</span>
+                    <span className="stock">Stock: {product.stock}</span>
+                    <div className="price-container">
+                      <span className="price">${product.price.toFixed(2)}</span>
+                    </div>
                   </div>
+                  
                   <button 
                     className={`btn-add-to-cart ${product.stock === 0 ? 'disabled' : ''}`}
                     onClick={() => addToCart(product.id)}
@@ -361,26 +347,31 @@ const HomePrivate = () => {
       <div className={`cart-sidebar ${isCartOpen ? 'active' : ''}`}>
         <div className="cart-header">
           <h3>Tu Carrito</h3>
-          <button className="close-cart" onClick={toggleCart}>
-            <i className="fas fa-times"></i>
+          <button 
+            className="close-cart"
+            onClick={() => setIsCartOpen(false)}
+          >
+            ×
           </button>
         </div>
         
         <div className="cart-items">
           {cart.length === 0 ? (
             <div className="empty-cart">
+              <div className="empty-cart-icon">🛒</div>
               <p>Tu carrito está vacío</p>
-              <div className="empty-cart-icon">
-                <i className="fas fa-shopping-cart"></i>
-              </div>
+              <button 
+                className="btn-continue-shopping"
+                onClick={() => setIsCartOpen(false)}
+              >
+                Continuar Comprando
+              </button>
             </div>
           ) : (
             cart.map(item => (
               <div key={item.id} className="cart-item">
                 <div className="item-image">
-                  <div className="item-image-placeholder">
-                    <i className="fas fa-shopping-bag"></i>
-                  </div>
+                  <div className="item-emoji">{item.image}</div>
                 </div>
                 <div className="item-details">
                   <h4>{item.name}</h4>
@@ -388,18 +379,21 @@ const HomePrivate = () => {
                 </div>
                 <div className="item-controls">
                   <button onClick={() => updateQuantity(item.id, item.quantity - 1)}>
-                    <i className="fas fa-minus"></i>
+                    -
                   </button>
                   <span>{item.quantity}</span>
                   <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>
-                    <i className="fas fa-plus"></i>
+                    +
                   </button>
                 </div>
                 <div className="item-total">
                   ${(item.price * item.quantity).toFixed(2)}
                 </div>
-                <button className="remove-item" onClick={() => removeFromCart(item.id)}>
-                  <i className="fas fa-trash"></i>
+                <button 
+                  className="remove-item"
+                  onClick={() => removeFromCart(item.id)}
+                >
+                  🗑️
                 </button>
               </div>
             ))
@@ -408,12 +402,22 @@ const HomePrivate = () => {
 
         {cart.length > 0 && (
           <div className="cart-footer">
-            <div className="cart-total">
-              <span>Total:</span>
-              <span>${getCartTotal().toFixed(2)}</span>
+            <div className="cart-summary">
+              <div className="cart-shipping">
+                <span>Envío:</span>
+                <span>Gratis</span>
+              </div>
+              <div className="cart-total">
+                <span>Total:</span>
+                <span>${getCartTotal().toFixed(2)}</span>
+              </div>
             </div>
-            <button className="btn-checkout" onClick={checkout}>
-              Proceder al Pago
+            <button 
+              className="btn-checkout"
+              onClick={handleCheckout}
+            >
+              <span>Proceder al Pago</span>
+              <span>→</span>
             </button>
           </div>
         )}
@@ -421,15 +425,30 @@ const HomePrivate = () => {
 
       {/* Overlay para el carrito */}
       <div 
-        className={`cart-overlay ${isCartOpen ? 'active' : ''}`} 
-        onClick={toggleCart}
-      ></div>
+        className={`cart-overlay ${isCartOpen ? 'active' : ''}`}
+        onClick={() => setIsCartOpen(false)}
+      />
 
       {/* Botón flotante del carrito */}
-      <button className="floating-cart-btn" onClick={toggleCart}>
-        <i className="fas fa-shopping-cart"></i>
-        {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
-      </button>
+      {getTotalItems() > 0 && (
+        <button 
+          className="floating-cart-btn"
+          onClick={() => setIsCartOpen(true)}
+        >
+          🛒
+          <span className="cart-badge">{getTotalItems()}</span>
+        </button>
+      )}
+
+      {/* Notificación */}
+      {notification.show && (
+        <div className="kahua-notification show">
+          {notification.message}
+        </div>
+      )}
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };
