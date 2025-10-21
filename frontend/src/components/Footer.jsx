@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import "bootstrap-icons/font/bootstrap-icons.css"; 
 
 const Footer = () => {
   const [email, setEmail] = useState('');
@@ -20,15 +21,15 @@ const Footer = () => {
             <p>Jugos naturales directamente desde las costas del Pacífico.</p>
             <div className="social-links">
               <a href="#" className="social-link" title="Facebook">
-                <i className="fab fa-facebook-f"></i>
+                <i className="bi bi-facebook"></i>
               </a>
               <a href="#" className="social-link" title="Instagram">
-                <i className="fab fa-instagram"></i>
+                <i className="bi bi-instagram"></i>
               </a>
               <a href="#" className="social-link" title="TikTok">
-                <i className="fab fa-tiktok"></i>
+                <i className="bi bi-tiktok"></i>
               </a>
-            </div>
+            </div>  
           </div>
           
           <div className="footer-column">
