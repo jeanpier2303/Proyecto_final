@@ -79,7 +79,7 @@ function App() {
     <Router>
       {isAuthenticated ? <NavPrivate /> : <NavbarApp />}
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home />} /> 
         <Route 
           path="/login" 
           element={<Login onLogin={updateAuthStatus} />} 
@@ -88,7 +88,7 @@ function App() {
           path="/register" 
           element={<Register onRegister={updateAuthStatus} />} 
         />
-        <Route path="/dashboard" element={<HomePrivate />} />
+        <Route path="/dashboard" element={<HomePrivate />} /> 
       </Routes>
     </Router>
   );

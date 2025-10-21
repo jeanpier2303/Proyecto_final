@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import NavPrivate from '../components/NavPrivate';
 import Footer from '../components/Footer';
-import '../assets/styles/HomePrivate.css';
+//import '../assets/styles/HomePrivate.css';
 
 const HomePrivate = () => {
   // Estados

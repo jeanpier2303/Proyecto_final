@@ -1,3 +1,8 @@
+#venv\Scripts\activate
+#uvicorn app.main:app --reload --port 8001
+#pip install -r requirements.txt
+
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import auth, cart, orders, admin, categorias, productos

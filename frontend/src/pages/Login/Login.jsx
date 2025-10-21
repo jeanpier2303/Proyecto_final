@@ -4,7 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { API_URL } from "../../config";
-import "../../assets/styles/Auth.css"; // Importar
+import "../../assets/styles/Auth.css"; //
+import Logoblanc from "../../assets/logo-blanc.png"; // 
+
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -35,13 +37,6 @@ const LoginPage = () => {
       });
 
       if (response.data.success) {
-        Swal.fire({
-          icon: "success",
-          title: "Inicio de sesión exitoso",
-          text: `Bienvenido de nuevo 😊`,
-          confirmButtonColor: "#9C27B0",
-        });
-
         localStorage.setItem("user", JSON.stringify(response.data.user));
         navigate("/");
       }
@@ -83,9 +78,6 @@ const LoginPage = () => {
   return (
     <div className="kahua-auth-container">
       {/* Fondo animado con partículas */}
-      <div className="kahua-particles">
-        {renderParticles()}
-      </div>
 
       <Container className="kahua-auth-wrapper">
         <Row className="justify-content-center align-items-center min-vh-100">

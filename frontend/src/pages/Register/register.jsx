@@ -4,6 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import "../../assets/styles/Auth.css";
 import Logoblanc from "../../assets/Logo-blanc.png";
+import axios from "axios";
+import { API_URL } from "../../config";
+
 
 const RegisterForm = () => {
   const navigate = useNavigate();
@@ -125,31 +128,57 @@ const RegisterForm = () => {
     return true;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!validateStep2()) {
-      return;
-    }
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    setIsLoading(true);
+  if (!validateStep2()) return;
 
-    // Simulación de registro exitoso
-    setTimeout(() => {
+  setIsLoading(true);
+
+  try {
+    // Mapeo de campos 
+    const payload = {
+      first_name: formData.nombres,
+      last_name: formData.apellidos,
+      identification_type_id:
+        formData.tipoDocumento === "CC"
+          ? 1
+          : formData.tipoDocumento === "TI"
+          ? 2
+          : 3, //
+      identification_number: formData.numeroDocumento,
+      phone: formData.telefono,
+      email: formData.email,
+      password: formData.password,
+    };
+
+    const response = await axios.post(`${API_URL}/auth/register`, payload);
+
+    if (response.status === 200 || response.status === 201) {
       Swal.fire({
         icon: "success",
         title: "¡Cuenta creada exitosamente!",
         text: "Tu cuenta ha sido creada. Serás redirigido al login.",
         confirmButtonColor: "#9C27B0",
-      }).then(() => {
-        // Redirigir al login después del registro exitoso
-        navigate("/login");
-      });
-      setIsLoading(false);
-    }, 2000);
-  };
+      }).then(() => navigate("/login"));
+    }
+  } catch (error) {
+    console.error(error);
+    Swal.fire({
+      icon: "error",
+      title: "Error al registrar",
+      text:
+        error.response?.data?.detail ||
+        "Hubo un problema al crear la cuenta.",
+      confirmButtonColor: "#9C27B0",
+    });
+  } finally {
+    setIsLoading(false);
+  }
+};
 
-  // Generar partículas
+
+  //  partículas
   const renderParticles = () => {
     return [...Array(20)].map((_, i) => (
       <div 
