@@ -1,5 +1,6 @@
 import React from 'react';
 import { useInView } from 'react-intersection-observer';
+import "bootstrap-icons/font/bootstrap-icons.css"; 
 
 const CategoryCard = ({ icon, title, description, delay }) => {
   const [ref, inView] = useInView({
@@ -8,13 +9,15 @@ const CategoryCard = ({ icon, title, description, delay }) => {
   });
 
   return (
-    <div 
+    <div
       ref={ref}
       className={`col-md-6 col-lg-3 mb-4 fade-in ${inView ? 'visible' : ''}`}
       style={{ animationDelay: `${delay}ms` }}
     >
-      <div className="category-card">
-        <span className="category-icon">{icon}</span>
+      <div className="category-card text-center">
+        <div className="category-icon">
+          <i className={icon}></i> 
+        </div>
         <h3>{title}</h3>
         <p>{description}</p>
       </div>
@@ -25,25 +28,29 @@ const CategoryCard = ({ icon, title, description, delay }) => {
 const Categories = () => {
   const categories = [
     {
-      icon: "🥤",
+      icon: "bi bi-cup-straw", 
       title: "Jugos Clásicos",
-      description: "Sabores tradicionales con un toque especial Kahua. Frescura garantizada en cada botella."
+      description:
+        "Sabores tradicionales con un toque especial Kahua. Frescura garantizada en cada botella.",
     },
     {
-      icon: "🌱",
+      icon: "bi bi-flower3", 
       title: "Jugos Verdes",
-      description: "Combinaciones detox llenas de nutrientes. Perfectos para empezar tu día con energía."
+      description:
+        "Combinaciones detox llenas de nutrientes. Perfectos para empezar tu día con energía.",
     },
     {
-      icon: "🍓",
+      icon: "bi bi-brightness-alt-high", 
       title: "Mezclas Tropicales",
-      description: "Explosión de sabores exóticos directamente desde los trópicos del Pacífico."
+      description:
+        "Explosión de sabores exóticos directamente desde los trópicos del Pacífico.",
     },
     {
-      icon: "💪",
+      icon: "bi bi-lightning-charge", 
       title: "Energizantes",
-      description: "Boosters naturales con superfoods para maximizar tu rendimiento físico y mental."
-    }
+      description:
+        "Boosters naturales con superfoods para maximizar tu rendimiento físico y mental.",
+    },
   ];
 
   return (

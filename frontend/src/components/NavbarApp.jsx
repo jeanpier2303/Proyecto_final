@@ -1,6 +1,7 @@
 // components/NavPublic.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import LogoKahua from "../assets/Logo-Kahua.png";
 
 const NavPublic = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -16,9 +17,13 @@ const NavPublic = () => {
     <nav className={`navbar navbar-expand-lg fixed-top navbar-custom ${scrolled ? "navbar-scrolled" : ""}`}>
       <div className="container">
         <Link className="navbar-brand logo-brand" to="/">
-          <div className="logo-fallback">
-            Kahua<span>Jugos</span>
-          </div>
+        <div className="logo-fallback">
+          <img
+            src={LogoKahua}
+            alt="Kahua Jugos"
+            className="logo-img"
+          />
+        </div>
         </Link>
 
         <div className="auth-buttons">

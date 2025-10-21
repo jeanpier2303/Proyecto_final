@@ -16,7 +16,7 @@ const Footer = () => {
       <div className="container">
         <div className="footer-content">
           <div className="footer-column">
-            <h3>Kahua Jugos</h3>
+            <h3>Kahua </h3>
             <p>Jugos naturales directamente desde las costas del Pacífico.</p>
             <div className="social-links">
               <a href="#" className="social-link" title="Facebook">
@@ -45,11 +45,11 @@ const Footer = () => {
             <div className="contact-info">
               <p>
                 <i className="fas fa-phone"></i>
-                <span>+593 98 765 4321</span>
+                <span>+57 322 267 1234</span>
               </p>
               <p>
                 <i className="fas fa-envelope"></i>
-                <span>info@kahuajugos.com</span>
+                <span>kahuajugos.com</span>
               </p>
             </div>
           </div>
@@ -75,7 +75,7 @@ const Footer = () => {
         </div>
         
         <div className="footer-bottom">
-          <p>&copy; 2025 Kahua Jugos - Frutos del Pacífico</p>
+          <p>&copy; Kahua - Frutos del Pacífico</p>
         </div>
       </div>
     </footer>
