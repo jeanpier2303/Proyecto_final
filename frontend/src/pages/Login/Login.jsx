@@ -4,8 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { API_URL } from "../../config";
-import "../../assets/styles/Auth.css";
-import Logoblanc from "../../assets/Logo-blanc.png";
+import "../../assets/styles/Auth.css"; // Importar
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");

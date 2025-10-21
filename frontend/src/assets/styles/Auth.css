@@ -21,21 +21,35 @@
   font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* ===== CONTENEDOR PRINCIPAL ===== */
-.kahua-auth-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, var(--light-color) 0%, #E1BEE7 100%);
+/* Contenedor principal CORREGIDO - NO TOCA EL NAV */
+.auth-final-container {
+  min-height: 120vh;
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  isolation: isolate;
+  padding: 80px 20px;
+  background: linear-gradient(135deg, 
+    rgba(243, 229, 245, 0.95) 0%, 
+    rgba(225, 190, 231, 0.9) 50%, 
+    rgba(206, 147, 216, 0.85) 100%);
+  margin: 0;
 }
 
-/* ===== SISTEMA DE PARTÍCULAS MEJORADO - BOLITAS QUE SUBEN Y BAJAN ===== */
-.kahua-particles {
+/* Wrapper para separación del nav/footer */
+.auth-final-wrapper {
+  top: 0;
+  left: 0;
+  width: 500%;
+  height: 90%;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+/* Fondo premium animado */
+.premium-background {
   position: absolute;
   top: 0;
   left: 0;
