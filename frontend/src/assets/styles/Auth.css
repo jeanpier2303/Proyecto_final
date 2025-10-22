@@ -132,9 +132,11 @@
 .kahua-auth-wrapper {
   position: relative;
   z-index: 10;
-  width: 100%;
-  max-width: 1400px;
+  width: 95%;
+  height: 9%;
+  max-width: 1200px;
   margin: 0 auto;
+  transform: scale(0.90); 
 }
 
 /* ===== SECCIÓN DE BIENVENIDA ===== */
