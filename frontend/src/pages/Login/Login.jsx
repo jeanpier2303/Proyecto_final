@@ -35,17 +35,11 @@ const LoginPage = () => {
         password: password,
       });
 
-      if (response.data.success) {
-        Swal.fire({
-          icon: "success",
-          title: "Inicio de sesión exitoso",
-          text: `Bienvenido de nuevo 😊`,
-          confirmButtonColor: "#9C27B0",
-        });
-
+      if (response && response.data && response.data.user) {
         localStorage.setItem("user", JSON.stringify(response.data.user));
-        navigate("/");
+        navigate("/inicio");
       }
+
     } catch (error) {
       if (error.response && error.response.status === 401) {
         Swal.fire({
@@ -67,27 +61,9 @@ const LoginPage = () => {
     }
   };
 
-  // Generar partículas
-  const renderParticles = () => {
-    return [...Array(20)].map((_, i) => (
-      <div 
-        key={i}
-        className={`kahua-particle ${i % 4 === 0 ? 'small' : i % 4 === 1 ? 'medium' : i % 4 === 2 ? 'large' : 'special'} ${i % 3 === 0 ? 'twinkle' : ''}`}
-        style={{
-          left: `${Math.random() * 100}%`,
-          animationDelay: `${Math.random() * 15}s`,
-        }}
-      />
-    ));
-  };
-
   return (
     <div className="kahua-auth-container">
-      {/* Fondo animado con partículas */}
-      <div className="kahua-particles">
-        {renderParticles()}
-      </div>
-
+  
       <Container className="kahua-auth-wrapper">
         <Row className="justify-content-center align-items-center min-vh-100">
           {/* Sección de Bienvenida */}

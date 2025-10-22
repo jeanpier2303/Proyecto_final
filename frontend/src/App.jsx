@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import HomePrivate from "./pages/HomePrivate";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/register";
+import Inicio from "./pages/Inicio";
 
 function App() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -14,13 +15,10 @@ function App() {
     <Router>
       {user ? <NavPrivate /> : <NavbarApp />}
       <Routes>
-        {/* Rutas públicas */}
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={user ? <Navigate to="/home" /> : <Login />} />
+        <Route path="/login" element={user ? <Navigate to="/Inicio" /> : <Login />} />
         <Route path="/register" element={<Register />} />
-
-        {/* Rutas privadas */}
-        <Route path="/home" element={user ? <HomePrivate /> : <Navigate to="/login" />} />
+        <Route path="/Inicio" element={user ? <Inicio /> : <Navigate to="/login" />} />
       </Routes>
     </Router>
   );
