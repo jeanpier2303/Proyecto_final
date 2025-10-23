@@ -493,8 +493,8 @@
 
 /* ===== BOTONES PRINCIPALES ===== */
 .kahua-auth-btn {
-  width: 100%;
-  padding: 18px;
+  width: auto;
+  padding: 1.5rem ;
   border: none;
   border-radius: 12px;
   font-size: 1.1rem;

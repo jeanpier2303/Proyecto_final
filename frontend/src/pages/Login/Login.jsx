@@ -70,12 +70,12 @@ const LoginPage = () => {
           <Col md={6} className="d-none d-md-block">
             <div className="kahua-welcome-section">
               <div className="kahua-welcome-content">
-                <div className="kahua-logo-container">
+                <div className="kahua-logo-container"><a href="/">
                   <img 
                     src={Logoblanc} 
                     alt="Kahua Logo" 
                     className="kahua-logo-img"
-                  />
+                  /> </a>
                 </div>
                 <h1 className="kahua-welcome-title">Bienvenido a Kahua</h1>
                 <p className="kahua-welcome-text">
