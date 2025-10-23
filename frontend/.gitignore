@@ -1,3 +1,12 @@
+# ==========================
+#  FRONTEND (React / Vite)
+# ==========================
+node_modules/
+dist/
+dist-ssr/
+build/
+*.local
+
 # Logs
 logs
 *.log
@@ -7,18 +16,98 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
+# Editor and system files
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ==========================
+#  BACKEND (FastAPI / Python)
+# ==========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.py.class
+*.sqlite3
+*.db
+instance/
+*.egg-info/
+*.egg
+*.manifest
+*.spec
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+env.bak/
+
+# Compiled files
+*.so
+
+# Environment files
+.env
+.env.*
+
+# ==========================
+#  General project ignores
+# ==========================
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Backup files
+*.bak
+*.tmp
+*.swp
+*.swo
+
+# ==========================
+# 🧑 IDE / Editor config
+# ==========================
+.vscode/*
+!.vscode/extensions.json
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# ==========================
+#  Testing / Coverage
+# ==========================
+coverage/
+htmlcov/
+.tox/
+.nox/
+.pytest_cache/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+#  Deployment
+# Local development files
+*.pid
+*.seed
+*.pid.lock
+tmp/
+temp/
+celerybeat-schedule
+celerybeat.pid
