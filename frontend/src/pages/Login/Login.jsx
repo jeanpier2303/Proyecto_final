@@ -35,10 +35,10 @@ const LoginPage = () => {
         password: password,
       });
 
-      if (response && response.data && response.data.user) {
-        localStorage.setItem("user", JSON.stringify(response.data.user));
-        navigate("/inicio");
-      }
+    if (response && response.data.user) {
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      navigate("/Inicio");
+    }
 
     } catch (error) {
       if (error.response && error.response.status === 401) {
