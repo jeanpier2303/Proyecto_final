@@ -1,24 +1,18 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import NavbarApp from "./components/NavbarApp";
-import NavPrivate from "./components/NavPrivate";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import HomePrivate from "./pages/HomePrivate";
+import NavbarApp from "./components/NavbarApp";
 import Login from "./pages/Login/Login";
-import Register from "./pages/Registro/register";
-import Inicio from "./pages/Inicio";
+import RegisterFORM from "./pages/Registro/Register";
 
 function App() {
-  const user = JSON.parse(localStorage.getItem("user"));
-
   return (
     <Router>
-      {user ? <NavPrivate /> : <NavbarApp />}
+      <NavbarApp />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={user ? <Navigate to="/Inicio" /> : <Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/Inicio" element={user ? <Inicio /> : <Navigate to="/login" />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<RegisterFORM />} />
       </Routes>
     </Router>
   );

@@ -36,10 +36,10 @@ const LoginPage = () => {
         password: password,
       });
 
-      if (response && response.data && response.data.user) {
-        localStorage.setItem("user", JSON.stringify(response.data.user));
-        navigate("/inicio");
-      }
+    if (response && response.data.user) {
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      navigate("/Inicio");
+    }
 
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -71,12 +71,12 @@ const LoginPage = () => {
           <Col md={6} className="d-none d-md-block">
             <div className="kahua-welcome-section">
               <div className="kahua-welcome-content">
-                <div className="kahua-logo-container">
+                <div className="kahua-logo-container"><a href="/">
                   <img 
                     src={Logoblanc} 
                     alt="Kahua Logo" 
                     className="kahua-logo-img"
-                  />
+                  /> </a>
                 </div>
                 <h1 className="kahua-welcome-title">Bienvenido a Kahua</h1>
                 <p className="kahua-welcome-text">

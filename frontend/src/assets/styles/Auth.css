@@ -37,111 +37,6 @@
   margin: 0;
 }
 
-/* Wrapper para separación del nav/footer */
-.auth-final-wrapper {
-  top: 0;
-  left: 0;
-  width: 500%;
-  height: 90%;
-  margin: 0 auto;
-  position: relative;
-  z-index: 10;
-}
-
-/* Fondo premium animado */
-.premium-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.kahua-particle {
-  position: absolute;
-  border-radius: 50%;
-  opacity: 0;
-  animation: kahuaFloatBounce 20s infinite ease-in-out;
-  background: radial-gradient(circle at 30% 30%, var(--primary-color), var(--secondary-color));
-  box-shadow: 0 0 20px rgba(156, 39, 176, 0.3);
-}
-
-.kahua-particle.small {
-  width: 8px;
-  height: 8px;
-  animation-duration: 15s;
-  opacity: 0.6;
-}
-
-.kahua-particle.medium {
-  width: 12px;
-  height: 12px;
-  animation-duration: 20s;
-  opacity: 0.4;
-}
-
-.kahua-particle.large {
-  width: 18px;
-  height: 18px;
-  animation-duration: 25s;
-  opacity: 0.3;
-}
-
-.kahua-particle.special {
-  width: 10px;
-  height: 10px;
-  border-radius: 40% 60% 60% 40% / 50% 50% 50% 50%;
-  animation-duration: 18s;
-  opacity: 0.5;
-  background: radial-gradient(circle at 30% 30%, var(--accent-color), var(--primary-color));
-}
-
-@keyframes kahuaFloatBounce {
-  0%, 100% {
-    transform: translateY(100vh) translateX(0) scale(0.5);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.8;
-    transform: translateY(80vh) translateX(10px) scale(0.8);
-  }
-  25% {
-    transform: translateY(60vh) translateX(-15px) scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: translateY(40vh) translateX(20px) scale(1.1);
-    opacity: 0.9;
-  }
-  75% {
-    transform: translateY(20vh) translateX(-10px) scale(0.9);
-    opacity: 0.7;
-  }
-  90% {
-    transform: translateY(5vh) translateX(5px) scale(0.7);
-    opacity: 0.3;
-  }
-}
-
-/* Efecto de brillo intermitente para partículas */
-@keyframes particleTwinkle {
-  0%, 100% { 
-    opacity: 0.3;
-    box-shadow: 0 0 10px rgba(156, 39, 176, 0.2);
-  }
-  50% { 
-    opacity: 0.8;
-    box-shadow: 0 0 25px rgba(156, 39, 176, 0.5);
-  }
-}
-
-.kahua-particle.twinkle {
-  animation: kahuaFloatBounce 20s infinite ease-in-out, particleTwinkle 4s infinite ease-in-out;
-}
-
 /* ===== WRAPPER DE AUTENTICACIÓN ===== */
 .kahua-auth-wrapper {
   position: relative;
@@ -601,8 +496,8 @@
 
 /* ===== BOTONES PRINCIPALES ===== */
 .kahua-auth-btn {
-  width: 100%;
-  padding: 18px;
+  width: auto;
+  padding: 1.5rem ;
   border: none;
   border-radius: 12px;
   font-size: 1.1rem;
