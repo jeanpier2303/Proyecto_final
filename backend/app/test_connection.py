@@ -1,14 +1,14 @@
-""" para prbar la conexin a la base de datos """
+from sqlalchemy import create_engine, text
 
-from app.db import get_conn
+engine = create_engine("mysql+mysqlconnector://root:123456J_@127.0.0.1:3310/kahua_local", pool_pre_ping=True)
+
+
+
+
 
 try:
-    conn = get_conn()
-    cursor = conn.cursor()
-    cursor.execute("SELECT DATABASE();")
-    result = cursor.fetchone()
-    print(f" si dio esta conrctado correctamente a la base de datos: {result[0]}")
-    cursor.close()
-    conn.close()
+    with engine.connect() as conn:
+        result = conn.execute(text("SELECT NOW()"))
+        print("Conexión OK:", result.fetchone())
 except Exception as e:
-    print(f" Error mano jodidos {e}")
+    print("Error al conectar:", e)

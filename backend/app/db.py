@@ -8,10 +8,13 @@ from app.config import settings
 Base = declarative_base()
 
 # URL de conexión SQLAlchemy (ajustada para Docker local)
+#DATABASE_URL = (f"mysql+mysqlconnector://{settings.DB_USER}:{settings.DB_PASSWORD}"
+#    f"@127.0.0.1:3310/kahua_local")
+
 DATABASE_URL = (
-    f"mysql+mysqlconnector://{settings.DB_USER}:{settings.DB_PASSWORD}"
-    f"@localhost:3310/{settings.DB_NAME}"
+    f"mysql+mysqlconnector://root:123456J_@127.0.0.1:3310/kahua_local"
 )
+
 
 # Crear motor y sesión
 engine = create_engine(DATABASE_URL, pool_pre_ping=True)
