@@ -36,11 +36,7 @@ const LoginPage = () => {
         password: password,
       });
 
-<<<<<<< HEAD
-      if (response.data.success) {
-=======
       if (response && response.data && response.data.user) {
->>>>>>> 01cb8563f488a57a212ea3950d1ed330511f49d3
         localStorage.setItem("user", JSON.stringify(response.data.user));
         navigate("/inicio");
       }
