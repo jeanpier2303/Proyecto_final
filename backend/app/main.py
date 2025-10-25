@@ -14,7 +14,8 @@ origins = [
     "http://localhost:3000",   
     "http://127.0.0.1:3000",
     "http://localhost:5173",   
-    "http://127.0.0.1:5173"
+    "http://127.0.0.1:5173",
+    "http://localhost:5173"
 ]
 
 app.add_middleware(
@@ -32,6 +33,9 @@ app.include_router(cart.router, prefix="/api/cart")
 app.include_router(orders.router, prefix="/api/orders")
 app.include_router(admin.router, prefix="/api/admin")
 app.include_router(categorias.router, prefix="/api/categorias") 
+app.include_router(admin.router, prefix="/api/admin")
+
+
 
 
 @app.get("/")

@@ -4,16 +4,18 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { API_URL } from "../../config";
-import "../../assets/styles/Auth.css"; //
-import Logoblanc from "../../assets/logo-blanc.png"; // 
-
+import "../../assets/styles/Auth.css";
+import Logoblanc from "../../assets/logo-blanc.png";
+import { useAuth } from "../../contexts/AuthContext"; // ✅ usamos el contexto
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -36,11 +38,37 @@ const LoginPage = () => {
         password: password,
       });
 
-    if (response && response.data.user) {
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-      navigate("/Inicio");
-    }
+      if (response?.data?.user) {
+        const userData = response.data.user;
 
+        // ✅ Guardamos usuario globalmente
+        login(userData);
+
+        Swal.fire({
+          icon: "success",
+          title: "Inicio de sesión exitoso",
+          text: `Bienvenido ${userData.first_name || "Usuario"}`,
+          timer: 1800,
+          showConfirmButton: false,
+        });
+
+        // --------------------------- Redirección según el rol
+        if (userData.role_id === 4) {
+          // Administrador
+          navigate("/admin");
+        } else if (userData.role_id === 5) {
+          // Cliente
+          navigate("/Inicio");
+        } else {
+          navigate("/");
+        }
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Error de autenticación",
+          text: "No se pudo obtener información del usuario.",
+        });
+      }
     } catch (error) {
       if (error.response && error.response.status === 401) {
         Swal.fire({
@@ -52,7 +80,7 @@ const LoginPage = () => {
       } else {
         Swal.fire({
           icon: "error",
-          title: "Error en el servidor",
+          title: "Error del servidor",
           text: "No se pudo conectar con el servidor. Intenta más tarde.",
           confirmButtonColor: "#9C27B0",
         });
@@ -64,26 +92,23 @@ const LoginPage = () => {
 
   return (
     <div className="kahua-auth-container">
-  
       <Container className="kahua-auth-wrapper">
         <Row className="justify-content-center align-items-center min-vh-100">
-          {/* Sección de Bienvenida */}
+          {/* Sección de bienvenida */}
           <Col md={6} className="d-none d-md-block">
             <div className="kahua-welcome-section">
               <div className="kahua-welcome-content">
-                <div className="kahua-logo-container"><a href="/">
-                  <img 
-                    src={Logoblanc} 
-                    alt="Kahua Logo" 
-                    className="kahua-logo-img"
-                  /> </a>
+                <div className="kahua-logo-container">
+                  <a href="/">
+                    <img src={Logoblanc} alt="Kahua Logo" className="kahua-logo-img" />
+                  </a>
                 </div>
                 <h1 className="kahua-welcome-title">Bienvenido a Kahua</h1>
                 <p className="kahua-welcome-text">
-                  Descubre los jugos más frescos y naturales, preparados al momento 
+                  Descubre los jugos más frescos y naturales, preparados al momento
                   con ingredientes 100% orgánicos y llenos de sabor.
                 </p>
-                
+
                 <div className="kahua-features">
                   <div className="kahua-feature">
                     <i className="fas fa-leaf"></i>
@@ -102,7 +127,7 @@ const LoginPage = () => {
             </div>
           </Col>
 
-          {/* Sección del Formulario */}
+          {/* Formulario de login */}
           <Col xs={12} md={6}>
             <Card className="kahua-auth-card">
               <Card.Body className="kahua-card-body">
@@ -143,17 +168,17 @@ const LoginPage = () => {
                         disabled={isLoading}
                         required
                       />
-                      <button 
+                      <button
                         type="button"
                         className="kahua-toggle-password"
                         onClick={() => setShowPassword(!showPassword)}
                       >
-                        <i className={`fas fa-eye${showPassword ? '-slash' : ''}`}></i>
+                        <i className={`fas fa-eye${showPassword ? "-slash" : ""}`}></i>
                       </button>
                     </div>
                   </div>
 
-                  {/* Opciones adicionales */}
+                  {/* Opciones */}
                   <div className="kahua-form-options">
                     <Form.Check
                       type="checkbox"
@@ -165,10 +190,12 @@ const LoginPage = () => {
                     </Link>
                   </div>
 
-                  {/* Botón de Login */}
+                  {/* Botón de inicio */}
                   <Button
                     type="submit"
-                    className={`kahua-auth-btn kahua-login-btn ${isLoading ? 'kahua-btn-loading' : ''}`}
+                    className={`kahua-auth-btn kahua-login-btn ${
+                      isLoading ? "kahua-btn-loading" : ""
+                    }`}
                     disabled={isLoading}
                   >
                     {isLoading ? (

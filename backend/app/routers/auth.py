@@ -34,3 +34,8 @@ def login_user(credentials: UserLogin):
     except Exception as e:
         # Cualquier otro error se devuelve con un 500
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/register-admin")
+def register_admin(user: UserRegister):
+    new_user = create_user(user, role_id=4)
+    return {"success": True, "data": new_user}

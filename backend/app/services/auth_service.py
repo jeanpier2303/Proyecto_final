@@ -11,12 +11,12 @@ def get_password_hash(password: str):
 def verify_password(plain_password: str, hashed_password: str):
     return pwd_context.verify(plain_password, hashed_password)
 
-def create_user(user_data: UserRegister):
+def create_user(user_data: UserRegister, role_id: int = 5):
     conn = get_connection()
     hashed_password = get_password_hash(user_data.password)
     sql = text("""
         INSERT INTO users (first_name, last_name, identification_type_id, identification_number, phone, email, password_hash, role_id)
-        VALUES (:first_name, :last_name, :identification_type_id, :identification_number, :phone, :email, :password_hash, 5)
+        VALUES (:first_name, :last_name, :identification_type_id, :identification_number, :phone, :email, :password_hash, :role_id)
     """)
     conn.execute(sql, {
         "first_name": user_data.first_name,
@@ -25,12 +25,14 @@ def create_user(user_data: UserRegister):
         "identification_number": user_data.identification_number,
         "phone": user_data.phone,
         "email": user_data.email,
-        "password_hash": hashed_password
+        "password_hash": hashed_password,
+        "role_id": role_id
     })
     conn.commit()
     nuevo = conn.execute(text("SELECT * FROM users ORDER BY id DESC LIMIT 1")).fetchone()
     conn.close()
     return dict(nuevo._mapping)
+
 
 def authenticate_user(email: str, password: str):
     conn = get_connection()
