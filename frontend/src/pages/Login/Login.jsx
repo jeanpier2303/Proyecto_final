@@ -5,8 +5,11 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { API_URL } from "../../config";
 import "../../assets/styles/Auth.css";
-import Logoblanc from "../../assets/logo-blanc.png";
 import { useAuth } from "../../contexts/AuthContext"; // ✅ usamos el contexto
+import "../../assets/styles/Auth.css"; //
+import Logoblanc from "../../assets/images/categorias/logo-blanc.png";  
+
+
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");

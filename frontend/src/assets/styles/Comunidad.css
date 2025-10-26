@@ -1,0 +1,264 @@
+.comunidad-page {
+  background-color: var(--light-color);
+  min-height: 100vh;
+}
+
+.page-header {
+  padding: 2rem 0;
+}
+
+.page-title {
+  color: var(--dark-color);
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.page-subtitle {
+  color: var(--text-color);
+  font-size: 1.2rem;
+}
+
+.comunidad-tabs .nav-link {
+  color: var(--text-color);
+  font-weight: 600;
+  border: none;
+  padding: 1rem 2rem;
+}
+
+.comunidad-tabs .nav-link.active {
+  color: var(--primary-color);
+  border-bottom: 3px solid var(--primary-color);
+  background: transparent;
+}
+
+.section-subtitle {
+  color: var(--dark-color);
+  font-weight: 600;
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}
+
+/* Estilos para Recetas */
+.receta-card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.receta-img-container {
+  height: 200px;
+  overflow: hidden;
+}
+
+.receta-img {
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.receta-card:hover .receta-img {
+  transform: scale(1.05);
+}
+
+.receta-titulo {
+  color: var(--dark-color);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.receta-meta {
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.receta-autor {
+  font-weight: 600;
+  margin-right: 1rem;
+}
+
+.receta-descripcion {
+  color: var(--text-color);
+  line-height: 1.5;
+}
+
+.receta-stats {
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.btn-ver-receta {
+  border-radius: 25px;
+  padding: 0.5rem 1.5rem;
+  font-weight: 600;
+}
+
+.nueva-receta-card {
+  border: 2px dashed var(--primary-color);
+  border-radius: 15px;
+  background: rgba(156, 39, 176, 0.05);
+  height: 100%;
+}
+
+.btn-compartir-receta {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  border: none;
+  border-radius: 25px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+}
+
+/* Estilos para Testimonios */
+.testimonio-card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease;
+}
+
+.testimonio-card:hover {
+  transform: translateY(-5px);
+}
+
+.testimonio-img-container {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--primary-color);
+}
+
+.testimonio-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rating {
+  font-size: 0.9rem;
+}
+
+.testimonio-contenido {
+  color: var(--text-color);
+  font-style: italic;
+  line-height: 1.6;
+}
+
+/* Estilos para Eventos */
+.evento-card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.evento-card:hover {
+  transform: translateY(-5px);
+}
+
+.evento-img-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.evento-img {
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.evento-card:hover .evento-img {
+  transform: scale(1.05);
+}
+
+.evento-fecha {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: var(--primary-color);
+  color: white;
+  padding: 0.5rem;
+  border-radius: 10px;
+  text-align: center;
+  min-width: 60px;
+}
+
+.evento-dia {
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.evento-mes {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.evento-titulo {
+  color: var(--dark-color);
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.evento-info {
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.evento-hora, .evento-lugar {
+  margin-bottom: 0.5rem;
+}
+
+.evento-descripcion {
+  color: var(--text-color);
+  line-height: 1.5;
+}
+
+.evento-cupos .progress {
+  height: 8px;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.evento-cupos .progress-bar {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+
+.btn-inscribirse {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  border: none;
+  border-radius: 25px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  width: 100%;
+}
+
+.btn-inscribirse:disabled {
+  background: #6c757d;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .comunidad-tabs .nav-link {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .receta-card .row {
+    flex-direction: column;
+  }
+  
+  .receta-img-container {
+    height: 150px;
+  }
+  
+  .evento-card .row {
+    flex-direction: column;
+  }
+  
+  .evento-img-container {
+    height: 200px;
+  }
+}

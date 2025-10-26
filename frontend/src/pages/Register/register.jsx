@@ -3,7 +3,7 @@ import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import "../../assets/styles/Auth.css";
-import Logoblanc from "../../assets/Logo-blanc.png";
+import Logoblanc from "../../assets/images/categorias/Logo-blanc.png"; 
 import axios from "axios";
 import { API_URL } from "../../config";
 

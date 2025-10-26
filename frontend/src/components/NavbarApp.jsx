@@ -1,7 +1,7 @@
 // components/NavPublic.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import LogoKahua from "../assets/Logo-Kahua.png";
+import LogoKahua from "../assets/images/categorias/Logo-Kahua.png";
 
 const NavPublic = () => {
   const [scrolled, setScrolled] = useState(false);

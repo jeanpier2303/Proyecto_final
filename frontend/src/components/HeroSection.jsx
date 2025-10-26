@@ -1,6 +1,8 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom"
 
 export default function HeroSection() {
+    const navigate = useNavigate();
   return (
     <section className="hero">
       <div className="container">
@@ -12,8 +14,8 @@ export default function HeroSection() {
             Descubre la frescura de los frutos del Pacífico en cada sorbo. Nuestros jugos 100% naturales están elaborados con las mejores frutas para brindarte salud y bienestar.
           </p>
           <div className="hero-buttons">
-            <button className="btn btn-hero btn-explore">Explorar Sabores</button>
-            <button className="btn btn-hero btn-login">Conoce Más</button>
+            <button className="btn btn-hero btn-explore"  onClick={() => navigate("/login")} >Explorar Sabores</button>
+            <button className="btn btn-hero btn-login"  onClick={() => navigate("/login")} >Conoce Más</button>
           </div>
         </div>
       </div>
