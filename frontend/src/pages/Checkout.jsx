@@ -90,7 +90,7 @@ const Checkout = () => {
   }, [errors]);
 
   // Validar formulario
-  const validateForm = () => {
+  const validateForm = useCallback(() => {
     const newErrors = {};
 
     // Validar información de envío
@@ -120,7 +120,7 @@ const Checkout = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
+  }, [formData]);
 
   // Procesar pedido
   const handleSubmitOrder = useCallback((e) => {
@@ -167,7 +167,7 @@ const Checkout = () => {
     
     // Redirigir a confirmación
     navigate(`/order-confirmation/${orderData.orderId}`);
-  }, [formData, cartItems, orderSummary, navigate]);
+  }, [formData, cartItems, orderSummary, navigate, validateForm]);
 
   // Volver al carrito
   const handleBackToCart = useCallback(() => {
