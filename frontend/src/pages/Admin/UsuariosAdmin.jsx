@@ -55,20 +55,22 @@ const UsuariosAdmin = () => {
             <tr><th>ID</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Acciones</th></tr>
           </thead>
           <tbody>
-            {users.length === 0 ? (
-              <tr><td colSpan="5" className="text-center text-muted">No hay usuarios</td></tr>
-            ) : users.map((u) => (
-              <tr key={u.id}>
-                <td>{u.id}</td>
-                <td>{u.first_name} {u.last_name}</td>
-                <td>{u.email}</td>
-                <td>{u.role_id === 4 ? "Administrador" : "Cliente"}</td>
-                <td>
-                  <Button size="sm" variant="light" className="me-1" onClick={() => Swal.fire("Usuario", JSON.stringify(u, null, 2), "info")}>Ver</Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+              {users.length === 0 ? (
+                <tr><td colSpan="5" className="text-center text-muted">No hay usuarios</td></tr>
+              ) : (
+                users.map((u, index) => (
+                  <tr key={u.id}>
+                    <td>{index + 1}</td>
+                    <td>{u.first_name} {u.last_name}</td>
+                    <td>{u.email}</td>
+                    <td>{u.role_id === 4 ? "Administrador" : "Cliente"}</td>
+                    <td>
+                      <Button size="sm" variant="light" className="me-1" onClick={() => Swal.fire("Usuario", JSON.stringify(u, null, 2), "info")}>Ver</Button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
         </Table>
       )}
     </div>

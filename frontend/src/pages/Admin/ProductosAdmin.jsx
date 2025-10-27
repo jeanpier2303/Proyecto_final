@@ -10,6 +10,8 @@ const ProductosAdmin = () => {
   const [search, setSearch] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const fetchCategories = async () => {
     try {
@@ -26,9 +28,14 @@ const ProductosAdmin = () => {
       const q = [];
       if (categoryId) q.push(`category_id=${categoryId}`);
       if (search) q.push(`search=${encodeURIComponent(search)}`);
+      q.push(`page=${page}`, `limit=10`);
       const qs = q.length ? `?${q.join("&")}` : "";
+
       const res = await axios.get(`${API_URL}/admin/products${qs}`);
-      setProducts(res.data);
+      const data = res.data;
+
+      setProducts(data.data || data);
+      setTotalPages(data.total_pages || 1);
     } catch (err) {
       console.error("Error cargando productos:", err);
       Swal.fire("Error", "No se pudieron cargar los productos", "error");
@@ -42,20 +49,21 @@ const ProductosAdmin = () => {
   }, []);
 
   useEffect(() => {
-    // fetch on filter change
-    const t = setTimeout(() => {
-      fetchProducts();
-    }, 250);
-    return () => clearTimeout(t);
+    fetchProducts();
     // eslint-disable-next-line
-  }, [search, categoryId]);
+  }, [search, categoryId, page]);
 
   return (
     <div className="p-3">
       <Row className="align-items-center mb-3">
-        <Col><h3>📦 Gestión de Productos</h3></Col>
+        <Col>
+          <h3>📦 Gestión de Productos</h3>
+        </Col>
         <Col xs="auto">
-          <Button variant="primary" onClick={() => Swal.fire("Nota", "Agregar producto (no implementado).", "info")}>
+          <Button
+            variant="primary"
+            onClick={() => Swal.fire("Nota", "Agregar producto (no implementado).", "info")}
+          >
             + Nuevo producto
           </Button>
         </Col>
@@ -73,22 +81,24 @@ const ProductosAdmin = () => {
           <Form.Select value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
             <option value="">Todas las categorías</option>
             {categories.map((c) => (
-              <option key={c.id} value={c.id}>{c.name}</option>
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
             ))}
           </Form.Select>
-        </Col>
-        <Col md={2}>
-          <Button onClick={fetchProducts} className="w-100">Buscar</Button>
         </Col>
       </Row>
 
       {loading ? (
-        <div className="text-center py-4"><Spinner animation="border" /></div>
+        <div className="text-center py-5">
+          <Spinner animation="border" variant="primary" />
+          <p className="mt-3 text-muted">Cargando productos...</p>
+        </div>
       ) : (
         <Table striped bordered hover responsive>
-          <thead>
+          <thead className="table-light">
             <tr>
-              <th>ID</th>
+              <th>#</th>
               <th>Nombre</th>
               <th>Precio</th>
               <th>Stock</th>
@@ -98,23 +108,54 @@ const ProductosAdmin = () => {
           </thead>
           <tbody>
             {products.length === 0 ? (
-              <tr><td colSpan="6" className="text-center text-muted">No se encontraron productos</td></tr>
-            ) : products.map((p) => (
-              <tr key={p.id}>
-                <td>{p.id}</td>
-                <td>{p.name}</td>
-                <td>${p.price}</td>
-                <td>{p.stock}</td>
-                <td>{p.category}</td>
-                <td>
-                  <Button size="sm" variant="light" className="me-1" onClick={() => Swal.fire("Ver", JSON.stringify(p, null, 2), "info")}>Ver</Button>
-                  <Button size="sm" variant="outline-primary" onClick={() => Swal.fire("Editar", "Editar producto (no implementado).", "info")}>Editar</Button>
+              <tr>
+                <td colSpan="6" className="text-center text-muted py-3">
+                  No se encontraron productos
                 </td>
               </tr>
-            ))}
+            ) : (
+              products.map((p, index) => (
+                <tr key={p.id}>
+                  <td>{(page - 1) * 10 + (index + 1)}</td>
+                  <td>{p.name}</td>
+                  <td>${p.price}</td>
+                  <td>{p.stock}</td>
+                  <td>{p.category}</td>
+                  <td>
+                    <Button
+                      size="sm"
+                      variant="light"
+                      className="me-1"
+                      onClick={() => Swal.fire("Ver", JSON.stringify(p, null, 2), "info")}
+                    >
+                      Ver
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline-primary"
+                      onClick={() => Swal.fire("Editar", "Editar producto (no implementado).", "info")}
+                    >
+                      Editar
+                    </Button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </Table>
       )}
+
+      <div className="d-flex justify-content-between align-items-center mt-3">
+        <Button variant="secondary" disabled={page === 1} onClick={() => setPage(page - 1)}>
+          ← Anterior
+        </Button>
+        <span className="text-muted">
+          Página {page} de {totalPages}
+        </span>
+        <Button variant="secondary" disabled={page === totalPages} onClick={() => setPage(page + 1)}>
+          Siguiente →
+        </Button>
+      </div>
     </div>
   );
 };

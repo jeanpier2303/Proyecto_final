@@ -43,9 +43,37 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
   background-color: var(--bg);
 }
 /* Logo */
-.sidebar-admin .logo { text-align:center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.2); }
+/* .sidebar-admin .logo { text-align:center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.2); }
 .sidebar-admin .logo h1 { color: var(--white); font-size: 28px; font-weight: bold; margin-bottom: 5px; }
 .sidebar-admin .logo p { color: rgba(255,255,255,0.9); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+ */
+ 
+/* Contenedor del logo */
+.logo {
+  text-align: center;
+  padding: 10px 0;
+}
+
+/* Imagen del logo */
+.logo-img {
+  width: 20px;      /* Cambia este valor para hacerlo más pequeño o grande */
+  height: auto;     /* Mantiene proporción */
+  margin-bottom: 10px;
+  border-radius: 10px; /* opcional, suaviza bordes */
+}
+
+/* Título y subtítulo */
+.logo h1 {
+  font-size: 1.5rem; /* Ajusta tamaño del texto */
+  margin: 0;
+  color: #fff;       /* o el color que uses en tu sidebar */
+}
+
+.logo p {
+  font-size: 0.9rem;
+  color: #ccc;
+  margin: 0;
+}
 
 /* Menu */
 .menu-section { margin-bottom: 25px; }

@@ -39,3 +39,18 @@ def login_user(credentials: UserLogin):
 def register_admin(user: UserRegister):
     new_user = create_user(user, role_id=4)
     return {"success": True, "data": new_user}
+
+#------------------------------------------------------------------------------------------------------------
+from app.db import get_connection
+from sqlalchemy import text
+
+@router.get("/usuarios/{user_id}")
+def obtener_usuario(user_id: int):
+    conn = get_connection()
+    sql = text("SELECT id, first_name, last_name, email, role_id FROM users WHERE id = :id")
+    result = conn.execute(sql, {"id": user_id}).fetchone()
+    conn.close()
+    if not result:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    return dict(result._mapping)
+

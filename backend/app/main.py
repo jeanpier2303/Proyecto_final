@@ -6,6 +6,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import auth, cart, orders, admin, categorias, productos
+from app.routers import pedidos
 
 
 app = FastAPI(title="Proyecto_end - FastAPI")
@@ -34,6 +35,7 @@ app.include_router(orders.router, prefix="/api/orders")
 app.include_router(admin.router, prefix="/api/admin")
 app.include_router(categorias.router, prefix="/api/categorias") 
 app.include_router(admin.router, prefix="/api/admin")
+app.include_router(pedidos.router)
 
 
 

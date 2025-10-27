@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_URL } from "../../config";
-import { Form, Table, Button } from "react-bootstrap";
+import { Form, Table, Button, Spinner } from "react-bootstrap";
 
 const PedidosAdmin = () => {
   const [orders, setOrders] = useState([]);
@@ -13,14 +13,10 @@ const PedidosAdmin = () => {
   const fetchOrders = async () => {
     try {
       setLoading(true);
-      // 🔹 Consulta al backend con paginación
       const res = await axios.get(`${API_URL}/admin/orders?page=${page}&limit=10`);
       let data = res.data;
-
-      // 🔹 Extraemos los pedidos del objeto paginado
       let ordersList = data.data || [];
 
-      // 🔹 Aplicar filtro por estado (opcional, en frontend)
       if (status) {
         ordersList = ordersList.filter((o) => o.status === status);
       }
@@ -39,15 +35,15 @@ const PedidosAdmin = () => {
   }, [status, page]);
 
   return (
-    <div>
-      <h3>Gestión de Pedidos</h3>
+    <div className="p-3">
+      <h3>📋 Gestión de Pedidos</h3>
 
       <Form.Select
         className="my-3"
         value={status}
         onChange={(e) => {
           setStatus(e.target.value);
-          setPage(1); // reiniciar paginación al cambiar filtro
+          setPage(1);
         }}
       >
         <option value="">Todos los estados</option>
@@ -57,12 +53,15 @@ const PedidosAdmin = () => {
       </Form.Select>
 
       {loading ? (
-        <p>Cargando pedidos...</p>
+        <div className="text-center py-5">
+          <Spinner animation="border" variant="primary" />
+          <p className="mt-3 text-muted">Cargando pedidos...</p>
+        </div>
       ) : (
         <Table striped bordered hover responsive>
-          <thead>
+          <thead className="table-light">
             <tr>
-              <th>ID</th>
+              <th>#</th>
               <th>Cliente</th>
               <th>Fecha</th>
               <th>Total</th>
@@ -70,10 +69,11 @@ const PedidosAdmin = () => {
             </tr>
           </thead>
           <tbody>
+            {/* consultar con el profee */}
             {orders.length > 0 ? (
-              orders.map((o) => (
+              orders.map((o, index) => (
                 <tr key={o.id}>
-                  <td>{o.id}</td>
+                  <td>{(page - 1) * 10 + (index + 1)}</td>
                   <td>{o.customer}</td>
                   <td>{o.date}</td>
                   <td>${o.total}</td>
@@ -82,7 +82,7 @@ const PedidosAdmin = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="5" className="text-center">
+                <td colSpan="5" className="text-center text-muted py-3">
                   No hay pedidos disponibles
                 </td>
               </tr>
@@ -91,7 +91,6 @@ const PedidosAdmin = () => {
         </Table>
       )}
 
-      {/* 🔹 Controles de paginación */}
       <div className="d-flex justify-content-between align-items-center mt-3">
         <Button
           variant="secondary"
@@ -100,7 +99,7 @@ const PedidosAdmin = () => {
         >
           ← Anterior
         </Button>
-        <span>
+        <span className="text-muted">
           Página {page} de {totalPages}
         </span>
         <Button

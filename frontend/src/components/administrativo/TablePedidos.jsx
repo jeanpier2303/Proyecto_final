@@ -62,7 +62,7 @@ const TablePedidos = ({ endpoint = "orders" }) => {
         <table>
           <thead>
             <tr>
-              <th>ID</th>
+              <th>#</th>
               <th>Cliente</th>
               <th>Fecha</th>
               <th>Total</th>
@@ -78,16 +78,12 @@ const TablePedidos = ({ endpoint = "orders" }) => {
                 </td>
               </tr>
             ) : (
-              orders.map((o) => (
+              orders.map((o, index) => (
                 <tr key={o.id}>
-                  <td>
-                    <strong>#{o.id}</strong>
-                  </td>
+                  <td><strong>{(page - 1) * 10 + index + 1}</strong></td>
                   <td>{o.customer}</td>
                   <td>{o.date}</td>
-                  <td>
-                    <strong>${o.total}</strong>
-                  </td>
+                  <td><strong>${o.total}</strong></td>
                   <td>
                     <span className={`status-badge ${getStatusClass(o.status)}`}>
                       {o.status}
