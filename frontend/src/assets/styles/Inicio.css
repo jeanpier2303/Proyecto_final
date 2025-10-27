@@ -788,3 +788,32 @@
   }
 }
 
+/* boton telegramm */
+/* === BOTÓN FLOTANTE TELEGRAM === */
+.telegram-float {
+  position: fixed;
+  bottom: 20px;          /* 👈 distancia desde la parte inferior */
+  right: 20px;           /* 👈 distancia desde el borde derecho */
+  background-color: #0088cc;
+  border-radius: 50%;
+  width: 65px;
+  height: 65px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;         /* 👈 garantiza que esté por encima de todo */
+  box-shadow: 0 4px 10px rgba(0, 136, 204, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.telegram-float:hover {
+  transform: scale(1.1);
+  background-color: #007ab8;
+  box-shadow: 0 6px 15px rgba(0, 136, 204, 0.6);
+}
+
+.telegram-float-icon {
+  width: 35px;
+  height: 35px;
+  filter: brightness(0) invert(1);
+}

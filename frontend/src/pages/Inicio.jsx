@@ -826,7 +826,22 @@ const Inicio = () => {
         </Modal.Footer>
       </Modal>
 
+      {/* Botón flotante de Telegram */}
+      <a
+        href="https://t.me/KAHUA05_bot"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="telegram-float"
+      >
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg"
+          alt="Chat en Telegram"
+          className="telegram-float-icon"
+        />
+      </a>
+
       <Footer />
+      
     </>
   );
 };
