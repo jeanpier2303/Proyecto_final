@@ -2,6 +2,7 @@
 from fastapi import APIRouter, Query, Body, Depends
 from sqlalchemy import text
 from app.db import get_connection
+import re #para generar slugs
 from app.services.admin_service import (
     get_admin_stats,
     get_sales_data,
@@ -66,3 +67,47 @@ def admin_remove_category(category_id: int):
 @router.get("/sales/details")
 def admin_get_sales_details():
     return get_sales_details()
+
+
+#----------------------------------------------
+def generate_slug(name: str) -> str:    #ya que para agregar un producto necesitamos un slug obligatoriamente
+    slug = re.sub(r'[^a-zA-Z0-9]+', '-', name.lower()).strip('-')
+    return slug
+
+@router.post("/products")
+def create_product(
+    name: str = Body(...),
+    price: float = Body(...),
+    stock: int = Body(...),
+    category_id: int = Body(...),
+    conn=Depends(get_connection)
+):
+    try:
+        slug = generate_slug(name)
+
+        query = text("""
+            INSERT INTO products (name, slug, price, stock, category_id)
+            VALUES (:name, :slug, :price, :stock, :category_id)
+        """)
+        conn.execute(query, {
+            "name": name,
+            "slug": slug,
+            "price": price,
+            "stock": stock,
+            "category_id": category_id
+        })
+        conn.commit()
+
+        result = conn.execute(text("""
+            SELECT p.id, p.name, p.slug, p.price, p.stock, c.name AS category
+            FROM products p
+            LEFT JOIN categories c ON c.id = p.category_id
+            ORDER BY p.id DESC
+            LIMIT 1
+        """)).fetchone()
+
+        return dict(result._mapping)
+
+    except Exception as e:
+        print("❌ Error creando producto:", e)
+        return {"error": str(e)}

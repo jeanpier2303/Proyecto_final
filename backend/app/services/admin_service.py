@@ -19,22 +19,61 @@ def get_admin_stats():
     return dict(result._mapping)
 
 
-# --- 2. Ventas por día ---
+# --- 2. Ventas por día no tengo ni idea de que hizo la IA ---
+from datetime import datetime
+
 def get_sales_data(days: int = 7):
     conn = get_connection()
-    sql = text(f"""
+    try:
+        # 🔹 Consulta totalmente compatible con ONLY_FULL_GROUP_BY
+        sql_recent = text("""
             SELECT
-        DATE_FORMAT(created_at, '%a') AS day,
-        SUM(total) AS amount
-    FROM orders
-    WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
-    GROUP BY day
-    ORDER BY day ASC;
+                DATE(created_at) AS order_date,
+                SUM(total) AS amount
+            FROM orders
+            WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL :days DAY)
+            GROUP BY DATE(created_at)
+            ORDER BY DATE(created_at) ASC;
+        """)
+        rows = conn.execute(sql_recent, {"days": days}).fetchall()
 
-    """)
-    rows = conn.execute(sql).fetchall()
-    conn.close()
-    return {"labels": [r.day for r in rows], "data": [float(r.amount or 0) for r in rows]}
+        # 🔹 Si no hay datos recientes, usar el último mes con ventas
+        if not rows:
+            sql_last_month = text("""
+                SELECT
+                    DATE(created_at) AS order_date,
+                    SUM(total) AS amount
+                FROM orders
+                WHERE YEAR(created_at) = (
+                    SELECT YEAR(MAX(created_at)) FROM orders
+                )
+                AND MONTH(created_at) = (
+                    SELECT MONTH(MAX(created_at)) FROM orders
+                )
+                GROUP BY DATE(created_at)
+                ORDER BY DATE(created_at) ASC;
+            """)
+            rows = conn.execute(sql_last_month).fetchall()
+
+        if not rows:
+            return {"labels": [], "data": []}
+
+        # 🔹 Dar formato a las fechas en Python, no en SQL
+        labels = []
+        data = []
+        for r in rows:
+            date_obj = r.order_date
+            day_label = date_obj.strftime("%a %d/%m") if isinstance(date_obj, datetime) else str(date_obj)
+            labels.append(day_label)
+            data.append(float(r.amount or 0))
+
+        return {"labels": labels, "data": data}
+
+    except Exception as e:
+        print("❌ Error en get_sales_data:", e)
+        return {"labels": [], "data": []}
+    finally:
+        conn.close()
 
 
 # --- 3. Categorías más vendidas ---
@@ -143,20 +182,21 @@ def delete_category(category_id: int):
 def get_sales_details():
     conn = get_connection()
     sql = text("""
-        SELECT 
-            o.id AS order_id,
-            DATE_FORMAT(o.created_at, '%d/%m/%Y') AS date,
-            u.first_name AS client,
-            p.name AS product,
-            oi.quantity,
-            oi.price,
-            (oi.quantity * oi.price) AS subtotal
-        FROM order_items oi
-        JOIN orders o ON o.id = oi.order_id
-        JOIN users u ON u.id = o.user_id
-        JOIN products p ON p.id = oi.product_id
-        ORDER BY o.created_at DESC;
-    """)
+    SELECT
+        o.id AS order_id,
+        DATE_FORMAT(o.created_at, '%d/%m/%Y') AS date,
+        u.first_name AS client,
+        p.name AS product,
+        oi.qty AS quantity,
+        oi.unit_price AS price,
+        oi.subtotal
+    FROM order_items oi
+    JOIN orders o ON o.id = oi.order_id
+    JOIN users u ON u.id = o.user_id
+    JOIN products p ON p.id = oi.product_id
+    ORDER BY o.created_at DESC;
+""")
+
     rows = conn.execute(sql).fetchall()
     conn.close()
     return [dict(r._mapping) for r in rows]
