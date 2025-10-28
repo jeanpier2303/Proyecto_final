@@ -47,8 +47,10 @@ const PedidosAdmin = () => {
         }}
       >
         <option value="">Todos los estados</option>
-        <option value="En proceso">En proceso</option>
-        <option value="Completado">Completado</option>
+        <option value="Pendiente">Pendiente</option>
+        <option value="En preparación">En preparación</option>
+        <option value="Enviado">Enviado</option>
+        <option value="Entregado">Entregado</option>
         <option value="Cancelado">Cancelado</option>
       </Form.Select>
 

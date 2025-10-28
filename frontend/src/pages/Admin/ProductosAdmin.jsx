@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_URL } from "../../config";
-import { Table, Form, Row, Col, Button, Spinner } from "react-bootstrap";
+import { Table, Form, Row, Col, Button, Spinner, Modal } from "react-bootstrap";
 import Swal from "sweetalert2";
 
 const ProductosAdmin = () => {
+  const [allProducts, setAllProducts] = useState([]);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [search, setSearch] = useState("");
@@ -12,7 +13,20 @@ const ProductosAdmin = () => {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
+  const [newProduct, setNewProduct] = useState({
+    name: "",
+    price: "",
+    stock: "",
+    category_id: ""
+  });
+
+  const itemsPerPage = 10;
+
+  // 🔹 Cargar categorías
   const fetchCategories = async () => {
     try {
       const res = await axios.get(`${API_URL}/admin/categories/all`);
@@ -22,20 +36,22 @@ const ProductosAdmin = () => {
     }
   };
 
+  // 🔹 Cargar productos
   const fetchProducts = async () => {
     setLoading(true);
     try {
       const q = [];
       if (categoryId) q.push(`category_id=${categoryId}`);
       if (search) q.push(`search=${encodeURIComponent(search)}`);
-      q.push(`page=${page}`, `limit=10`);
       const qs = q.length ? `?${q.join("&")}` : "";
 
       const res = await axios.get(`${API_URL}/admin/products${qs}`);
-      const data = res.data;
+      const data = Array.isArray(res.data) ? res.data : res.data.data || [];
 
-      setProducts(data.data || data);
-      setTotalPages(data.total_pages || 1);
+      setAllProducts(data);
+      const filtered = data.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+      setProducts(filtered);
+      setTotalPages(Math.ceil(data.length / itemsPerPage));
     } catch (err) {
       console.error("Error cargando productos:", err);
       Swal.fire("Error", "No se pudieron cargar los productos", "error");
@@ -50,35 +66,54 @@ const ProductosAdmin = () => {
 
   useEffect(() => {
     fetchProducts();
-    // eslint-disable-next-line
   }, [search, categoryId, page]);
+
+  // 🔹 Crear producto
+  const handleAddProduct = async () => {
+    if (!newProduct.name || !newProduct.price || !newProduct.stock || !newProduct.category_id) {
+      Swal.fire("Campos requeridos", "Completa todos los campos", "warning");
+      return;
+    }
+
+    try {
+      const res = await axios.post(`${API_URL}/admin/products`, newProduct);
+      const created = res.data;
+
+      setAllProducts((prev) => [created, ...prev]);
+      setProducts((prev) => [created, ...prev.slice(0, itemsPerPage - 1)]);
+      Swal.fire("✅ Éxito", "Producto agregado correctamente", "success");
+      setShowAddModal(false);
+      setNewProduct({ name: "", price: "", stock: "", category_id: "" });
+    } catch (err) {
+      console.error("Error agregando producto:", err);
+      Swal.fire("Error", "No se pudo agregar el producto", "error");
+    }
+  };
 
   return (
     <div className="p-3">
-      <Row className="align-items-center mb-3">
-        <Col>
-          <h3>📦 Gestión de Productos</h3>
-        </Col>
-        <Col xs="auto">
-          <Button
-            variant="primary"
-            onClick={() => Swal.fire("Nota", "Agregar producto (no implementado).", "info")}
-          >
-            + Nuevo producto
-          </Button>
-        </Col>
-      </Row>
+      <h3>📦 Gestión de Productos</h3>
 
-      <Row className="g-2 mb-3">
+      {/* Filtros */}
+      <Row className="g-2 my-3">
         <Col md={6}>
           <Form.Control
             placeholder="Buscar producto por nombre..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
           />
         </Col>
         <Col md={4}>
-          <Form.Select value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
+          <Form.Select
+            value={categoryId}
+            onChange={(e) => {
+              setCategoryId(e.target.value);
+              setPage(1);
+            }}
+          >
             <option value="">Todas las categorías</option>
             {categories.map((c) => (
               <option key={c.id} value={c.id}>
@@ -87,8 +122,14 @@ const ProductosAdmin = () => {
             ))}
           </Form.Select>
         </Col>
+        <Col md={2} className="text-end">
+          <Button variant="primary" onClick={() => setShowAddModal(true)}>
+            + Nuevo producto
+          </Button>
+        </Col>
       </Row>
 
+      {/* Tabla */}
       {loading ? (
         <div className="text-center py-5">
           <Spinner animation="border" variant="primary" />
@@ -116,7 +157,7 @@ const ProductosAdmin = () => {
             ) : (
               products.map((p, index) => (
                 <tr key={p.id}>
-                  <td>{(page - 1) * 10 + (index + 1)}</td>
+                  <td>{(page - 1) * itemsPerPage + (index + 1)}</td>
                   <td>{p.name}</td>
                   <td>${p.price}</td>
                   <td>{p.stock}</td>
@@ -126,16 +167,12 @@ const ProductosAdmin = () => {
                       size="sm"
                       variant="light"
                       className="me-1"
-                      onClick={() => Swal.fire("Ver", JSON.stringify(p, null, 2), "info")}
+                      onClick={() => {
+                        setSelectedProduct(p);
+                        setShowViewModal(true);
+                      }}
                     >
                       Ver
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline-primary"
-                      onClick={() => Swal.fire("Editar", "Editar producto (no implementado).", "info")}
-                    >
-                      Editar
                     </Button>
                   </td>
                 </tr>
@@ -145,6 +182,7 @@ const ProductosAdmin = () => {
         </Table>
       )}
 
+      {/* Paginación */}
       <div className="d-flex justify-content-between align-items-center mt-3">
         <Button variant="secondary" disabled={page === 1} onClick={() => setPage(page - 1)}>
           ← Anterior
@@ -156,6 +194,87 @@ const ProductosAdmin = () => {
           Siguiente →
         </Button>
       </div>
+
+      {/* 🔹 Modal para agregar producto */}
+      <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>🆕 Nuevo Producto</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>Nombre</Form.Label>
+              <Form.Control
+                value={newProduct.name}
+                onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Precio</Form.Label>
+              <Form.Control
+                type="number"
+                value={newProduct.price}
+                onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Stock</Form.Label>
+              <Form.Control
+                type="number"
+                value={newProduct.stock}
+                onChange={(e) => setNewProduct({ ...newProduct, stock: e.target.value })}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Categoría</Form.Label>
+              <Form.Select
+                value={newProduct.category_id}
+                onChange={(e) => setNewProduct({ ...newProduct, category_id: e.target.value })}
+              >
+                <option value="">Selecciona categoría</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowAddModal(false)}>
+            Cancelar
+          </Button>
+          <Button variant="primary" onClick={handleAddProduct}>
+            Guardar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* 🔹 Modal para ver producto */}
+      <Modal show={showViewModal} onHide={() => setShowViewModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>📄 Detalles del Producto</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedProduct ? (
+            <div>
+              <p><strong>Nombre:</strong> {selectedProduct.name}</p>
+              <p><strong>Precio:</strong> ${selectedProduct.price}</p>
+              <p><strong>Stock:</strong> {selectedProduct.stock}</p>
+              <p><strong>Categoría:</strong> {selectedProduct.category}</p>
+              <p><strong>ID:</strong> {selectedProduct.id}</p>
+            </div>
+          ) : (
+            <p>No hay información del producto</p>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowViewModal(false)}>
+            Cerrar
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

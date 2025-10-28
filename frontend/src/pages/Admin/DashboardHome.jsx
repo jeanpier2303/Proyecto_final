@@ -16,20 +16,32 @@ const DashboardHome = () => {
       try {
         const [statsRes, salesRes, catRes] = await Promise.all([
           axios.get(`${API_URL}/admin/stats`),
-          axios.get(`${API_URL}/admin/sales?range=7`),
+          axios.get(`${API_URL}/admin/sales?range=30`),
           axios.get(`${API_URL}/admin/categories`),
         ]);
 
         // Estadísticas generales
-        setStats(statsRes.data);
-
         // Datos de ventas
+        let salesLabels = salesRes.data.labels ?? [];
+        let salesValues = salesRes.data.data ?? [];
+
+        // Si no hay ventas en el mes actual, intentar cargar del último mes con registros
+        if (salesValues.length === 0) {
+          try {
+            const lastMonthRes = await axios.get(`${API_URL}/admin/sales?range=30&last_with_sales=true`);
+            salesLabels = lastMonthRes.data.labels ?? [];
+            salesValues = lastMonthRes.data.data ?? [];
+          } catch (err2) {
+            console.warn("⚠️ No hay registros de ventas en meses anteriores tampoco.");
+          }
+        }
+
         setSalesData({
-          labels: salesRes.data.labels ?? [],
+          labels: salesLabels,
           datasets: [
             {
               label: "Ventas",
-              data: salesRes.data.data ?? [],
+              data: salesValues,
               borderColor: "#8B3A9C",
               backgroundColor: "rgba(139,58,156,0.08)",
               fill: true,

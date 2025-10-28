@@ -1,25 +1,48 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_URL } from "../../config";
-import { Table, Spinner, Button } from "react-bootstrap";
+import { Table, Spinner, Button, Alert } from "react-bootstrap";
 import { saveAs } from "file-saver";
 
 const VentasAdmin = () => {
   const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const limit = 10;
 
+  // 🔹 Formato COP
+  const formatCOP = (value) =>
+    new Intl.NumberFormat("es-CO", {
+      style: "currency",
+      currency: "COP",
+      minimumFractionDigits: 0,
+    }).format(value || 0);
+
+  // 🔹 Obtener ventas
   const fetchSales = async () => {
     setLoading(true);
+    setError("");
     try {
-      const res = await axios.get(`${API_URL}/admin/sales/details?page=${page}&limit=${limit}`);
-      const data = res.data;
-      setSales(data.data || data); // por si el backend no usa "data"
-      setTotalPages(data.total_pages || Math.ceil((data.total || data.length) / limit));
+      const res = await axios.get(`${API_URL}/admin/sales/details`);
+      let data = Array.isArray(res.data) ? res.data : res.data.data || [];
+
+      if (!data.length) {
+        setSales([]);
+        setTotalPages(1);
+        return;
+      }
+
+      // 🔸 Paginación manual en frontend
+      const start = (page - 1) * limit;
+      const end = start + limit;
+      const paginated = data.slice(start, end);
+      setSales(paginated);
+      setTotalPages(Math.ceil(data.length / limit));
     } catch (err) {
-      console.error("Error cargando ventas:", err);
+      console.error("❌ Error cargando ventas:", err);
+      setError("Ocurrió un error al cargar las ventas.");
     } finally {
       setLoading(false);
     }
@@ -29,9 +52,19 @@ const VentasAdmin = () => {
     fetchSales();
   }, [page]);
 
+  // para  Exportar CSV
   const exportCSV = () => {
     if (!sales.length) return;
-    const header = ["#", "Pedido", "Fecha", "Cliente", "Producto", "Cantidad", "Precio", "Subtotal"];
+    const header = [
+      "#",
+      "Pedido",
+      "Fecha",
+      "Cliente",
+      "Producto",
+      "Cantidad",
+      "Precio (COP)",
+      "Subtotal (COP)",
+    ];
     const rows = sales.map((s, i) => [
       (page - 1) * limit + i + 1,
       s.order_id,
@@ -39,8 +72,8 @@ const VentasAdmin = () => {
       s.client,
       s.product,
       s.quantity,
-      s.price,
-      s.subtotal
+      formatCOP(s.price),
+      formatCOP(s.subtotal),
     ]);
     const csv = [header, ...rows]
       .map((r) => r.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","))
@@ -54,18 +87,31 @@ const VentasAdmin = () => {
       <h3>💰 Ventas Detalladas</h3>
 
       <div className="mb-3 d-flex justify-content-end">
-        <Button variant="outline-primary" onClick={exportCSV} disabled={!sales.length}>
+        <Button
+          variant="outline-primary"
+          onClick={exportCSV}
+          disabled={!sales.length}
+        >
           Exportar CSV
         </Button>
       </div>
 
       {loading ? (
         <div className="text-center py-4">
-          <Spinner animation="border" />
+          <Spinner animation="border" variant="primary" />
+          <p className="text-muted mt-3">Cargando ventas...</p>
+        </div>
+      ) : error ? (
+        <Alert variant="danger" className="text-center">
+          {error}
+        </Alert>
+      ) : sales.length === 0 ? (
+        <div className="text-center py-4 text-muted">
+          No hay ventas registradas.
         </div>
       ) : (
         <Table striped bordered hover responsive>
-          <thead>
+          <thead className="table-light">
             <tr>
               <th>#</th>
               <th>Pedido</th>
@@ -78,48 +124,44 @@ const VentasAdmin = () => {
             </tr>
           </thead>
           <tbody>
-            {sales.length === 0 ? (
-              <tr>
-                <td colSpan="8" className="text-center text-muted">
-                  No hay ventas registradas
-                </td>
+            {sales.map((s, i) => (
+              <tr key={i}>
+                <td>{(page - 1) * limit + i + 1}</td>
+                <td>{s.order_id}</td>
+                <td>{s.date}</td>
+                <td>{s.client}</td>
+                <td>{s.product}</td>
+                <td>{s.quantity}</td>
+                <td>{formatCOP(s.price)}</td>
+                <td>{formatCOP(s.subtotal)}</td>
               </tr>
-            ) : (
-              sales.map((s, i) => (
-                <tr key={i}>
-                  <td>{(page - 1) * limit + i + 1}</td>
-                  <td>{s.order_id}</td>
-                  <td>{s.date}</td>
-                  <td>{s.client}</td>
-                  <td>{s.product}</td>
-                  <td>{s.quantity}</td>
-                  <td>${s.price}</td>
-                  <td>${s.subtotal}</td>
-                </tr>
-              ))
-            )}
+            ))}
           </tbody>
         </Table>
       )}
 
-      {/* 🔹 Paginación visual */}
-      <div className="d-flex justify-content-between align-items-center mt-3">
-        <Button
-          variant="secondary"
-          disabled={page === 1}
-          onClick={() => setPage((p) => Math.max(p - 1, 1))}
-        >
-          ← Anterior
-        </Button>
-        <span>Página {page} de {totalPages}</span>
-        <Button
-          variant="secondary"
-          disabled={page === totalPages}
-          onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
-        >
-          Siguiente →
-        </Button>
-      </div>
+      {/* Paginación visual */}
+      {sales.length > 0 && (
+        <div className="d-flex justify-content-between align-items-center mt-3">
+          <Button
+            variant="secondary"
+            disabled={page === 1}
+            onClick={() => setPage((p) => Math.max(p - 1, 1))}
+          >
+            ← Anterior
+          </Button>
+          <span className="text-muted">
+            Página {page} de {totalPages}
+          </span>
+          <Button
+            variant="secondary"
+            disabled={page === totalPages}
+            onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+          >
+            Siguiente →
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
