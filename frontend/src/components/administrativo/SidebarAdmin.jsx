@@ -1,13 +1,13 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import "../../assets/styles/admin.css";
+import Logoblanc from "../../assets/images/categorias/Logo-blanc.png";
 
 const SidebarAdmin = () => {
   return (
     <aside className="sidebar-admin">
       <div className="logo">
-        <h1>Kahua</h1>
-        <p>Frutos del Pacífico</p>
+        <img src={Logoblanc} alt="Kahua Logo" className="logo-mg" />
       </div>
 
       <div className="menu-section">

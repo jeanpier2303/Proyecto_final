@@ -55,11 +55,9 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 }
 
 /* Imagen del logo */
-.logo-img {
-  width: 20px;      /* Cambia este valor para hacerlo más pequeño o grande */
-  height: auto;     /* Mantiene proporción */
-  margin-bottom: 10px;
-  border-radius: 10px; /* opcional, suaviza bordes */
+.logo-mg {
+  height: 170px;       
+  width: auto;      
 }
 
 /* Título y subtítulo */

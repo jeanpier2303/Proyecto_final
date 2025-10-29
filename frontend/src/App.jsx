@@ -25,7 +25,7 @@ function App() {
           <Routes>
             {/* Rutas principales */}
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<AdminDashboard />} />
             <Route path="/register" element={<Register />} />
 
             {/* Rutas privadas o internas */}
