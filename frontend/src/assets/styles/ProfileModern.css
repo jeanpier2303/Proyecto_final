@@ -1,0 +1,165 @@
+/* 🌈 Estilo moderno y actual para Perfil Kahua */
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #f3e5f5, #ede7f6);
+  color: #333;
+  padding-top: 5rem; /* Altura del navbar */
+}
+
+/* --- Contenedor principal --- */
+.perfil-modern-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-top: 7rem;
+}
+
+/* --- Cabecera del perfil --- */
+.perfil-header-card {
+  background: linear-gradient(135deg, #9c27b0, #673ab7);
+  color: #fff;
+  border-radius: 1.5rem;
+  padding: 2rem 2.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.perfil-avatar {
+  width: 110px;
+  height: 110px;
+  border: 4px solid #fff;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.perfil-avatar:hover {
+  transform: scale(1.05);
+}
+
+.perfil-nombre {
+  font-weight: 600;
+  font-size: 1.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.perfil-email {
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-bottom: 0.4rem;
+  text-transform: lowercase;
+}
+
+.perfil-nivel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.perfil-header-card .btn {
+  background-color: #fff;
+  color: #6a1b9a;
+  border: none;
+  font-weight: 600;
+  border-radius: 50px;
+  padding: 0.6rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.perfil-header-card .btn:hover {
+  background-color: #f3e5f5;
+  transform: scale(1.04);
+}
+
+/* --- Cards de información --- */
+.perfil-info-card {
+  background: #fff;
+  border-radius: 1rem;
+  border: none;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.perfil-info-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.perfil-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.perfil-card-icon {
+  color: #6a1b9a;
+}
+
+.perfil-info-card h5 {
+  font-size: 1.05rem;
+  color: #6a1b9a;
+  font-weight: 600;
+  margin: 0;
+}
+
+.perfil-info-card hr {
+  opacity: 0.15;
+  margin: 0.8rem 0 1rem;
+}
+
+.perfil-info-card p {
+  margin: 0.3rem 0;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+/* --- Badges y estados --- */
+.badge {
+  font-size: 0.75rem;
+  border-radius: 20px;
+  padding: 0.35rem 0.8rem;
+  font-weight: 500;
+}
+
+/* --- Recompensas --- */
+.text-primary {
+  color: #6a1b9a !important;
+}
+
+.badge.bg-success {
+  background-color: #4caf50 !important;
+}
+
+/* --- Responsividad --- */
+@media (max-width: 768px) {
+  .perfil-header-card {
+    text-align: center;
+    padding: 2rem 1.2rem;
+  }
+
+  .perfil-avatar {
+    width: 85px;
+    height: 85px;
+  }
+
+  .perfil-nombre {
+    font-size: 1.25rem;
+  }
+
+  .perfil-header-card .btn {
+    margin-top: 1rem;
+  }
+}
+@media (max-width: 576px) {
+  .perfil-modern-container {
+    padding: 1rem;
+  }
+
+  .perfil-info-card {
+    padding: 1rem;
+  }
+}
+
+/* Espaciado inferior para evitar que el footer se pegue */
+.perfil-modern-container {
+  padding-bottom: 2rem;
+}
