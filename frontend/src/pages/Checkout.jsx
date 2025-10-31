@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
+// Checkout.jsx
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import NavPrivate from "../components/NavPrivate";
 import Footer from "../components/Footer";
@@ -15,31 +16,53 @@ const Checkout = () => {
     total: 0
   });
 
+  // Datos de departamentos y ciudades de Colombia
+  const colombiaData = useMemo(() => ({
+    "Bogotá D.C.": ["Bogotá"],
+    "Antioquia": ["Medellín", "Bello", "Itagüí", "Envigado", "Sabaneta", "Rionegro"],
+    "Valle del Cauca": ["Cali", "Palmira", "Buenaventura", "Tuluá", "Cartago"],
+    "Cundinamarca": ["Soacha", "Facatativá", "Girardot", "Zipaquirá", "Chía"],
+    "Santander": ["Bucaramanga", "Floridablanca", "Girón", "Piedecuesta"],
+    "Atlántico": ["Barranquilla", "Soledad", "Malambo", "Puerto Colombia"],
+    "Bolívar": ["Cartagena", "Magangué", "Turbaco"],
+    "Nariño": ["Pasto", "Ipiales", "Tumaco"],
+    "Córdoba": ["Montería", "Cereté", "Lorica"],
+    "Boyacá": ["Tunja", "Sogamoso", "Duitama"],
+    "Caldas": ["Manizales", "La Dorada", "Chinchiná"],
+    "Magdalena": ["Santa Marta", "Ciénaga", "Fundación"],
+    "Tolima": ["Ibagué", "Espinal", "Melgar"],
+    "Norte de Santander": ["Cúcuta", "Ocaña", "Pamplona"],
+    "Huila": ["Neiva", "Pitalito", "Garzón"],
+    "Cauca": ["Popayán", "Santander de Quilichao"],
+    "Risaralda": ["Pereira", "Dosquebradas", "Santa Rosa de Cabal"],
+    "Quindío": ["Armenia", "Calarcá", "Montenegro"],
+    "Sucre": ["Sincelejo", "Corozal", "Sampués"],
+    "Meta": ["Villavicencio", "Acacías", "Granada"]
+  }), []);
+
   // Estados del formulario
   const [formData, setFormData] = useState({
-    // Información de envío
     firstName: "",
     lastName: "",
     email: "",
     phone: "",
     address: "",
-    city: "",
     state: "",
+    city: "",
     zipCode: "",
     country: "Colombia",
-    
-    // Información de pago
     paymentMethod: "card",
     cardNumber: "",
     cardName: "",
     expiryDate: "",
     cvv: "",
-    
-    // Términos
     acceptTerms: false
   });
 
   const [errors, setErrors] = useState({});
+  const [cities, setCities] = useState([]);
+  const [completedSections, setCompletedSections] = useState([]);
+  const [currentStep, setCurrentStep] = useState(0);
 
   // Cargar datos del carrito
   useEffect(() => {
@@ -50,7 +73,6 @@ const Checkout = () => {
           const parsedCart = JSON.parse(storedCart);
           setCartItems(parsedCart);
           
-          // Calcular resumen del pedido
           const subtotal = parsedCart.reduce((total, item) => total + (item.precio * item.cantidad), 0);
           const discount = parsedCart.reduce((total, item) => {
             if (item.oferta) {
@@ -58,7 +80,7 @@ const Checkout = () => {
             }
             return total;
           }, 0);
-          const shipping = 0; // Envío gratis
+          const shipping = 0;
           const total = subtotal - discount + shipping;
           
           setOrderSummary({ subtotal, discount, shipping, total });
@@ -73,6 +95,35 @@ const Checkout = () => {
     loadCartData();
   }, []);
 
+  // Efecto para animar elementos cuando se cargan
+  useEffect(() => {
+    if (!loading) {
+      const timer = setTimeout(() => {
+        setCurrentStep(1);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [loading]);
+
+  // Verificar secciones completadas
+  useEffect(() => {
+    const sections = [];
+    if (formData.firstName && formData.lastName && formData.email && formData.phone && 
+        formData.address && formData.state && formData.city && formData.zipCode) {
+      sections.push('shipping');
+    }
+    if (formData.paymentMethod) {
+      if (formData.paymentMethod === 'cash' || 
+          (formData.cardNumber && formData.cardName && formData.expiryDate && formData.cvv)) {
+        sections.push('payment');
+      }
+    }
+    if (formData.acceptTerms) {
+      sections.push('terms');
+    }
+    setCompletedSections(sections);
+  }, [formData]);
+
   // Manejar cambios en el formulario
   const handleInputChange = useCallback((field, value) => {
     setFormData(prev => ({
@@ -80,20 +131,35 @@ const Checkout = () => {
       [field]: value
     }));
     
-    // Limpiar error del campo cuando el usuario empiece a escribir
+    // Actualizar ciudades cuando cambie el departamento
+    if (field === 'state') {
+      setCities(colombiaData[value] || []);
+      setFormData(prev => ({ ...prev, city: "" })); // Resetear ciudad
+    }
+    
     if (errors[field]) {
       setErrors(prev => ({
         ...prev,
         [field]: ""
       }));
     }
-  }, [errors]);
+
+    // Efecto de animación al completar campo
+    if (value.trim() !== '') {
+      const inputElement = document.querySelector(`[data-field="${field}"]`);
+      if (inputElement) {
+        inputElement.classList.add('field-completed');
+        setTimeout(() => {
+          inputElement.classList.remove('field-completed');
+        }, 1000);
+      }
+    }
+  }, [errors, colombiaData]);
 
   // Validar formulario
   const validateForm = useCallback(() => {
     const newErrors = {};
 
-    // Validar información de envío
     if (!formData.firstName.trim()) newErrors.firstName = "El nombre es requerido";
     if (!formData.lastName.trim()) newErrors.lastName = "El apellido es requerido";
     if (!formData.email.trim()) {
@@ -107,7 +173,6 @@ const Checkout = () => {
     if (!formData.state.trim()) newErrors.state = "El departamento es requerido";
     if (!formData.zipCode.trim()) newErrors.zipCode = "El código postal es requerido";
 
-    // Validar información de pago
     if (formData.paymentMethod === "card") {
       if (!formData.cardNumber.trim()) newErrors.cardNumber = "El número de tarjeta es requerido";
       if (!formData.cardName.trim()) newErrors.cardName = "El nombre en la tarjeta es requerido";
@@ -115,7 +180,6 @@ const Checkout = () => {
       if (!formData.cvv.trim()) newErrors.cvv = "El CVV es requerido";
     }
 
-    // Validar términos y condiciones
     if (!formData.acceptTerms) newErrors.acceptTerms = "Debes aceptar los términos y condiciones";
 
     setErrors(newErrors);
@@ -127,54 +191,68 @@ const Checkout = () => {
     e.preventDefault();
     
     if (!validateForm()) {
-      alert("Por favor completa todos los campos requeridos correctamente.");
+      // Animación de shake en los campos con error
+      const errorFields = Object.keys(errors);
+      errorFields.forEach(field => {
+        const element = document.querySelector(`[data-field="${field}"]`);
+        if (element) {
+          element.classList.add('field-error-shake');
+          setTimeout(() => {
+            element.classList.remove('field-error-shake');
+          }, 600);
+        }
+      });
+      
+      // Scroll al primer error
+      const firstErrorField = document.querySelector('.field-error-shake');
+      if (firstErrorField) {
+        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      
       return;
     }
 
-    // Simular procesamiento del pedido
-    const orderData = {
-      orderId: `ORD-${Date.now()}`,
-      customer: {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        phone: formData.phone
-      },
-      shipping: {
-        address: formData.address,
-        city: formData.city,
-        state: formData.state,
-        zipCode: formData.zipCode,
-        country: formData.country
-      },
-      payment: {
-        method: formData.paymentMethod,
-        ...(formData.paymentMethod === "card" && {
-          cardLastFour: formData.cardNumber.slice(-4)
-        })
-      },
-      items: cartItems,
-      total: orderSummary.total,
-      date: new Date().toISOString()
-    };
-
-    // Guardar pedido en localStorage
-    const existingOrders = JSON.parse(localStorage.getItem('kahuaOrders') || '[]');
-    localStorage.setItem('kahuaOrders', JSON.stringify([...existingOrders, orderData]));
+    // Animación de confirmación
+    setCurrentStep(2);
     
-    // Limpiar carrito
-    localStorage.removeItem('kahuaCart');
-    
-    // Redirigir a confirmación
-    navigate(`/order-confirmation/${orderData.orderId}`);
-  }, [formData, cartItems, orderSummary, navigate, validateForm]);
+    setTimeout(() => {
+      const orderData = {
+        orderId: `ORD-${Date.now()}`,
+        customer: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone
+        },
+        shipping: {
+          address: formData.address,
+          city: formData.city,
+          state: formData.state,
+          zipCode: formData.zipCode,
+          country: formData.country
+        },
+        payment: {
+          method: formData.paymentMethod,
+          ...(formData.paymentMethod === "card" && {
+            cardLastFour: formData.cardNumber.slice(-4)
+          })
+        },
+        items: cartItems,
+        total: orderSummary.total,
+        date: new Date().toISOString()
+      };
 
-  // Volver al carrito
+      const existingOrders = JSON.parse(localStorage.getItem('kahuaOrders') || '[]');
+      localStorage.setItem('kahuaOrders', JSON.stringify([...existingOrders, orderData]));
+      localStorage.removeItem('kahuaCart');
+      navigate(`/order-confirmation/${orderData.orderId}`);
+    }, 1500);
+  }, [formData, cartItems, orderSummary, navigate, validateForm, errors]);
+
   const handleBackToCart = useCallback(() => {
     navigate("/carrito");
   }, [navigate]);
 
-  // Estado de carga
   if (loading) {
     return (
       <>
@@ -208,13 +286,12 @@ const Checkout = () => {
               </div>
             </div>
           </div>
-          <div style={{ textAlign: 'center', padding: '50px 20px' }}>
+          <div className="empty-cart-message">
             <h3>Tu carrito está vacío</h3>
             <p>Agrega productos antes de proceder al checkout</p>
             <button 
               className="btn btn-primary"
               onClick={() => navigate("/productos")}
-              style={{ marginTop: '20px' }}
             >
               <i className="bi bi-bag"></i>
               Explorar Productos
@@ -230,53 +307,47 @@ const Checkout = () => {
     <>
       <NavPrivate />
       
-      <div className="checkout-page">
-        {/* Header del Checkout */}
+      <div className={`checkout-page ${currentStep > 0 ? 'step-active' : ''}`}>
+        {/* Header Principal */}
         <div className="checkout-header">
           <div className="checkout-header-content">
-            <div>
+            <div className="header-main">
               <h1 className="checkout-title">
                 <i className="bi bi-cart-check"></i>
-                Checkout
+                Finalizar Compra
               </h1>
               <p className="checkout-subtitle">
-                Completa tu información para finalizar la compra
+                Completa tu información para procesar el pedido
               </p>
             </div>
-            <div className="checkout-steps">
-              <div className="step active">
-                <span className="step-number">1</span>
-                <span>Carrito</span>
-              </div>
-              <i className="bi bi-chevron-right"></i>
-              <div className="step active">
-                <span className="step-number">2</span>
-                <span>Checkout</span>
-              </div>
-              <i className="bi bi-chevron-right"></i>
-              <div className="step">
-                <span className="step-number">3</span>
-                <span>Confirmación</span>
-              </div>
+            <div className="order-total-preview">
+              <span className="total-label">Total a pagar:</span>
+              <span className="total-amount">${orderSummary.total.toLocaleString()}</span>
             </div>
           </div>
         </div>
 
         <form onSubmit={handleSubmitOrder}>
           <div className="checkout-container">
-            {/* Formularios Principales */}
             <div className="checkout-main">
               {/* Información de Envío */}
-              <div className="checkout-card">
+              <div className={`checkout-card ${completedSections.includes('shipping') ? 'section-completed' : ''}`}>
                 <div className="checkout-card-header">
                   <h3 className="checkout-card-title">
                     <i className="bi bi-truck"></i>
                     Información de Envío
+                    {completedSections.includes('shipping') && (
+                      <i className="bi bi-check-circle-fill section-complete-icon"></i>
+                    )}
                   </h3>
+                  <p className="section-description">Ingresa la dirección donde deseas recibir tu pedido</p>
                 </div>
                 <div className="form-row">
-                  <div className="form-group">
-                    <label className="form-label required">Nombre</label>
+                  <div className="form-group" data-field="firstName">
+                    <label className="form-label required">
+                      <i className="bi bi-person"></i>
+                      Nombre
+                    </label>
                     <input
                       type="text"
                       className={`form-input ${errors.firstName ? 'error' : ''}`}
@@ -291,8 +362,11 @@ const Checkout = () => {
                       </div>
                     )}
                   </div>
-                  <div className="form-group">
-                    <label className="form-label required">Apellido</label>
+                  <div className="form-group" data-field="lastName">
+                    <label className="form-label required">
+                      <i className="bi bi-person-badge"></i>
+                      Apellido
+                    </label>
                     <input
                       type="text"
                       className={`form-input ${errors.lastName ? 'error' : ''}`}
@@ -309,8 +383,11 @@ const Checkout = () => {
                   </div>
                 </div>
                 <div className="form-row">
-                  <div className="form-group">
-                    <label className="form-label required">Email</label>
+                  <div className="form-group" data-field="email">
+                    <label className="form-label required">
+                      <i className="bi bi-envelope"></i>
+                      Email
+                    </label>
                     <input
                       type="email"
                       className={`form-input ${errors.email ? 'error' : ''}`}
@@ -325,8 +402,11 @@ const Checkout = () => {
                       </div>
                     )}
                   </div>
-                  <div className="form-group">
-                    <label className="form-label required">Teléfono</label>
+                  <div className="form-group" data-field="phone">
+                    <label className="form-label required">
+                      <i className="bi bi-telephone"></i>
+                      Teléfono
+                    </label>
                     <input
                       type="tel"
                       className={`form-input ${errors.phone ? 'error' : ''}`}
@@ -342,8 +422,11 @@ const Checkout = () => {
                     )}
                   </div>
                 </div>
-                <div className="form-group">
-                  <label className="form-label required">Dirección</label>
+                <div className="form-group" data-field="address">
+                  <label className="form-label required">
+                    <i className="bi bi-geo-alt"></i>
+                    Dirección
+                  </label>
                   <input
                     type="text"
                     className={`form-input ${errors.address ? 'error' : ''}`}
@@ -359,31 +442,21 @@ const Checkout = () => {
                   )}
                 </div>
                 <div className="form-row">
-                  <div className="form-group">
-                    <label className="form-label required">Ciudad</label>
-                    <input
-                      type="text"
-                      className={`form-input ${errors.city ? 'error' : ''}`}
-                      value={formData.city}
-                      onChange={(e) => handleInputChange('city', e.target.value)}
-                      placeholder="Ciudad"
-                    />
-                    {errors.city && (
-                      <div className="form-error">
-                        <i className="bi bi-exclamation-circle"></i>
-                        {errors.city}
-                      </div>
-                    )}
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label required">Departamento</label>
-                    <input
-                      type="text"
+                  <div className="form-group" data-field="state">
+                    <label className="form-label required">
+                      <i className="bi bi-map"></i>
+                      Departamento
+                    </label>
+                    <select
                       className={`form-input ${errors.state ? 'error' : ''}`}
                       value={formData.state}
                       onChange={(e) => handleInputChange('state', e.target.value)}
-                      placeholder="Departamento"
-                    />
+                    >
+                      <option value="">Selecciona un departamento</option>
+                      {Object.keys(colombiaData).map(dept => (
+                        <option key={dept} value={dept}>{dept}</option>
+                      ))}
+                    </select>
                     {errors.state && (
                       <div className="form-error">
                         <i className="bi bi-exclamation-circle"></i>
@@ -391,8 +464,34 @@ const Checkout = () => {
                       </div>
                     )}
                   </div>
-                  <div className="form-group">
-                    <label className="form-label required">Código Postal</label>
+                  <div className="form-group" data-field="city">
+                    <label className="form-label required">
+                      <i className="bi bi-geo"></i>
+                      Ciudad
+                    </label>
+                    <select
+                      className={`form-input ${errors.city ? 'error' : ''}`}
+                      value={formData.city}
+                      onChange={(e) => handleInputChange('city', e.target.value)}
+                      disabled={!formData.state}
+                    >
+                      <option value="">Selecciona una ciudad</option>
+                      {cities.map(city => (
+                        <option key={city} value={city}>{city}</option>
+                      ))}
+                    </select>
+                    {errors.city && (
+                      <div className="form-error">
+                        <i className="bi bi-exclamation-circle"></i>
+                        {errors.city}
+                      </div>
+                    )}
+                  </div>
+                  <div className="form-group" data-field="zipCode">
+                    <label className="form-label required">
+                      <i className="bi bi-mailbox"></i>
+                      Código Postal
+                    </label>
                     <input
                       type="text"
                       className={`form-input ${errors.zipCode ? 'error' : ''}`}
@@ -411,12 +510,16 @@ const Checkout = () => {
               </div>
 
               {/* Método de Pago */}
-              <div className="checkout-card">
+              <div className={`checkout-card ${completedSections.includes('payment') ? 'section-completed' : ''}`}>
                 <div className="checkout-card-header">
                   <h3 className="checkout-card-title">
                     <i className="bi bi-credit-card"></i>
                     Método de Pago
+                    {completedSections.includes('payment') && (
+                      <i className="bi bi-check-circle-fill section-complete-icon"></i>
+                    )}
                   </h3>
+                  <p className="section-description">Selecciona cómo deseas pagar tu pedido</p>
                 </div>
                 <div className="payment-methods">
                   <label 
@@ -458,8 +561,11 @@ const Checkout = () => {
 
                 {formData.paymentMethod === 'card' && (
                   <div className="card-info">
-                    <div className="form-group">
-                      <label className="form-label required">Número de Tarjeta</label>
+                    <div className="form-group" data-field="cardNumber">
+                      <label className="form-label required">
+                        <i className="bi bi-credit-card"></i>
+                        Número de Tarjeta
+                      </label>
                       <input
                         type="text"
                         className={`form-input ${errors.cardNumber ? 'error' : ''}`}
@@ -475,8 +581,11 @@ const Checkout = () => {
                         </div>
                       )}
                     </div>
-                    <div className="form-group">
-                      <label className="form-label required">Nombre en la Tarjeta</label>
+                    <div className="form-group" data-field="cardName">
+                      <label className="form-label required">
+                        <i className="bi bi-person-vcard"></i>
+                        Nombre en la Tarjeta
+                      </label>
                       <input
                         type="text"
                         className={`form-input ${errors.cardName ? 'error' : ''}`}
@@ -492,8 +601,11 @@ const Checkout = () => {
                       )}
                     </div>
                     <div className="card-row">
-                      <div className="form-group">
-                        <label className="form-label required">Fecha de Expiración</label>
+                      <div className="form-group" data-field="expiryDate">
+                        <label className="form-label required">
+                          <i className="bi bi-calendar"></i>
+                          Fecha de Expiración
+                        </label>
                         <input
                           type="text"
                           className={`form-input ${errors.expiryDate ? 'error' : ''}`}
@@ -509,8 +621,11 @@ const Checkout = () => {
                           </div>
                         )}
                       </div>
-                      <div className="form-group">
-                        <label className="form-label required">CVV</label>
+                      <div className="form-group" data-field="cvv">
+                        <label className="form-label required">
+                          <i className="bi bi-shield-lock"></i>
+                          CVV
+                        </label>
                         <input
                           type="text"
                           className={`form-input ${errors.cvv ? 'error' : ''}`}
@@ -532,7 +647,7 @@ const Checkout = () => {
               </div>
 
               {/* Términos y Condiciones */}
-              <div className="terms">
+              <div className={`terms ${completedSections.includes('terms') ? 'section-completed' : ''}`}>
                 <div className="terms-checkbox">
                   <input
                     type="checkbox"
@@ -541,6 +656,7 @@ const Checkout = () => {
                     onChange={(e) => handleInputChange('acceptTerms', e.target.checked)}
                   />
                   <label htmlFor="acceptTerms" className="terms-text">
+                    <i className="bi bi-shield-check"></i>
                     Acepto los <a href="/terminos">términos y condiciones</a> y la <a href="/privacidad">política de privacidad</a>. 
                     Autorizo el tratamiento de mis datos personales de acuerdo con la ley.
                   </label>
@@ -566,9 +682,19 @@ const Checkout = () => {
                 <button 
                   type="submit"
                   className="btn btn-primary"
+                  disabled={currentStep === 2}
                 >
-                  <i className="bi bi-lock-fill"></i>
-                  Confirmar Pedido - ${orderSummary.total.toLocaleString()}
+                  {currentStep === 2 ? (
+                    <>
+                      <div className="btn-spinner"></div>
+                      Procesando...
+                    </>
+                  ) : (
+                    <>
+                      <i className="bi bi-lock-fill"></i>
+                      Confirmar Pedido - ${orderSummary.total.toLocaleString()}
+                    </>
+                  )}
                 </button>
               </div>
             </div>
@@ -583,8 +709,12 @@ const Checkout = () => {
                   </h3>
                 </div>
                 <div className="order-items">
-                  {cartItems.map((item) => (
-                    <div key={item.id} className="order-item">
+                  {cartItems.map((item, index) => (
+                    <div 
+                      key={item.id} 
+                      className="order-item"
+                      style={{ animationDelay: `${index * 0.1}s` }}
+                    >
                       <div className="order-item-image">
                         <img 
                           src={item.imagen} 
@@ -630,17 +760,28 @@ const Checkout = () => {
                 </div>
               </div>
 
-              {/* Información de Envío */}
               <div className="shipping-info">
                 <h3 className="checkout-card-title">
                   <i className="bi bi-info-circle"></i>
                   Información de Entrega
                 </h3>
                 <div className="shipping-address">
-                  <div className="address-name">Entrega Express</div>
-                  <div className="address-line">⏱️ 45 minutos o menos</div>
-                  <div className="address-line">📦 Empaque especial para jugos</div>
-                  <div className="address-line">🚚 Envío gratis</div>
+                  <div className="address-name">
+                    <i className="bi bi-lightning"></i>
+                    Entrega Express
+                  </div>
+                  <div className="address-line">
+                    <i className="bi bi-clock"></i>
+                    45 minutos o menos
+                  </div>
+                  <div className="address-line">
+                    <i className="bi bi-box-seam"></i>
+                    Empaque especial para jugos
+                  </div>
+                  <div className="address-line">
+                    <i className="bi bi-truck"></i>
+                    Envío gratis
+                  </div>
                 </div>
               </div>
             </div>
