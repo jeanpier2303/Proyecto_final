@@ -4,9 +4,7 @@ import { useNavigate } from "react-router-dom";
 import NavPrivate from "../components/NavPrivate";
 import Footer from "../components/Footer";
 import "../assets/styles/Inicio.css";
-import categoria_1 from"../assets/images/categorias/carrusel1.png";
-import categoria_2 from"../assets/images/categorias/carrusel2.png";
- 
+
 const Inicio = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -48,7 +46,7 @@ const Inicio = () => {
       id: 1,
       title: "Jugos Naturales Premium",
       description: "Frescura, sabor y energía en cada sorbo directamente del Pacífico",
-      image: categoria_1,
+      image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1350&q=80",
       buttonText: "Descubrir Sabores",
       buttonLink: "/productos"
     },
@@ -56,7 +54,7 @@ const Inicio = () => {
       id: 2,
       title: "Nuevas Ofertas Exclusivas",
       description: "Hasta 30% de descuento en nuestros combos especiales de temporada",
-      image: categoria_2,
+      image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1350&q=80",
       buttonText: "Ver Ofertas",
       buttonLink: "/ofertas"
     },
