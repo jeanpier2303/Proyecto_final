@@ -385,7 +385,7 @@ const OrderConfirmation = () => {
               )}
               <p className="thank-you">¡Gracias por tu compra!</p>
               <p className="contact-info">
-                Kahua Jugos • Tel: +57 322 267 1234 • Email: info@kahuajugos.com
+                Kahua Jugos • Tele: +57 322 267 1234 • Email: info@kahuajugos.com
               </p>
             </div>
           </div>
