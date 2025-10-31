@@ -16,7 +16,8 @@ import Comunidad from "./pages/Comunidad/Comunidad";
 import Soporte from "./pages/Soporte";
 import Carrito from "./pages/Carrito";
 import Checkout from "./pages/Checkout";
-import Perfil from "./pages/Perfil/Perfil";
+import OrderConfirmation from "./components/OrderConfirmation";
+//import Perfil from "./pages/Perfil/Perfil";
 
 function App() {
   return (
@@ -41,7 +42,7 @@ function App() {
             <Route path="/Home" element={<Home />} />
             <Route path="/Carrito" element={<Carrito />} />
             <Route path="/Checkout" element={<Checkout />} />
-            <Route path="/Perfil" element={<Perfil />} />
+            <Route path="/OrderConfirmation" element={<OrderConfirmation />} />
           </Routes>
         </Router>
       </AuthProvider>
