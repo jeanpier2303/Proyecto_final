@@ -141,5 +141,3 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 @media (max-width: 1200px) { .charts-section { grid-template-columns: 1fr; } }
 @media (max-width: 768px) { .sidebar-admin { transform: translateX(-100%); } .main-area { margin-left:0; } }
 
-
-/* ----------------------------------------------------------- */

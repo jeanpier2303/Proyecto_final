@@ -49,6 +49,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return ConversationHandler.END
 
         user = response.json()
+
         context.user_data["user"] = user
 
         full_name = f"{user.get('first_name', '')} {user.get('last_name', '')}".strip()
@@ -60,8 +61,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text("⚠️ No pude obtener la lista de productos.")
             return ConversationHandler.END
 
-        productos = productos_response.json()
-        #productos = productos[:20]  
+        productos = productos_response.json() 
+        productos = productos[:20]
         context.user_data["productos"] = productos
 
         # Mostrar lista
@@ -70,7 +71,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             for p in productos
         ])
         await update.message.reply_text(
-            f"📋 Productos disponibles:\n{lista}\n\n"
+            f"📋 Productos disponibles para entrega imediata:\n{lista}\n\n"
             "Por favor escribe el número del producto que deseas consumir hoy:"
         )
         return PRODUCT
