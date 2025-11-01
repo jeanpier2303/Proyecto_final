@@ -18,6 +18,9 @@ import Carrito from "./pages/Carrito";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./components/OrderConfirmation";
 //import Perfil from "./pages/Perfil/Perfil";
+//import FacturaView from "./pages/Admin/Facturacion/FacturaView";
+//import FacturaView from "./pages/Admin/Facturacion/FacturaView";
+
 
 function App() {
   return (
@@ -43,6 +46,9 @@ function App() {
             <Route path="/Carrito" element={<Carrito />} />
             <Route path="/Checkout" element={<Checkout />} />
             <Route path="/OrderConfirmation" element={<OrderConfirmation />} />
+            {/* <Route path="/admin/factura/:id" element={<FacturaView />} /> */}
+
+            
           </Routes>
         </Router>
       </AuthProvider>

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_URL } from "../../config";
-import { Form, Table, Button, Spinner } from "react-bootstrap";
+import { Form, Table, Button, Spinner, Modal } from "react-bootstrap";
+import FacturaCard from "./Facturacion/FacturaCard";
 
 const PedidosAdmin = () => {
   const [orders, setOrders] = useState([]);
@@ -9,22 +10,21 @@ const PedidosAdmin = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const limit = 10;
 
   const fetchOrders = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const res = await axios.get(`${API_URL}/admin/orders?page=${page}&limit=10`);
-      let data = res.data;
-      let ordersList = data.data || [];
-
-      if (status) {
-        ordersList = ordersList.filter((o) => o.status === status);
-      }
-
-      setOrders(ordersList);
+      const res = await axios.get(`${API_URL}/admin/orders`, {
+        params: { page, limit, status },
+      });
+      const data = res.data;
+      setOrders(data.data || []);
       setTotalPages(data.total_pages || 1);
     } catch (error) {
-      console.error("❌ Error cargando pedidos:", error);
+      console.error(" Error cargando pedidos:", error);
     } finally {
       setLoading(false);
     }
@@ -34,9 +34,14 @@ const PedidosAdmin = () => {
     fetchOrders();
   }, [status, page]);
 
+  const handleViewFactura = (id) => {
+    setSelectedOrder(id);
+    setShowModal(true);
+  };
+
   return (
     <div className="p-3">
-      <h3>📋 Gestión de Pedidos</h3>
+      <h3 className="mb-3"> Gestión de Pedidos</h3>
 
       <Form.Select
         className="my-3"
@@ -68,23 +73,39 @@ const PedidosAdmin = () => {
               <th>Fecha</th>
               <th>Total</th>
               <th>Estado</th>
+              <th>Acción</th>
             </tr>
           </thead>
           <tbody>
-            {/* consultar con el profee */}
             {orders.length > 0 ? (
               orders.map((o, index) => (
                 <tr key={o.id}>
-                  <td>{(page - 1) * 10 + (index + 1)}</td>
+                  <td>{(page - 1) * limit + (index + 1)}</td>
                   <td>{o.customer}</td>
                   <td>{o.date}</td>
                   <td>${o.total}</td>
                   <td>{o.status}</td>
+                  <td>
+                    {["Entregado", "Enviado", "En preparación", "Cancelado"].includes(o.status) ? (
+                      <Button
+                        style={{
+                          backgroundColor: "#6f42c1",
+                          borderColor: "#6f42c1",
+                        }}
+                        size="sm"
+                        onClick={() => handleViewFactura(o.id)}
+                      >
+                        Ver factura
+                      </Button>
+                    ) : (
+                      <span className="text-muted">—</span>
+                    )}
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="5" className="text-center text-muted py-3">
+                <td colSpan="6" className="text-center text-muted py-3">
                   No hay pedidos disponibles
                 </td>
               </tr>
@@ -112,6 +133,22 @@ const PedidosAdmin = () => {
           Siguiente →
         </Button>
       </div>
+
+      {/* 🔹 Modal con la factura */}
+      <Modal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        size="xl"
+        centered
+        scrollable
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Factura del Pedido #{selectedOrder}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedOrder && <FacturaCard orderId={selectedOrder} />}
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

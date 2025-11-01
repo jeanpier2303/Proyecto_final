@@ -1,0 +1,75 @@
+:root{
+  --bg:#f7f5f8;
+  --card:#ffffff;
+  --accent1:#7b2bd4;
+  --accent2:#5b1fae;
+  --muted:#7b6b8b;
+  --text:#2b1b3a;
+  --success:#2b9a6f;
+  --danger:#d44b7a;
+  --shadow: 0 12px 30px rgba(25,10,40,0.06);
+}
+
+*{box-sizing:border-box}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;color:var(--text)}
+.wrap{max-width:1100px;margin:28px auto;padding:18px}
+.card.invoice-card{background:var(--card);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.header{display:flex;align-items:center;justify-content:space-between;padding:26px 30px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:white}
+.brand{display:flex;gap:18px;align-items:center}
+.brand img{height:60px;width:auto;border-radius:8px;padding:6px}
+.brand h2{margin:0;font-size:20px;letter-spacing:0.2px}
+.head-right{text-align:right}
+.head-right .title{font-weight:800;font-size:18px}
+.head-right .meta{font-size:13px;opacity:0.95}
+
+/* Body */
+.body{display:grid;grid-template-columns:1fr 380px;gap:22px;padding:26px;background:linear-gradient(180deg,#fff,#fff)}
+.section{margin-bottom:18px}
+.section h4{margin:0 0 8px 0;font-size:13px;color:var(--muted);font-weight:600}
+.client-block{display:flex;gap:12px;align-items:flex-start}
+.client-block .tag{background:rgba(91,31,174,0.06);padding:6px 10px;border-radius:8px;font-weight:700;color:var(--accent2);font-size:13px}
+
+/* Items */
+table.items{width:100%;border-collapse:collapse;margin-top:8px}
+table.items thead th{font-size:13px;text-align:left;padding:12px 10px;background:linear-gradient(90deg,rgba(123,43,212,0.06),rgba(91,31,174,0.04));border-bottom:1px solid rgba(0,0,0,0.04)}
+table.items tbody td{padding:12px 10px;border-bottom:1px solid #f0ecf6;font-size:14px;vertical-align:middle}
+.text-right{text-align:right}
+.muted{color:var(--muted);font-size:13px}
+
+/* Summary */
+.summary{background:linear-gradient(180deg,#fff,#fbfbff);border-radius:10px;padding:18px;border:1px solid rgba(91,31,174,0.04)}
+.summary .line{display:flex;justify-content:space-between;padding:8px 0}
+.summary .line.total{font-size:18px;font-weight:800;border-top:1px dashed rgba(0,0,0,0.04);padding-top:14px;margin-top:8px}
+.summary .status{display:inline-block;padding:6px 10px;border-radius:7px;background:rgba(43,154,111,0.08);color:var(--success);font-weight:700}
+
+/* Footer */
+.footer{display:flex;justify-content:space-between;gap:20px;padding:22px;border-top:1px solid rgba(0,0,0,0.03);align-items:center}
+.signature{width:46%;background:linear-gradient(180deg,#fff,#fff);padding:14px;border-radius:8px;border:1px dashed rgba(0,0,0,0.05)}
+.qr{width:200px;text-align:center}
+.small{font-size:12px;color:var(--muted)}
+
+/* Toolbar */
+.toolbar{display:flex;gap:10px;align-items:center;padding:18px;border-top:1px dashed rgba(0,0,0,0.03);background:linear-gradient(180deg,#fff,#fff);justify-content:flex-end}
+.btn{padding:10px 14px;border-radius:9px;border:none;cursor:pointer;font-weight:700}
+.btn.primary{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:white;box-shadow:0 8px 22px rgba(91,31,174,0.12)}
+.btn.ghost{background:transparent;border:1px solid rgba(91,31,174,0.08);color:var(--accent2)}
+
+/* === SELLO DE CANCELADA === */
+.sello-cancelada {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-20deg);
+  font-size: 90px;
+  font-weight: 900;
+  color: var(--danger);
+  opacity: 0.12;
+  border: 8px solid var(--danger);
+  padding: 30px 80px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 10px;
+  pointer-events: none;
+  user-select: none;
+  z-index: 50;
+}

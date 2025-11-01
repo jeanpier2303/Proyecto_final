@@ -92,7 +92,7 @@ const ProductosAdmin = () => {
 
   return (
     <div className="p-3">
-      <h3>📦 Gestión de Productos</h3>
+      <h3> Gestión de Productos</h3>
 
       {/* Filtros */}
       <Row className="g-2 my-3">
@@ -254,7 +254,7 @@ const ProductosAdmin = () => {
       {/* 🔹 Modal para ver producto */}
       <Modal show={showViewModal} onHide={() => setShowViewModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>📄 Detalles del Producto</Modal.Title>
+          <Modal.Title> Detalles del Producto</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {selectedProduct ? (
