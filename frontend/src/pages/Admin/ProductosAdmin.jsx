@@ -26,7 +26,7 @@ const ProductosAdmin = () => {
 
   const itemsPerPage = 10;
 
-  // 🔹 Cargar categorías
+  //  Cargar categorías
   const fetchCategories = async () => {
     try {
       const res = await axios.get(`${API_URL}/admin/categories/all`);
@@ -36,7 +36,7 @@ const ProductosAdmin = () => {
     }
   };
 
-  // 🔹 Cargar productos
+  //  Cargar productos
   const fetchProducts = async () => {
     setLoading(true);
     try {
@@ -68,7 +68,7 @@ const ProductosAdmin = () => {
     fetchProducts();
   }, [search, categoryId, page]);
 
-  // 🔹 Crear producto
+  //  Crear producto
   const handleAddProduct = async () => {
     if (!newProduct.name || !newProduct.price || !newProduct.stock || !newProduct.category_id) {
       Swal.fire("Campos requeridos", "Completa todos los campos", "warning");
@@ -81,7 +81,7 @@ const ProductosAdmin = () => {
 
       setAllProducts((prev) => [created, ...prev]);
       setProducts((prev) => [created, ...prev.slice(0, itemsPerPage - 1)]);
-      Swal.fire("✅ Éxito", "Producto agregado correctamente", "success");
+      Swal.fire(" Éxito", "Producto agregado correctamente", "success");
       setShowAddModal(false);
       setNewProduct({ name: "", price: "", stock: "", category_id: "" });
     } catch (err) {
@@ -195,7 +195,7 @@ const ProductosAdmin = () => {
         </Button>
       </div>
 
-      {/* 🔹 Modal para agregar producto */}
+      {/*  Modal para agregar producto */}
       <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>🆕 Nuevo Producto</Modal.Title>
@@ -251,7 +251,7 @@ const ProductosAdmin = () => {
         </Modal.Footer>
       </Modal>
 
-      {/* 🔹 Modal para ver producto */}
+      {/*  Modal para ver producto */}
       <Modal show={showViewModal} onHide={() => setShowViewModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title> Detalles del Producto</Modal.Title>

@@ -22,7 +22,7 @@ const UsuariosAdmin = () => {
       const data = Array.isArray(res.data) ? res.data : [];
       setAllUsers(data);
 
-      // 🔹 Calcula la paginación local
+      //  Calcula la paginación local
       const start = (page - 1) * itemsPerPage;
       const end = start + itemsPerPage;
       setUsers(data.slice(start, end));
@@ -125,7 +125,7 @@ const UsuariosAdmin = () => {
         </Table>
       )}
 
-      {/* 🔹 Controles de paginación */}
+      {/*  Controles de paginación */}
       <div className="d-flex justify-content-between align-items-center mt-3">
         <Button
           variant="secondary"

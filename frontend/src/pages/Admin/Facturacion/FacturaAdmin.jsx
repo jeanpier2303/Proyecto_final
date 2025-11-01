@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import FacturaCard from "./FacturaCard"; // 👈 Importa tu componente visual
+import FacturaCard from "./FacturaCard"; //  Importa tu componente visual
 
 const FacturaAdmin = () => {
   const { id } = useParams();

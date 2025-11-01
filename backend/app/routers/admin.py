@@ -42,7 +42,7 @@ def admin_get_orders(
     try:
         return get_orders_paginated(page=page, limit=limit, status=status)
     except Exception as e:
-        print("❌ Error en /admin/orders:", e)
+        print(" Error en /admin/orders:", e)
         raise
 
 
@@ -113,7 +113,7 @@ def create_product(
         return dict(result._mapping)
 
     except Exception as e:
-        print("❌ Error creando producto:", e)
+        print(" Error creando producto:", e)
         return {"error": str(e)}
     
 # --------------------------------------------------------
@@ -149,7 +149,7 @@ def admin_get_order_details(order_id: int):
         if not order:
             raise HTTPException(status_code=404, detail="Pedido no encontrado")
 
-        # ✅ Items del pedido (sin discount ni sku)
+        #  Items del pedido (sin discount ni sku)
         sql_items = text("""
             SELECT
                 p.name AS product_name,
@@ -169,7 +169,37 @@ def admin_get_order_details(order_id: int):
         return result
 
     except Exception as e:
-        print(f"❌ Error en get_order_details: {e}")
+        print(f" Error en get_order_details: {e}")
         raise HTTPException(status_code=500, detail=f"Error interno: {e}")
     finally:
         conn.close()
+
+
+# ---------------------------------------- Todo de soporte / mensajes
+from app.services.admin_service import (
+    get_support_messages,
+    get_support_message_by_id,
+    update_support_message_status
+)
+
+# Módulo de soporte / mensajes
+@router.get("/support/messages")
+def admin_get_messages():
+    try:
+        return get_support_messages()
+    except Exception as e:
+        print("Error en /support/messages:", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/support/messages/{message_id}")
+def admin_get_message_detail(message_id: int):
+    msg = get_support_message_by_id(message_id)
+    if not msg:
+        raise HTTPException(status_code=404, detail="Mensaje no encontrado")
+    return msg
+
+
+@router.put("/support/messages/{message_id}/status")
+def admin_update_message_status(message_id: int, status_id: int = Body(..., embed=True)):
+    return update_support_message_status(message_id, status_id)

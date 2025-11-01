@@ -4,10 +4,12 @@ import { API_URL } from "../../../config";
 import Spinner from "react-bootstrap/Spinner";
 import Button from "react-bootstrap/Button";
 import "../../../assets/styles/factura.css";
+import logo from "../../../assets/images/categorias/Logo-blanc.png";
+
 
 /*
   Nota: este componente intenta mapear distintos shapes de respuesta del backend.
-  Si tu endpoint devuelve otra estructura, el componente usa el mock de ejemplo.
+  Si el endpoint devuelve otra estructura, el componente usa el mock de ejemplo.
 */
 
 const FacturaCard = ({ orderId }) => {
@@ -34,7 +36,7 @@ const FacturaCard = ({ orderId }) => {
         };
       }
 
-      // Caso 2: backend plano (como el tuyo)
+      // Caso 2: backend plano 
       else if (payload.id && payload.items) {
         normalized = {
           order: {
@@ -80,39 +82,65 @@ const FacturaCard = ({ orderId }) => {
   }, [orderId]);
 
   const downloadPdf = async () => {
-    // import dinámico de html2pdf para no romper build si no está instalado
-    try {
-      const html2pdf = (await import("html2pdf.js")).default || (await import("html2pdf.js"));
-      const element = cardRef.current;
-      if (!element) return alert("No se encontró la factura en el DOM");
-      const opt = {
-          margin: [5, 5, 5, 5],
-          filename: `${data?.order?.serial || 'factura'}.pdf`,
-          image: { type: 'jpeg', quality: 0.98 },
+      try {
+        const html2pdf = (await import("html2pdf.js")).default || (await import("html2pdf.js"));
+        const element = cardRef.current;
+        if (!element) return alert("No se encontró la factura en el DOM");
+
+        //  Asegurar que el contenido esté completamente visible antes de exportar
+        window.scrollTo(0, 0);
+        element.style.maxWidth = "100%";
+        element.style.background = "#fff";
+
+        const opt = {
+          margin: 0, // sin margen interno
+          filename: `${data?.order?.serial || "factura"}.pdf`,
+          image: { type: "jpeg", quality: 1 },
           html2canvas: {
-            scale: 2, // escala ajustada para no cortar contenido
+            scale: 2.5,           // alta calidad
             useCORS: true,
-            scrollY: 0, // evita errores de posición
-            windowWidth: document.documentElement.scrollWidth,
+            scrollY: 0,           // evita cortes por scroll
+            windowWidth: element.scrollWidth,
+            windowHeight: element.scrollHeight, 
           },
           jsPDF: {
-            unit: 'mm',
-            format: 'a4', // mejor formato que letter para contenido vertical largo
-            orientation: 'portrait',
+            unit: "mm",
+            format: "a4",
+            orientation: "portrait",
           },
           pagebreak: {
-            mode: ['css', 'legacy'], // más estable
-            before: '.footer', // garantiza que no corte antes del pie
+            mode: ["avoid-all", "css", "legacy"],
+            after: ".footer", // asegúrate de no cortar el pie
           },
         };
 
+        const pdf = html2pdf()
+          .set(opt)
+          .from(element)
+          .toPdf()
+          .get("pdf")
+          .then((pdfObj) => {
+            const totalPages = pdfObj.internal.getNumberOfPages();
+            for (let i = 1; i <= totalPages; i++) {
+              pdfObj.setPage(i);
+              pdfObj.setFontSize(10);
+              pdfObj.text(
+                `Página ${i} de ${totalPages}`,
+                pdfObj.internal.pageSize.getWidth() - 40,
+                pdfObj.internal.pageSize.getHeight() - 10
+              );
+            }
+          });
 
-      html2pdf().set(opt).from(element).save();
-    } catch (e) {
-      console.error("html2pdf import error:", e);
-      alert("No se pudo generar PDF en el navegador. Asegúrate de instalar html2pdf.js o usa la descarga desde el backend.");
-    }
-  };
+        html2pdf().set(opt).from(element).save();
+      } catch (e) {
+        console.error("html2pdf import error:", e);
+        alert(
+          "No se pudo generar PDF. Verifica que html2pdf.js esté instalado correctamente."
+        );
+      }
+    };
+
 
   if (loading) {
     return (
@@ -157,10 +185,10 @@ const FacturaCard = ({ orderId }) => {
 
         <div className="header">
           <div className="brand">
-            <img id="logo" src={data.company?.logo || "/Logo-blanc.png"} alt="logo" />
+            <img id="logo" src={logo} alt="logo" />
             <div>
-              <h2 id="companyName">{data.company?.name || "Kahua S.A.S"}</h2>
-              <div className="small" id="companyInfo">{data.company?.address || "Cra. Ejemplo 123 · Quibdó"} · NIT: {data.company?.nit || "900000000-0"}</div>
+              <h2 id="companyName">{data.company?.name || " S.A.S"}</h2>
+              <div className="small" id="companyInfo">{data.company?.address || "Cra. 123 · Quibdó"} · NIT: {data.company?.nit || "900000000-0"}</div>
             </div>
           </div>
           <div className="head-right">
@@ -251,7 +279,7 @@ const FacturaCard = ({ orderId }) => {
 
               <div style={{height:8}}></div>
               <div className="small">Información bancaria</div>
-              <div className="muted" style={{marginTop:6}}>Banco Ejemplo · Cuenta: 123456789 · Titular: Kahua S.A.S</div>
+              <div className="muted" style={{marginTop:6}}>Banco · Cuenta: 123456789 · Titular: Dairon S.A.S</div>
             </div>
           </aside>
         </div>
@@ -266,6 +294,7 @@ const FacturaCard = ({ orderId }) => {
 
           <div style={{flex:1,paddingLeft:18}}>
             <div style={{display:"flex",justifyContent:"flex-end"}}>
+              {/* QR */}
               <div className="qr" id="qrcode">
                 <img
                   src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=Factura-Kahua"

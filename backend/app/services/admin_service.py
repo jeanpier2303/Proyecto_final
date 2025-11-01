@@ -47,7 +47,7 @@ def get_sales_data(days: int = 7):
 
         return {"labels": labels, "data": data}
     except Exception as e:
-        print("❌ Error en get_sales_data:", e)
+        print(" Error en get_sales_data:", e)
         return {"labels": [], "data": []}
     finally:
         conn.close()
@@ -225,7 +225,7 @@ def get_orders_paginated(page: int = 1, limit: int = 10, status: str = None):
         }
 
     except Exception as e:
-        print("❌ Error en get_orders_paginated:", e)
+        print(" Error en get_orders_paginated:", e)
         return {"page": page, "limit": limit, "total_records": 0, "total_pages": 1, "data": []}
     finally:
         conn.close()
@@ -307,7 +307,68 @@ def get_order_details(order_id: int):
         return invoice
 
     except Exception as e:
-        print("❌ Error en get_order_details:", e)
+        print(" Error en get_order_details:", e)
         return None
+    finally:
+        conn.close()
+
+
+# ------------parte de mensaje en soporte------------
+# --- 11. Mensajes de soporte ---
+def get_support_messages(status_id: int = None):
+    conn = get_connection()
+    try:
+        sql = """
+            SELECT 
+                cm.id,
+                cm.email,
+                cm.subject,
+                cm.message,
+                cm.status_id,
+                s.label AS status,
+                cm.created_at
+            FROM contact_messages cm
+            JOIN statuses s ON s.id = cm.status_id
+            ORDER BY cm.created_at DESC;
+        """
+        rows = conn.execute(text(sql)).fetchall()
+        return [dict(r._mapping) for r in rows]
+    finally:
+        conn.close()
+
+
+def get_support_message_by_id(message_id: int):
+    conn = get_connection()
+    try:
+        sql = text("""
+            SELECT 
+                cm.id,
+                cm.user_id,
+                cm.email,
+                cm.subject,
+                cm.message,
+                cm.status_id,
+                s.label AS status,
+                cm.created_at,
+                cm.updated_at
+            FROM contact_messages cm
+            JOIN statuses s ON s.id = cm.status_id
+            WHERE cm.id = :id;
+        """)
+        row = conn.execute(sql, {"id": message_id}).fetchone()
+        return dict(row._mapping) if row else None
+    finally:
+        conn.close()
+
+
+def update_support_message_status(message_id: int, status_id: int):
+    conn = get_connection()
+    try:
+        conn.execute(
+            text("UPDATE contact_messages SET status_id = :status_id WHERE id = :id"),
+            {"status_id": status_id, "id": message_id}
+        )
+        conn.commit()
+        return {"message": "Estado actualizado correctamente"}
     finally:
         conn.close()
