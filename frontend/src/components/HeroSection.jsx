@@ -6,7 +6,7 @@ export default function HeroSection() {
   return (
     <section className="hero">
       <div className="container">
-        <div className="hero-content">
+        <div className="hero-contentn">
           <h1>
             Jugos Naturales <span>Llenos de Vida</span> y Energía
           </h1>

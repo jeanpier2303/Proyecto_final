@@ -5,6 +5,20 @@ import NavbarApp from "../components/NavbarApp";
 import Footer from "../components/Footer";
 import "../assets/styles/CategoryProducts.css";
 
+// Importar las mismas imágenes que en Productos.jsx
+import JugoNaranja from "../assets/images/Productos/Jugo_naranja.png";
+import JugoManzana from "../assets/images/Productos/Jugo_manzana.png";
+import JugoZanahoriaNaranja from "../assets/images/Productos/Jugo_Naranja&Zanahoria.png";
+import JugoBorojó from "../assets/images/Productos/Jugo_borojo.png";
+import JugoGuanabana from "../assets/images/Productos/Jugo_guanabana.png";
+import JugoLulo from "../assets/images/Productos/Jugo_lulo.png";
+import JugoMango from "../assets/images/Productos/Jugo_mango.png";
+import JugoBorojóMaracuya from "../assets/images/Productos/Jugo_borojo&maracuya.png";
+import JugoFrutosRojos from "../assets/images/Productos/Jugo_frutos_rojos.png";
+import JugoMangoMaracuya from "../assets/images/Productos/Jugo_Mango&Maracuyá.png";
+import JugoChontaduro from "../assets/images/Productos/Jugo_Chontaduro.png";
+import JugoMangoGuayabaNaranja from "../assets/images/Productos/Jugo_MangoGuayabaNaranja.png";
+
 const CategoryProducts = () => {
   const { categoryId } = useParams();
   const navigate = useNavigate();
@@ -17,20 +31,21 @@ const CategoryProducts = () => {
   const [priceRange, setPriceRange] = useState([0, 20000]);
   const productsPerPage = 6;
 
-  // Datos de ejemplo para productos (mismos que en Productos.jsx)
- const productos = [
+  // Usar los mismos datos de productos que en Productos.jsx
+  const productos = [
     {
       id: 1,
       nombre: "Jugo de Naranja Natural",
       precio: 7500,
       precioOriginal: 8500,
       categoria: "clasicos",
-      imagen: "/images/productos/naranja.jpg",
+      imagen: JugoNaranja,
       descripcion: "Jugo de naranja recién exprimido, lleno de vitamina C y energía natural para empezar tu día.",
       oferta: true,
       descuento: 12,
       stock: 18,
       ingredientes: ["Naranjas frescas", "Hielo"],
+      beneficios: ["Alto en vitamina C", "Energía natural", "Refuerzo inmunológico"],
       rating: 4.8,
       reviews: 124,
       tiempoPreparacion: "5 min",
@@ -38,16 +53,17 @@ const CategoryProducts = () => {
     },
     {
       id: 2,
-      nombre: "Jugo Verde Detox",
+      nombre: "Jugo Verde Lulo",
       precio: 12000,
       precioOriginal: 12000,
       categoria: "verdes",
-      imagen: "/images/productos/verde-detox.jpg",
-      descripcion: "Mezcla revitalizante de espinaca, piña, pepino y jengibre para limpiar tu cuerpo naturalmente.",
+      imagen: JugoLulo,
+      descripcion: "Refrescante jugo verde con lulo, espinaca y pepino, ideal para detoxificar y revitalizar tu cuerpo.",
       oferta: false,
       descuento: 0,
       stock: 12,
-      ingredientes: ["Espinaca fresca", "Piña", "Pepino", "Jengibre", "Limón"],
+      ingredientes: ["Lulo", "Espinaca", "Pepino", "Apio", "Limón"],
+      beneficios: ["Detoxificación", "Rico en antioxidantes", "Energizante natural"],
       rating: 4.9,
       reviews: 89,
       tiempoPreparacion: "7 min",
@@ -55,16 +71,17 @@ const CategoryProducts = () => {
     },
     {
       id: 3,
-      nombre: "Batido Tropical de Mango y Maracuyá",
+      nombre: "Mezcla Tropical de Mango y Maracuyá",
       precio: 10500,
       precioOriginal: 12000,
       categoria: "tropicales",
-      imagen: "/images/productos/tropical-mango.jpg",
-      descripcion: "Explosión tropical de mango dulce y maracuyá ácido en un batido cremoso y refrescante.",
+      imagen: JugoMangoMaracuya,
+      descripcion: "Explosión tropical de mango dulce y maracuyá ácido en un jugo refrescante.",
       oferta: true,
       descuento: 13,
       stock: 10,
-      ingredientes: ["Mango maduro", "Maracuyá", "Leche de coco", "Hielo"],
+      ingredientes: ["Mango maduro", "Maracuyá", "Hielo"],
+      beneficios: ["Vitaminas A y C", "Hidratante", "Antioxidante"],
       rating: 4.7,
       reviews: 156,
       tiempoPreparacion: "6 min",
@@ -72,16 +89,17 @@ const CategoryProducts = () => {
     },
     {
       id: 4,
-      nombre: "Energizante Natural de Guaraná",
+      nombre: "Jugo energizante de Borojó",
       precio: 12800,
       precioOriginal: 14500,
       categoria: "energizantes",
-      imagen: "/images/productos/energizante-guarana.jpg",
-      descripcion: "Potente combinación de guaraná, maca y jengibre para energía natural sin cafeína.",
+      imagen: JugoBorojó,
+      descripcion: "Potente jugo de borojó con maca y jengibre, diseñado para aumentar tu energía y resistencia física.",
       oferta: true,
       descuento: 12,
       stock: 8,
-      ingredientes: ["Guaraná natural", "Maca", "Jengibre", "Miel", "Agua de coco"],
+      ingredientes: ["Borojó", "Maca", "Jengibre", "Miel", "Agua"],
+      beneficios: ["Incrementa energía", "Mejora resistencia", "Aumenta vitalidad"],
       rating: 4.6,
       reviews: 67,
       tiempoPreparacion: "8 min",
@@ -93,12 +111,13 @@ const CategoryProducts = () => {
       precio: 6800,
       precioOriginal: 6800,
       categoria: "clasicos",
-      imagen: "/images/productos/manzana.jpg",
+      imagen: JugoManzana,
       descripcion: "Jugo dulce y refrescante de manzana roja, perfecto para cualquier momento del día.",
       oferta: false,
       descuento: 0,
       stock: 20,
       ingredientes: ["Manzanas rojas", "Hielo", "Canela opcional"],
+      beneficios: ["Rico en fibra", "Digestivo", "Hidratante natural"],
       rating: 4.5,
       reviews: 98,
       tiempoPreparacion: "4 min",
@@ -106,16 +125,17 @@ const CategoryProducts = () => {
     },
     {
       id: 6,
-      nombre: "Green Power con Espirulina",
+      nombre: "Jugo Guanabana Power",
       precio: 13500,
       precioOriginal: 15000,
       categoria: "verdes",
-      imagen: "/images/productos/green-power.jpg",
-      descripcion: "Super jugo verde con espirulina, kale, piña y limón para carga máxima de nutrientes.",
+      imagen: JugoGuanabana,
+      descripcion: "Energizante jugo de guanábana con kale y espirulina, cargado de superfoods para un impulso saludable.",
       oferta: true,
       descuento: 10,
       stock: 6,
-      ingredientes: ["Kale", "Espirulina", "Piña", "Limón", "Manzana verde"],
+      ingredientes: ["Guanábana", "Kale", "Espirulina", "Limón"],
+      beneficios: ["Antioxidante", "Refuerzo inmunológico", "Energía natural"],
       rating: 4.9,
       reviews: 45,
       tiempoPreparacion: "7 min",
@@ -123,16 +143,17 @@ const CategoryProducts = () => {
     },
     {
       id: 7,
-      nombre: "Sunset Tropical",
+      nombre: "Mezcla Tropical Frutos Rojos",
       precio: 11200,
       precioOriginal: 11200,
       categoria: "tropicales",
-      imagen: "/images/productos/sunset-tropical.jpg",
-      descripcion: "Mezcla exótica de papaya, fresa y coco que evoca atardeceres en la playa.",
+      imagen: JugoFrutosRojos,
+      descripcion: "Deliciosa mezcla de frutos rojos tropicales como fresa, papaya y coco, rica en antioxidantes y sabor.",
       oferta: false,
       descuento: 0,
       stock: 9,
-      ingredientes: ["Papaya", "Fresa", "Coco fresco", "Jugo de naranja"],
+      ingredientes: ["Fresas", "Papaya", "Mora", "Uva", "Coco", "Hielo"],
+      beneficios: ["Rico en antioxidantes", "Vitaminas C y E", "Salud cardiovascular"],
       rating: 4.8,
       reviews: 112,
       tiempoPreparacion: "6 min",
@@ -140,16 +161,17 @@ const CategoryProducts = () => {
     },
     {
       id: 8,
-      nombre: "Power Boost con Ginseng",
+      nombre: "Jugo Energizante Borojó y Maracuyá",
       precio: 14200,
       precioOriginal: 16000,
       categoria: "energizantes",
-      imagen: "/images/productos/power-boost.jpg",
-      descripcion: "Combinación potente de ginseng, jengibre y cítricos para máximo rendimiento físico y mental.",
+      imagen: JugoBorojóMaracuya,
+      descripcion: "Combinación potente de borojó y maracuyá con ginseng para un impulso energético natural.",
       oferta: true,
       descuento: 11,
       stock: 7,
-      ingredientes: ["Ginseng natural", "Jengibre", "Naranja", "Limón", "Miel"],
+      ingredientes: ["Borojó", "Maracuyá", "Ginseng", "Miel"],
+      beneficios: ["Incrementa energía", "Mejora concentración", "Antioxidante"],
       rating: 4.7,
       reviews: 78,
       tiempoPreparacion: "8 min",
@@ -161,12 +183,13 @@ const CategoryProducts = () => {
       precio: 8200,
       precioOriginal: 9200,
       categoria: "clasicos",
-      imagen: "/images/productos/zanahoria-naranja.jpg",
+      imagen: JugoZanahoriaNaranja,
       descripcion: "Clásica combinación de zanahoria dulce y naranja cítrica, rica en betacaroteno.",
       oferta: true,
       descuento: 11,
       stock: 14,
       ingredientes: ["Zanahoria fresca", "Naranja", "Jengibre"],
+      beneficios: ["Vitamina A", "Salud ocular", "Piel radiante"],
       rating: 4.6,
       reviews: 134,
       tiempoPreparacion: "5 min",
@@ -174,16 +197,17 @@ const CategoryProducts = () => {
     },
     {
       id: 10,
-      nombre: "Detox Verde Profundo",
+      nombre: "Jugo verde de Mango",
       precio: 12500,
       precioOriginal: 12500,
       categoria: "verdes",
-      imagen: "/images/productos/detox-verde.jpg",
-      descripcion: "Jugo detox profundo con diente de león, pepino, manzana verde y limón para limpieza hepática.",
+      imagen: JugoMango,
+      descripcion: "Exquisito jugo verde con mango, pepino y menta para una experiencia refrescante y nutritiva.",
       oferta: false,
       descuento: 0,
       stock: 5,
-      ingredientes: ["Diente de león", "Pepino", "Manzana verde", "Limón", "Menta"],
+      ingredientes: ["Mango", "Pepino", "Menta", "Limón"],
+      beneficios: ["Rico en vitamina C", "Hidratante", "Antioxidante"],
       rating: 4.9,
       reviews: 56,
       tiempoPreparacion: "7 min",
@@ -191,16 +215,17 @@ const CategoryProducts = () => {
     },
     {
       id: 11,
-      nombre: "Piña Colada Sin Alcohol",
+      nombre: "Mezcla Tropical de Mango, Guayaba y Naranja",
       precio: 9800,
       precioOriginal: 11500,
       categoria: "tropicales",
-      imagen: "/images/productos/pina-colada.jpg",
-      descripcion: "Versión saludable de la clásica piña colada, con coco cremoso y piña dulce sin azúcar añadido.",
+      imagen: JugoMangoGuayabaNaranja,
+      descripcion: "Deliciosa mezcla tropical de mango, guayaba y naranja, perfecta para un impulso de sabor y vitaminas.",
       oferta: true,
       descuento: 15,
       stock: 11,
-      ingredientes: ["Piña madura", "Leche de coco", "Hielo", "Esencia de vainilla"],
+      ingredientes: ["Mango", "Guayaba", "Naranja", "Hielo"],
+      beneficios: ["Rico en vitamina C", "Hidratante", "Antioxidante"],
       rating: 4.8,
       reviews: 203,
       tiempoPreparacion: "5 min",
@@ -208,16 +233,17 @@ const CategoryProducts = () => {
     },
     {
       id: 12,
-      nombre: "Focus Mind Elixir",
+      nombre: "Jugo Energgizante de Chontaduro",
       precio: 13800,
       precioOriginal: 15500,
       categoria: "energizantes",
-      imagen: "/images/productos/focus-mind.jpg",
-      descripcion: "Elixir mental con romero, blueberries y té verde para claridad y concentración máxima.",
+      imagen: JugoChontaduro,
+      descripcion: "Energizante jugo de chontaduro con té verde y romero, ideal para mejorar la concentración y el enfoque mental.",
       oferta: true,
       descuento: 11,
       stock: 8,
-      ingredientes: ["Blueberries", "Romero", "Té verde", "Miel", "Limón"],
+      ingredientes: ["Chontaduro", "Té verde", "Romero", "Miel"],
+      beneficios: ["Aumenta la resistencia", "Mejora concentración", "Aumenta energía", "Rico en antioxidantes"],
       rating: 4.7,
       reviews: 89,
       tiempoPreparacion: "8 min",
@@ -234,6 +260,11 @@ const CategoryProducts = () => {
 
   // Obtener información de la categoría actual
   const currentCategory = categorias.find(cat => cat.id === categoryId) || { nombre: "Productos" };
+
+  // Función para cambiar de categoría
+  const handleCategoryChange = (newCategoryId) => {
+    navigate(`/categoria/${newCategoryId}`);
+  };
 
   // Filtrar productos según búsqueda y categoría
   const filteredProductos = productos.filter(producto => {
@@ -400,7 +431,7 @@ const CategoryProducts = () => {
         {/* Hero Section de Categoría */}
         <div className="category-hero">
           <Container>
-            <div className="hero-content text-center">
+            <div className="hero-contentt text-center">
               <div className="category-icon mb-3">
                 <i className={currentCategory.icon}></i>
               </div>
@@ -469,11 +500,11 @@ const CategoryProducts = () => {
           <Row>
             {/* Contenido Principal */}
             <Col lg={12}>
-              {/* Barra de filtros */}
+              {/* Barra de filtros - ACTUALIZADA CON SELECTOR DE CATEGORÍAS */}
               <Card className="filters-bar mb-4">
                 <Card.Body className="py-2">
                   <Row className="align-items-center">
-                    <Col md={6}>
+                    <Col md={4}>
                       <div className="search-container">
                         <InputGroup size="sm">
                           <InputGroup.Text>
@@ -488,7 +519,21 @@ const CategoryProducts = () => {
                         </InputGroup>
                       </div>
                     </Col>
-                    <Col md={6}>
+                    <Col md={4}>
+                      {/* Selector de categorías agregado */}
+                      <Form.Select 
+                        value={categoryId}
+                        onChange={(e) => handleCategoryChange(e.target.value)}
+                        size="sm"
+                      >
+                        {categorias.map(categoria => (
+                          <option key={categoria.id} value={categoria.id}>
+                            {categoria.nombre}
+                          </option>
+                        ))}
+                      </Form.Select>
+                    </Col>
+                    <Col md={4}>
                       <Form.Select 
                         value={sortBy}
                         onChange={(e) => setSortBy(e.target.value)}
@@ -649,7 +694,7 @@ const CategoryProducts = () => {
                             <div className="producto-actions mt-2">
                               <Button 
                                 variant="primary" 
-                                className="btn-comprar"
+                                className="btn-comprarr"
                                 onClick={() => handleAddToCart(producto)}
                                 disabled={producto.stock === 0}
                               >

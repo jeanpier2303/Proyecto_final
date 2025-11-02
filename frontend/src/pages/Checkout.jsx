@@ -534,14 +534,14 @@ const Checkout = () => {
 
             <div className="confirmation-actions">
               <button 
-                className="btn btn-outline"
+                className="btnn btnn-outline"
                 onClick={handleContinueShopping}
               >
                 <i className="bi bi-bag"></i>
                 Seguir Comprando
               </button>
               <button 
-                className="btn btn-primary"
+                className="btnn btnn-primary"
                 onClick={handlePrintInvoice}
               >
                 <i className="bi bi-printer"></i>
@@ -619,7 +619,7 @@ const Checkout = () => {
             <h3>Tu carrito está vacío</h3>
             <p>Agrega productos antes de proceder al checkout</p>
             <button 
-              className="btn btn-primary"
+              className="btnn btnn-primary"
               onClick={() => navigate("/productos")}
             >
               <i className="bi bi-bag"></i>
@@ -1002,7 +1002,7 @@ const Checkout = () => {
               <div className="action-buttons">
                 <button 
                   type="button"
-                  className="btn btn-outline"
+                  className="btnn btn-outline"
                   onClick={handleBackToCart}
                 >
                   <i className="bi bi-arrow-left"></i>
@@ -1010,12 +1010,12 @@ const Checkout = () => {
                 </button>
                 <button 
                   type="submit"
-                  className="btn btn-primary"
+                  className="btnn btnn-primary"
                   disabled={currentStep === 2}
                 >
                   {currentStep === 2 ? (
                     <>
-                      <div className="btn-spinner"></div>
+                      <div className="btnn-spinner"></div>
                       Procesando...
                     </>
                   ) : (

@@ -32,7 +32,7 @@ function App() {
           <Routes>
             {/* Rutas principales */}
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<Inicio />} />
             <Route path="/register" element={<Register />} />
 
             {/* Rutas privadas o internas */}
