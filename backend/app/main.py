@@ -36,6 +36,7 @@ app.include_router(orders.router, prefix="/api/orders")
 app.include_router(admin.router, prefix="/api/admin")
 app.include_router(categorias.router, prefix="/api/categorias") 
 app.include_router(pedidos.router)
+app.include_router(orders.router)
 
 # Rutas de facturación
 #app.include_router(invoice_routes.router)
