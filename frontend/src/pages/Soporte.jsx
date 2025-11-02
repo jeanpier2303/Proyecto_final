@@ -241,43 +241,6 @@ const Soporte = () => {
                   )}
 
                   <Form onSubmit={handleSubmit}>
-                    <Row>
-                      <Col md={6}>
-                        <Form.Group className="mb-3">
-                          <Form.Label className="soporte-form-label">
-                            <i className="bi bi-person me-1"></i>
-                            Nombre completo *
-                          </Form.Label>
-                          <Form.Control
-                            type="text"
-                            name="nombre"
-                            value={formData.nombre}
-                            onChange={handleChange}
-                            required
-                            placeholder="Tu nombre completo"
-                            className="soporte-form-control"
-                          />
-                        </Form.Group>
-                      </Col>
-                      <Col md={6}>
-                        <Form.Group className="mb-3">
-                          <Form.Label className="soporte-form-label">
-                            <i className="bi bi-envelope me-1"></i>
-                            Email *
-                          </Form.Label>
-                          <Form.Control
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                            placeholder="tu@email.com"
-                            className="soporte-form-control"
-                          />
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                    
                     <Form.Group className="mb-3">
                       <Form.Label className="soporte-form-label">
                         <i className="bi bi-tag me-1"></i>

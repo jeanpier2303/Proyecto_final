@@ -23,6 +23,19 @@ IVA = "Incluido"
 BANCO = "Davivienda"
 TITULAR = "Dairon S.A.S"
 
+# 📸 Diccionario de imágenes de productos (ajusta las rutas a tus archivos)
+IMAGENES_PRODUCTOS = {
+    1: "app/bot/assets/product_images/jugo_naranja.png",
+    2: "app/bot/assets/product_images/jugo_mango.png",
+    3: "app/bot/assets/product_images/jugo_maracuya.png",
+    4: "app/bot/assets/product_images/jJugo_MangoGuayabaNaranja.png",
+    5: "app/bot/assets/product_images/jugo_manzana.png",
+    5: "app/bot/assets/product_images/Jugo_Mango&Maracuyá.png",
+    6: "app/bot/assets/product_images/jugo_pina.png",
+
+    # puedes seguir agregando más según los IDs de tu base de datos
+}
+
 # ---------------------------------------------------------------------
 # Función para crear el PDF de la factura
 # ---------------------------------------------------------------------
@@ -61,7 +74,6 @@ def generar_factura_pdf(user, producto, cantidad, total):
     pdf.cell(200, 8, f"Banco: {BANCO}", ln=True)
     pdf.cell(200, 8, f"Titular: {TITULAR}", ln=True)
 
-    # --- Código QR de la factura ---
     qr_data = f"Pago confirmado por {user['first_name']} - Total: ${total:.2f}"
     qr_img = qrcode.make(qr_data)
     qr_path = f"factura_qr_{user['id']}.png"
@@ -73,15 +85,13 @@ def generar_factura_pdf(user, producto, cantidad, total):
     return pdf_output
 
 # ---------------------------------------------------------------------
-# Inicio del flujo
-# ---------------------------------------------------------------------
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     args = context.args
     if not args:
         keyboard = [[InlineKeyboardButton("🔐 Iniciar sesión", url=f"{FRONTEND_URL}/login")]]
         reply_markup = InlineKeyboardMarkup(keyboard)
         await update.message.reply_text(
-            " No se reconocen tus credenciales.\n\n"
+            "⚠️ No se reconocen tus credenciales.\n\n"
             "Por favor inicia sesión desde tu cuenta para continuar 👇",
             reply_markup=reply_markup
         )
@@ -89,7 +99,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     user_id = args[0]
     try:
-        # Obtener usuario
         user = requests.get(f"{API_URL}/api/auth/usuarios/{user_id}").json()
         context.user_data["user"] = user
 
@@ -98,7 +107,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Estos son los productos disponibles:"
         )
 
-        # Obtener productos
         productos = requests.get(f"{API_URL}/api/productos/").json()[:10]
         context.user_data["productos"] = productos
 
@@ -106,15 +114,11 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"{p['id']}. {p.get('name') or p.get('nombre')} - ${p.get('price') or p.get('precio')}"
             for p in productos
         ])
-        
-        # --- Enviar imagen de bienvenida ---
+
         with open("app/bot/assets/Carrusel-2.png", "rb") as photo:
             await update.message.reply_photo(
                 photo=photo,
-                caption=(
-                    "🥭 *Bienvenido a KAHUA* 🥭\n\n"
-                    "Elige uno de nuestros deliciosos jugos naturales 🍹"
-                ),
+                caption="🥭 *Bienvenido a KAHUA* 🥭\n\nElige uno de nuestros deliciosos jugos naturales 🍹",
                 parse_mode="Markdown"
             )
 
@@ -141,8 +145,18 @@ async def get_product(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return PRODUCT
 
     context.user_data["producto"] = producto
+
+    # 📸 Mostrar imagen del producto si existe
+    ruta_imagen = IMAGENES_PRODUCTOS.get(producto_id)
+    if ruta_imagen and os.path.exists(ruta_imagen):
+        with open(ruta_imagen, "rb") as img:
+            await update.message.reply_photo(
+                photo=img,
+                caption=f"🍹 *{producto.get('name') or producto.get('nombre')}* seleccionado.",
+                parse_mode="Markdown"
+            )
+
     await update.message.reply_text(
-        f"Has elegido *{producto.get('name') or producto.get('nombre')}* 🍹\n"
         f"¿Cuántas unidades deseas? (Máximo {MAX_CANTIDAD})"
     )
     return QUANTITY
@@ -168,7 +182,6 @@ async def get_quantity(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data["cantidad"] = cantidad
     context.user_data["total"] = total
 
-    # Generar QR de pago
     qr_data = f"Transferencia a {TITULAR} ({BANCO}) - Total: ${total:.2f}"
     qr_img = qrcode.make(qr_data)
     qr_path = f"pago_{user['id']}.png"
@@ -179,18 +192,15 @@ async def get_quantity(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup = InlineKeyboardMarkup(keyboard)
         await update.message.reply_photo(
             photo=qr_file,
-            caption=(
-                f"💳 Método de pago: Transferencia Bancaria\n\n"
-                f"Banco: {BANCO}\nTitular: {TITULAR}\n\n"
-                f"Total a pagar: ${total:.2f}\n\n"
-                "Escanea este código QR para realizar tu pago 👇"
-            ),
+            caption=(f"💳 Método de pago: Transferencia Bancaria\n\nBanco: {BANCO}\nTitular: {TITULAR}\n\n"
+                     f"Total a pagar: ${total:.2f}\n\nEscanea este código QR para realizar tu pago 👇"),
             reply_markup=reply_markup
         )
 
     os.remove(qr_path)
     return PAYMENT
 
+# ---------------------------------------------------------------------
 # ---------------------------------------------------------------------
 async def continuar_pago(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
@@ -202,11 +212,10 @@ async def continuar_pago(update: Update, context: ContextTypes.DEFAULT_TYPE):
     total = context.user_data["total"]
 
     # Registrar pedido en backend
-    # Registrar pedido en backend
     pedido = {
         "user_id": user["id"],
         "address_id": 1,
-        "status_id": 4,  # Pagado
+        "status_id": 4,  # Entregado
         "subtotal": total - COSTO_ENVIO,
         "shipping": COSTO_ENVIO,
         "tax": 0,
@@ -223,7 +232,6 @@ async def continuar_pago(update: Update, context: ContextTypes.DEFAULT_TYPE):
     }
     requests.post(f"{API_URL}/orders", json=pedido)
 
-
     # Generar factura
     pdf_output = generar_factura_pdf(user, producto, cantidad, total)
     factura_file = InputFile(pdf_output, filename="factura_kahua.pdf")
@@ -232,9 +240,53 @@ async def continuar_pago(update: Update, context: ContextTypes.DEFAULT_TYPE):
         document=factura_file,
         caption="🧾 Aquí tienes tu factura electrónica.\n¡Gracias por tu compra en KAHUA! 🥭"
     )
-    return ConversationHandler.END
+
+    # --- Mostrar botones finales ---
+    keyboard = [
+        [InlineKeyboardButton("🛍 Iniciar nueva compra", callback_data="nueva_compra")],
+        [InlineKeyboardButton("🚪 Salir", callback_data="salir")]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
+    await query.message.reply_text(
+        "¿Deseas realizar otra compra o salir del chat?",
+        reply_markup=reply_markup
+    )
+
+    return PAYMENT  # mantenemos el estado activo para capturar la siguiente acción
 
 # ---------------------------------------------------------------------
+async def nueva_compra(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+
+    # Reiniciar flujo como si fuera /start, pero sin pedir login otra vez
+    user = context.user_data["user"]
+
+    await query.message.reply_text(
+        f"🛍 ¡Perfecto {user['first_name']}! Vamos a iniciar una nueva compra 🥭"
+    )
+
+    # Obtener productos actualizados
+    productos = requests.get(f"{API_URL}/api/productos/").json()[:10]
+    context.user_data["productos"] = productos
+
+    lista = "\n".join([
+        f"{p['id']}. {p.get('name') or p.get('nombre')} - ${p.get('price') or p.get('precio')}"
+        for p in productos
+    ])
+
+    await query.message.reply_text(f"{lista}\n\n👉 Escribe el número del producto que deseas.")
+    return PRODUCT
+
+
+async def salir(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+    await query.message.reply_text("👋 ¡Gracias por comprar con KAHUA! Esperamos verte pronto 🥭")
+    return ConversationHandler.END
+# ---------------------------------------------------------------------
+
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("🚪 Pedido cancelado. Usa /start para comenzar de nuevo.")
     return ConversationHandler.END
@@ -248,7 +300,12 @@ def main():
         states={
             PRODUCT: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_product)],
             QUANTITY: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_quantity)],
-            PAYMENT: [CallbackQueryHandler(continuar_pago, pattern="continuar_pago")],
+            PAYMENT: [
+                        CallbackQueryHandler(continuar_pago, pattern="continuar_pago"),
+                        CallbackQueryHandler(nueva_compra, pattern="nueva_compra"),
+                        CallbackQueryHandler(salir, pattern="salir")
+                    ],
+
         },
         fallbacks=[CommandHandler("cancel", cancel)],
     )
