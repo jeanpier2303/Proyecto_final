@@ -16,11 +16,9 @@ import Comunidad from "./pages/Comunidad/Comunidad";
 import Soporte from "./pages/Soporte";
 import Carrito from "./pages/Carrito";
 import Checkout from "./pages/Checkout";
-<<<<<<< HEAD
-import OrderConfirmation from "./components/OrderConfirmation";
-=======
-import Perfil from "./pages/Perfil/Perfil";
->>>>>>> 9c663d04206091aeab2b93b80b274e519141b187
+/* import OrderConfirmation from "./components/OrderConfirmation"; */
+/* import Perfil from "./pages/Perfil/Perfil"; */
+
 
 function App() {
   return (
@@ -45,11 +43,8 @@ function App() {
             <Route path="/Home" element={<Home />} />
             <Route path="/Carrito" element={<Carrito />} />
             <Route path="/Checkout" element={<Checkout />} />
-<<<<<<< HEAD
-            <Route path="/OrderConfirmation" element={<OrderConfirmation />} />
-=======
-            <Route path="/Perfil" element={<Perfil />} />
->>>>>>> 9c663d04206091aeab2b93b80b274e519141b187
+            {/* <Route path="/OrderConfirmation" element={<OrderConfirmation />} /> */}
+            {/* <Route path="/Perfil" element={<Perfil />} /> */}
           </Routes>
         </Router>
       </AuthProvider>
