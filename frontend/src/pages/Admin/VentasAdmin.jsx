@@ -84,7 +84,7 @@ const VentasAdmin = () => {
 
   return (
     <div className="p-3">
-      <h3>💰 Ventas Detalladas</h3>
+      <h3> Ventas Detalladas</h3>
 
       <div className="mb-3 d-flex justify-content-end">
         <Button

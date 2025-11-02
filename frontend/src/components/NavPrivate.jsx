@@ -255,7 +255,6 @@ const NavPrivate = () => {
                 </div>
               </div>
 
-              <NavDropdown.Divider />
 
               <NavDropdown.Item as={Link} to="/perfil" className="dropdown-item-improved">
                 <i className="bi bi-person"></i>
@@ -268,7 +267,7 @@ const NavPrivate = () => {
                 <Badge bg="primary" className="item-badge-improved">3</Badge>
               </NavDropdown.Item>
 
-              <NavDropdown.Item as={Link} to="/favoritos" className="dropdown-item-improved">
+              {/* <NavDropdown.Item as={Link} to="/favoritos" className="dropdown-item-improved">
                 <i className="bi bi-heart"></i>
                 <span>Favoritos</span>
                 <Badge bg="danger" className="item-badge-improved">2</Badge>
@@ -278,7 +277,7 @@ const NavPrivate = () => {
                 <i className="bi bi-gear"></i>
                 <span>Configuración</span>
               </NavDropdown.Item>
-
+ */}
               <NavDropdown.Divider />
 
               <NavDropdown.Item 

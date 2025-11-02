@@ -32,7 +32,7 @@ const DashboardHome = () => {
             salesLabels = lastMonthRes.data.labels ?? [];
             salesValues = lastMonthRes.data.data ?? [];
           } catch (err2) {
-            console.warn("⚠️ No hay registros de ventas en meses anteriores tampoco.");
+            console.warn("No hay registros de ventas en meses anteriores tampoco.");
           }
         }
 

@@ -1,6 +1,7 @@
 # app/services/admin_service.py
 from sqlalchemy import text
 from app.db import get_connection
+from datetime import datetime
 
 
 # --- 1. Estadísticas principales ---
@@ -19,13 +20,10 @@ def get_admin_stats():
     return dict(result._mapping)
 
 
-# --- 2. Ventas por día no tengo ni idea de que hizo la IA ---
-from datetime import datetime
-
+# --- 2. Ventas por día ---
 def get_sales_data(days: int = 7):
     conn = get_connection()
     try:
-        # 🔹 Consulta totalmente compatible con ONLY_FULL_GROUP_BY
         sql_recent = text("""
             SELECT
                 DATE(created_at) AS order_date,
@@ -37,30 +35,10 @@ def get_sales_data(days: int = 7):
         """)
         rows = conn.execute(sql_recent, {"days": days}).fetchall()
 
-        # 🔹 Si no hay datos recientes, usar el último mes con ventas
-        if not rows:
-            sql_last_month = text("""
-                SELECT
-                    DATE(created_at) AS order_date,
-                    SUM(total) AS amount
-                FROM orders
-                WHERE YEAR(created_at) = (
-                    SELECT YEAR(MAX(created_at)) FROM orders
-                )
-                AND MONTH(created_at) = (
-                    SELECT MONTH(MAX(created_at)) FROM orders
-                )
-                GROUP BY DATE(created_at)
-                ORDER BY DATE(created_at) ASC;
-            """)
-            rows = conn.execute(sql_last_month).fetchall()
-
         if not rows:
             return {"labels": [], "data": []}
 
-        # 🔹 Dar formato a las fechas en Python, no en SQL
-        labels = []
-        data = []
+        labels, data = [], []
         for r in rows:
             date_obj = r.order_date
             day_label = date_obj.strftime("%a %d/%m") if isinstance(date_obj, datetime) else str(date_obj)
@@ -68,9 +46,8 @@ def get_sales_data(days: int = 7):
             data.append(float(r.amount or 0))
 
         return {"labels": labels, "data": data}
-
     except Exception as e:
-        print("❌ Error en get_sales_data:", e)
+        print(" Error en get_sales_data:", e)
         return {"labels": [], "data": []}
     finally:
         conn.close()
@@ -94,25 +71,23 @@ def get_categories_data():
     return {"labels": [r.category for r in rows], "data": [r.count for r in rows]}
 
 
-# --- 4. Pedidos recientes / filtro por estado ---
+# --- 4. Pedidos recientes ---
 def get_orders(status: str = None, limit: int = 20):
     conn = get_connection()
     base_sql = """
         SELECT 
             o.id,
             CONCAT(u.first_name, ' ', u.last_name) AS client_name,
-            GROUP_CONCAT(CONCAT(p.name, ' (', oi.quantity, ')') SEPARATOR ', ') AS product_description,
             DATE_FORMAT(o.created_at, '%d %b %Y') AS date,
             o.total,
-            o.status
+            s.label AS status
         FROM orders o
         JOIN users u ON u.id = o.user_id
-        JOIN order_items oi ON oi.order_id = o.id
-        JOIN products p ON p.id = oi.product_id
+        JOIN statuses s ON s.id = o.status_id
     """
     if status:
-        base_sql += " WHERE o.status = :status"
-    base_sql += " GROUP BY o.id ORDER BY o.created_at DESC LIMIT :limit;"
+        base_sql += " WHERE s.label = :status"
+    base_sql += " ORDER BY o.created_at DESC LIMIT :limit;"
     sql = text(base_sql)
     params = {"status": status, "limit": limit} if status else {"limit": limit}
     rows = conn.execute(sql, params).fetchall()
@@ -120,7 +95,7 @@ def get_orders(status: str = None, limit: int = 20):
     return [dict(r._mapping) for r in rows]
 
 
-# --- 5. Productos con filtro por categoría o búsqueda ---
+# --- 5. Productos con filtros ---
 def get_products(category_id: int = None, search: str = None):
     conn = get_connection()
     sql = """
@@ -142,7 +117,7 @@ def get_products(category_id: int = None, search: str = None):
     return [dict(r._mapping) for r in rows]
 
 
-# --- 6. Usuarios por rol ---
+# --- 6. Usuarios ---
 def get_users(role_id: int = None):
     conn = get_connection()
     sql = "SELECT id, first_name, last_name, email, role_id FROM users"
@@ -156,12 +131,13 @@ def get_users(role_id: int = None):
     return [dict(r._mapping) for r in rows]
 
 
-# --- 7. Categorías (CRUD básico) ---
+# --- 7. Categorías ---
 def get_categories():
     conn = get_connection()
     rows = conn.execute(text("SELECT * FROM categories ORDER BY id DESC;")).fetchall()
     conn.close()
     return [dict(r._mapping) for r in rows]
+
 
 def create_category(name: str):
     conn = get_connection()
@@ -169,6 +145,7 @@ def create_category(name: str):
     conn.commit()
     conn.close()
     return {"message": "Categoría creada"}
+
 
 def delete_category(category_id: int):
     conn = get_connection()
@@ -182,61 +159,216 @@ def delete_category(category_id: int):
 def get_sales_details():
     conn = get_connection()
     sql = text("""
-    SELECT
-        o.id AS order_id,
-        DATE_FORMAT(o.created_at, '%d/%m/%Y') AS date,
-        u.first_name AS client,
-        p.name AS product,
-        oi.qty AS quantity,
-        oi.unit_price AS price,
-        oi.subtotal
-    FROM order_items oi
-    JOIN orders o ON o.id = oi.order_id
-    JOIN users u ON u.id = o.user_id
-    JOIN products p ON p.id = oi.product_id
-    ORDER BY o.created_at DESC;
-""")
-
+        SELECT
+            o.id AS order_id,
+            DATE_FORMAT(o.created_at, '%d/%m/%Y') AS date,
+            CONCAT(u.first_name, ' ', u.last_name) AS client,
+            p.name AS product,
+            oi.qty AS quantity,
+            oi.unit_price AS price,
+            (oi.qty * oi.unit_price) AS subtotal
+        FROM order_items oi
+        JOIN orders o ON o.id = oi.order_id
+        JOIN users u ON u.id = o.user_id
+        JOIN products p ON p.id = oi.product_id
+        ORDER BY o.created_at DESC;
+    """)
     rows = conn.execute(sql).fetchall()
     conn.close()
     return [dict(r._mapping) for r in rows]
 
 
-# --- 9. Pedidos con paginación profesional ---
-def get_orders_paginated(page: int = 1, limit: int = 10):
+# --- 9. Pedidos con paginación ---
+def get_orders_paginated(page: int = 1, limit: int = 10, status: str = None):
     conn = get_connection()
+    try:
+        offset = (page - 1) * limit
+        params = {"limit": limit, "offset": offset}
 
-    # Calcular desplazamiento
-    offset = (page - 1) * limit
+        where_clause = ""
+        if status:
+            where_clause = "WHERE s.label = :status"
+            params["status"] = status
 
-    # Obtener total de registros
-    total_sql = text("SELECT COUNT(*) AS total FROM orders;")
-    total_result = conn.execute(total_sql).fetchone()
-    total_records = total_result.total
-    total_pages = (total_records + limit - 1) // limit  # Redondeo hacia arriba
+        total_sql = text(f"""
+            SELECT COUNT(*) AS total
+            FROM orders o
+            JOIN statuses s ON s.id = o.status_id
+            {where_clause};
+        """)
+        total_result = conn.execute(total_sql, params).fetchone()
+        total_records = total_result.total if total_result else 0
+        total_pages = (total_records + limit - 1) // limit or 1
 
-    # Consulta principal con JOINs para mostrar cliente y estado
-    sql = text("""
-        SELECT 
-            o.id,
-            CONCAT(u.first_name, ' ', u.last_name) AS customer,
-            DATE_FORMAT(o.created_at, '%d %b %Y') AS date,
-            o.total,
-            s.label AS status
-        FROM orders o
-        JOIN users u ON u.id = o.user_id
-        JOIN statuses s ON s.id = o.status_id
-        ORDER BY o.created_at DESC
-        LIMIT :limit OFFSET :offset;
-    """)
+        sql = text(f"""
+            SELECT 
+                o.id,
+                CONCAT(u.first_name, ' ', u.last_name) AS customer,
+                DATE_FORMAT(o.created_at, '%d %b %Y') AS date,
+                o.total,
+                s.label AS status
+            FROM orders o
+            JOIN users u ON u.id = o.user_id
+            JOIN statuses s ON s.id = o.status_id
+            {where_clause}
+            ORDER BY o.created_at DESC
+            LIMIT :limit OFFSET :offset;
+        """)
+        rows = conn.execute(sql, params).fetchall()
 
-    rows = conn.execute(sql, {"limit": limit, "offset": offset}).fetchall()
-    conn.close()
+        return {
+            "page": page,
+            "limit": limit,
+            "total_records": total_records,
+            "total_pages": total_pages,
+            "data": [dict(r._mapping) for r in rows]
+        }
 
-    return {
-        "page": page,
-        "limit": limit,
-        "total_records": total_records,
-        "total_pages": total_pages,
-        "data": [dict(r._mapping) for r in rows]
-    }
+    except Exception as e:
+        print(" Error en get_orders_paginated:", e)
+        return {"page": page, "limit": limit, "total_records": 0, "total_pages": 1, "data": []}
+    finally:
+        conn.close()
+
+
+# --- 10. Detalle de pedido ---
+def get_order_details(order_id: int):
+    conn = get_connection()
+    try:
+        # --- Datos principales del pedido ---
+        sql_order = text("""
+            SELECT 
+                o.id,
+                o.created_at,
+                o.total,
+                o.subtotal,
+                o.tax,
+                o.shipping AS shipping_cost,
+                s.label AS status,
+                o.note,
+                u.first_name,
+                u.last_name,
+                u.email,
+                u.phone,
+                u.identification_number AS document,
+                CONCAT(a.street, ', ', IFNULL(a.complement, ''), ', ', c.name) AS address
+            FROM orders o
+            JOIN users u ON u.id = o.user_id
+            JOIN statuses s ON s.id = o.status_id
+            LEFT JOIN addresses a ON a.id = o.address_id
+            LEFT JOIN cities c ON c.id = a.city_id
+            WHERE o.id = :order_id;
+        """)
+        order_row = conn.execute(sql_order, {"order_id": order_id}).fetchone()
+        if not order_row:
+            return None
+
+        order = dict(order_row._mapping)
+
+        # --- Productos del pedido ---
+        sql_items = text("""
+            SELECT 
+                p.name AS product_name,
+                oi.qty AS quantity,
+                oi.unit_price AS unit_price,
+                (oi.qty * oi.unit_price) AS subtotal
+            FROM order_items oi
+            JOIN products p ON p.id = oi.product_id
+            WHERE oi.order_id = :order_id;
+        """)
+        items = [dict(i._mapping) for i in conn.execute(sql_items, {"order_id": order_id}).fetchall()]
+
+        # --- Estructura compatible con el frontend ---
+        invoice = {
+            "order": {
+                "id": order["id"],
+                "created_at": order["created_at"],
+                "subtotal": float(order["subtotal"] or 0),
+                "tax": float(order["tax"] or 0),
+                "shipping_cost": float(order["shipping_cost"] or 0),
+                "total": float(order["total"] or 0),
+                "status": order["status"],
+                "note": order.get("note", "") or "",
+                "payment_method": "Pago no especificado"
+            },
+            "user": {
+                "first_name": order.get("first_name", ""),
+                "last_name": order.get("last_name", ""),
+                "email": order.get("email", ""),
+                "phone": order.get("phone", ""),
+                "identification_number": order.get("document", "")
+            },
+            "address": {
+                "street": order.get("address", "")
+            },
+            "items": items
+        }
+
+        return invoice
+
+    except Exception as e:
+        print(" Error en get_order_details:", e)
+        return None
+    finally:
+        conn.close()
+
+
+# ------------parte de mensaje en soporte------------
+# --- 11. Mensajes de soporte ---
+def get_support_messages(status_id: int = None):
+    conn = get_connection()
+    try:
+        sql = """
+            SELECT 
+                cm.id,
+                cm.email,
+                cm.subject,
+                cm.message,
+                cm.status_id,
+                s.label AS status,
+                cm.created_at
+            FROM contact_messages cm
+            JOIN statuses s ON s.id = cm.status_id
+            ORDER BY cm.created_at DESC;
+        """
+        rows = conn.execute(text(sql)).fetchall()
+        return [dict(r._mapping) for r in rows]
+    finally:
+        conn.close()
+
+
+def get_support_message_by_id(message_id: int):
+    conn = get_connection()
+    try:
+        sql = text("""
+            SELECT 
+                cm.id,
+                cm.user_id,
+                cm.email,
+                cm.subject,
+                cm.message,
+                cm.status_id,
+                s.label AS status,
+                cm.created_at,
+                cm.updated_at
+            FROM contact_messages cm
+            JOIN statuses s ON s.id = cm.status_id
+            WHERE cm.id = :id;
+        """)
+        row = conn.execute(sql, {"id": message_id}).fetchone()
+        return dict(row._mapping) if row else None
+    finally:
+        conn.close()
+
+
+def update_support_message_status(message_id: int, status_id: int):
+    conn = get_connection()
+    try:
+        conn.execute(
+            text("UPDATE contact_messages SET status_id = :status_id WHERE id = :id"),
+            {"status_id": status_id, "id": message_id}
+        )
+        conn.commit()
+        return {"message": "Estado actualizado correctamente"}
+    finally:
+        conn.close()

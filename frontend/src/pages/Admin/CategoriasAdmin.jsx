@@ -43,7 +43,7 @@ const CategoriasAdmin = () => {
 
   return (
     <div className="p-3">
-      <h3>🏷️ Gestión de Categorías</h3>
+      <h3> Gestión de Categorías</h3>
 
       <Row className="my-3 g-2">
         <Col md={8}>

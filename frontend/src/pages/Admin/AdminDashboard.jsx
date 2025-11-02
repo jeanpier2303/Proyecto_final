@@ -9,6 +9,7 @@ import UsuariosAdmin from "./UsuariosAdmin";
 import CategoriasAdmin from "./CategoriasAdmin";
 import VentasAdmin from "./VentasAdmin";
 import "../../assets/styles/admin.css";
+import MensajesAdmin from "./MensajesAdmin"
 
 const AdminDashboard = () => {
   return (
@@ -23,6 +24,7 @@ const AdminDashboard = () => {
           <Route path="usuarios" element={<UsuariosAdmin />} />
           <Route path="categorias" element={<CategoriasAdmin />} />
           <Route path="ventas" element={<VentasAdmin />} />
+          <Route path="mensajes" element={<MensajesAdmin />} />
         </Routes>
       </div>
     </div>

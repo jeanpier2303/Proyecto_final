@@ -4,7 +4,7 @@ import { BiEditAlt, BiMailSend, BiUserCircle, BiCoinStack, BiMap } from "react-i
 import NavPrivate from "../../components/NavPrivate.jsx";
 import "../../assets/styles/ProfileModern.css";
 import Footer from "../../components/Footer.jsx";
-/* import "../assets/styles/ProfileModern.css"; */
+import "../../assets/styles/ProfileModern.css";
 
 const Perfil = () => {
   const [user, setUser] = useState(null);
@@ -15,8 +15,8 @@ const Perfil = () => {
       setUser(JSON.parse(storedUser));
     } else {
       const mockUser = {
-        nombres: "dv",
-        apellidos: "usuario",
+        nombres: "Linux",
+        apellidos: "Master",
         email: "dv@kahua.com",
         puntosKahua: 120,
         nivel: "Plata",
@@ -48,7 +48,7 @@ const Perfil = () => {
               <div className="d-flex justify-content-between align-items-center flex-wrap">
                 <div>
                   <h3 className="perfil-nombre">{user.nombres} {user.apellidos}</h3>
-                  <h4 className="perfil-email"><BiMailSend className="me-1" /> {user.email}</h4>
+                  <h3 className="perfil-email"><BiMailSend className="me-1" /> {user.email}</h3>
                 </div>
               </div>
             </Col>
@@ -116,15 +116,15 @@ const Perfil = () => {
                   <h5>Estado de la Cuenta</h5>
                 </div>
                 <hr />
-{/*                 <p><strong>Usuario:</strong> {user.nombres.toLowerCase()}</p>
- */}                <p><strong>Estado:</strong> Activa</p>
+                {/* <p><strong>Usuario:</strong> {user.nombres.toLowerCase()}</p> */}
+                <p><strong>Estado:</strong> Activa</p>
                 <p><strong>Registro:</strong> 15 de marzo de 2024</p>
               </Card.Body>
             </Card>
           </Col>
         </Row>
       </Container>
-        <Footer />
+    <Footer />
     </>
   );
 };

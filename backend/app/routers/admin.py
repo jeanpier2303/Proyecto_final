@@ -3,6 +3,7 @@ from fastapi import APIRouter, Query, Body, Depends
 from sqlalchemy import text
 from app.db import get_connection
 import re #para generar slugs
+from fastapi import APIRouter, HTTPException 
 from app.services.admin_service import (
     get_admin_stats,
     get_sales_data,
@@ -30,17 +31,20 @@ def admin_get_sales(range: int = Query(7, ge=7, le=90)):
 def admin_get_categories_chart():
     return get_categories_data()
 
+#para filtrar los pedidos
 @router.get("/orders")
 def admin_get_orders(
     page: int = Query(1, ge=1),
-    limit: int = Query(10, ge=1, le=100)
+    limit: int = Query(10, ge=1, le=100),
+    status: str | None = Query(None)
 ):
     from app.services.admin_service import get_orders_paginated
     try:
-        return get_orders_paginated(page=page, limit=limit)
+        return get_orders_paginated(page=page, limit=limit, status=status)
     except Exception as e:
-        print("❌ Error en /admin/orders:", e)
+        print(" Error en /admin/orders:", e)
         raise
+
 
 
 
@@ -109,5 +113,93 @@ def create_product(
         return dict(result._mapping)
 
     except Exception as e:
-        print("❌ Error creando producto:", e)
+        print(" Error creando producto:", e)
         return {"error": str(e)}
+    
+# --------------------------------------------------------
+# DETALLE DE UN PEDIDO ESPECÍFICO (FACTURA)
+
+@router.get("/orders/{order_id}")
+def admin_get_order_details(order_id: int):
+    conn = get_connection()
+    try:
+        sql = text("""
+            SELECT
+                o.id,
+                o.created_at,
+                o.total,
+                o.subtotal,
+                o.tax,
+                o.shipping AS shipping_cost,
+                s.label AS status,
+                CONCAT(u.first_name, ' ', u.last_name) AS customer_name,
+                u.email,
+                u.phone,
+                u.identification_number AS document,
+                CONCAT(a.street, ', ', IFNULL(a.complement, ''), ', ', c.name) AS address
+            FROM orders o
+            JOIN users u ON u.id = o.user_id
+            JOIN statuses s ON s.id = o.status_id
+            LEFT JOIN addresses a ON a.id = o.address_id
+            LEFT JOIN cities c ON c.id = a.city_id
+            WHERE o.id = :order_id
+        """)
+        order = conn.execute(sql, {"order_id": order_id}).fetchone()
+
+        if not order:
+            raise HTTPException(status_code=404, detail="Pedido no encontrado")
+
+        #  Items del pedido (sin discount ni sku)
+        sql_items = text("""
+            SELECT
+                p.name AS product_name,
+                oi.qty AS quantity,
+                oi.unit_price,
+                (oi.qty * oi.unit_price) AS subtotal
+            FROM order_items oi
+            JOIN products p ON p.id = oi.product_id
+            WHERE oi.order_id = :order_id
+        """)
+        items = conn.execute(sql_items, {"order_id": order_id}).fetchall()
+
+        result = dict(order._mapping)
+        result["items"] = [dict(i._mapping) for i in items]
+        result["payment_method"] = "Pago no especificado"  # temporal
+
+        return result
+
+    except Exception as e:
+        print(f" Error en get_order_details: {e}")
+        raise HTTPException(status_code=500, detail=f"Error interno: {e}")
+    finally:
+        conn.close()
+
+
+# ---------------------------------------- Todo de soporte / mensajes
+from app.services.admin_service import (
+    get_support_messages,
+    get_support_message_by_id,
+    update_support_message_status
+)
+
+# Módulo de soporte / mensajes
+@router.get("/support/messages")
+def admin_get_messages():
+    try:
+        return get_support_messages()
+    except Exception as e:
+        print("Error en /support/messages:", e)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/support/messages/{message_id}")
+def admin_get_message_detail(message_id: int):
+    msg = get_support_message_by_id(message_id)
+    if not msg:
+        raise HTTPException(status_code=404, detail="Mensaje no encontrado")
+    return msg
+
+
+@router.put("/support/messages/{message_id}/status")
+def admin_update_message_status(message_id: int, status_id: int = Body(..., embed=True)):
+    return update_support_message_status(message_id, status_id)

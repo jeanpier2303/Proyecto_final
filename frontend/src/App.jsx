@@ -16,9 +16,12 @@ import Comunidad from "./pages/Comunidad/Comunidad";
 import Soporte from "./pages/Soporte";
 import Carrito from "./pages/Carrito";
 import Checkout from "./pages/Checkout";
-/* import OrderConfirmation from "./components/OrderConfirmation"; */
 /* import Perfil from "./pages/Perfil/Perfil"; */
 import CategoryProducts from "./components/CategoryProducts"; // Nueva página para productos por categoría
+import Perfil from "./pages/Perfil/Perfil";
+//import FacturaView from "./pages/Admin/Facturacion/FacturaView";
+//import FacturaView from "./pages/Admin/Facturacion/FacturaView";
+
 
 
 function App() {
@@ -29,7 +32,7 @@ function App() {
           <Routes>
             {/* Rutas principales */}
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Inicio />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
 
             {/* Rutas privadas o internas */}
@@ -38,6 +41,7 @@ function App() {
             {/* Rutas del sitio principal */}
             <Route path="/Inicio" element={<Inicio />} />
             <Route path="/Ofertas" element={<Ofertas />} />
+            <Route path="/Perfil" element={<Perfil />} />
             <Route path="/Productos" element={<Productos />} />
             <Route path="/Comunidad" element={<Comunidad />} />
             <Route path="/Soporte" element={<Soporte />} />
@@ -47,6 +51,7 @@ function App() {
             {/* <Route path="/OrderConfirmation" element={<OrderConfirmation />} /> */}
             {/* <Route path="/Perfil" element={<Perfil />} /> */}
             <Route path="/categoria/:categoryId" element={<CategoryProducts />} />
+            {/* <Route path="/admin/factura/:id" element={<FacturaView />} /> */}
           </Routes>
         </Router>
       </AuthProvider>
