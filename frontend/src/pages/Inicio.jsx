@@ -387,12 +387,6 @@ const Inicio = () => {
                         <div className="stat-label">Puntos</div>
                       </div>
                     </Col>
-                    <Col xs={4} className="text-center">
-                      <div className="stat-circle fade-in-up delay-4">
-                        <div className="stat-number count-up" data-count="2">0</div>
-                        <div className="stat-label">Favoritos</div>
-                      </div>
-                    </Col>
                   </Row>
                 </div>
 
@@ -438,15 +432,6 @@ const Inicio = () => {
                       </div>
                       <h6>Puntos Kahua</h6>
                       <p className="small">Acumula y canjea</p>
-                    </div>
-                  </Col>
-                  <Col md={6} className="mb-3">
-                    <div className="feature-card fade-in-up delay-4">
-                      <div className="feature-icon floating-slow">
-                        <i className="bi bi-heart"></i>
-                      </div>
-                      <h6>Tus Favoritos</h6>
-                      <p className="small">Acceso rápido</p>
                     </div>
                   </Col>
                   <Col md={6} className="mb-3">
