@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import NavPrivate from "../components/NavPrivate";
 import Footer from "../components/Footer";
 import "../assets/styles/Inicio.css";
+import Carrusel1 from "../assets/images/categorias/Carrusel1.png";
+import Carrusel2 from "../assets/images/categorias/Carrusel2.png";
+import Carrusel3 from "../assets/images/categorias/Carrusel3.png";
 
 const Inicio = () => {
   const navigate = useNavigate();
@@ -46,7 +49,7 @@ const Inicio = () => {
       id: 1,
       title: "Jugos Naturales Premium",
       description: "Frescura, sabor y energía en cada sorbo directamente del Pacífico",
-      image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1350&q=80",
+      image: Carrusel3,
       buttonText: "Descubrir Sabores",
       buttonLink: "/productos"
     },
@@ -54,7 +57,7 @@ const Inicio = () => {
       id: 2,
       title: "Nuevas Ofertas Exclusivas",
       description: "Hasta 30% de descuento en nuestros combos especiales de temporada",
-      image: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1350&q=80",
+      image: Carrusel2,
       buttonText: "Ver Ofertas",
       buttonLink: "/ofertas"
     },
@@ -62,7 +65,7 @@ const Inicio = () => {
       id: 3,
       title: "Refresca tu Día con Kahua",
       description: "Descubre sabores exóticos y beneficios únicos para tu salud",
-      image: "https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=1350&q=80",
+      image: Carrusel1,
       buttonText: "Explorar Productos",
       buttonLink: "/productos"
     }
@@ -296,12 +299,11 @@ const Inicio = () => {
       {/* Hero Section con Carrusel Mejorado */}
       <section className="hero-inicio">
         <Carousel 
-          fade 
           activeIndex={activeCarouselIndex} 
           onSelect={handleCarouselSelect}
           className="hero-carousel"
           indicators={false}
-          interval={5000}
+          interval={3000}
         >
           {carouselItems.map((item, index) => (
             <Carousel.Item key={item.id} className="hero-carousel-item">

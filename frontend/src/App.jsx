@@ -17,7 +17,7 @@ import Soporte from "./pages/Soporte";
 import Carrito from "./pages/Carrito";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./components/OrderConfirmation";
-//import Perfil from "./pages/Perfil/Perfil";
+import Perfil from "./pages/Perfil/Perfil";
 //import FacturaView from "./pages/Admin/Facturacion/FacturaView";
 //import FacturaView from "./pages/Admin/Facturacion/FacturaView";
 
@@ -39,6 +39,7 @@ function App() {
             {/* Rutas del sitio principal */}
             <Route path="/Inicio" element={<Inicio />} />
             <Route path="/Ofertas" element={<Ofertas />} />
+            <Route path="/Perfil" element={<Perfil />} />
             <Route path="/Productos" element={<Productos />} />
             <Route path="/Comunidad" element={<Comunidad />} />
             <Route path="/Soporte" element={<Soporte />} />
