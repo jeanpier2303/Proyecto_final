@@ -7,6 +7,7 @@ import "../assets/styles/Inicio.css";
 import Carrusel1 from "../assets/images/categorias/Carrusel1.png";
 import Carrusel2 from "../assets/images/categorias/Carrusel2.png";
 import Carrusel3 from "../assets/images/categorias/Carrusel3.png";
+import { FaTelegramPlane } from 'react-icons/fa';
 
 const Inicio = () => {
   const navigate = useNavigate();
@@ -817,9 +818,10 @@ const Inicio = () => {
           rel="noopener noreferrer"
           className="telegram-float"
         >
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg"
-            alt="Chat en Telegram"
+          {/* REEMPLAZO DEL LOGO: Usa el componente FaTelegramPlane */}
+          <FaTelegramPlane 
+            size={40} // Define el tamaño del icono aquí
+            color="white" // Define el color del icono
             className="telegram-float-icon"
           />
         </a>
