@@ -1,34 +1,40 @@
-.soporte-page {
-  background-color: var(--light-color);
+/* ===== ESTILOS ESPECÍFICOS PARA SOPORTE ===== */
+.soporte-kahua-page {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   min-height: 100vh;
 }
 
-.page-header {
+/* Header de la página */
+.soporte-page-header {
   padding: 2rem 0;
 }
 
-.page-title {
+.soporte-page-title {
   color: var(--dark-color);
   font-weight: 700;
   margin-bottom: 1rem;
+  font-size: 2.5rem;
 }
 
-.page-subtitle {
+.soporte-page-subtitle {
   color: var(--text-color);
   font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-/* Tarjetas de información */
-.contact-info-card,
-.quick-channels-card,
-.faq-card,
-.contact-form-card {
+/* Tarjetas de soporte */
+.soporte-contact-info-card,
+.soporte-help-card,
+.soporte-faq-card,
+.soporte-contact-form-card {
   border: none;
   border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
-.card-title {
+.soporte-card-title {
   color: var(--dark-color);
   font-weight: 700;
   border-bottom: 2px solid var(--primary-color);
@@ -37,15 +43,21 @@
 }
 
 /* Información de contacto */
-.contact-item {
+.soporte-contact-item {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f1f3f4;
 }
 
-.contact-icon {
-  width: 40px;
-  height: 40px;
+.soporte-contact-item:last-child {
+  border-bottom: none;
+}
+
+.soporte-contact-icon {
+  width: 45px;
+  height: 45px;
   background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   border-radius: 50%;
   display: flex;
@@ -53,118 +65,279 @@
   justify-content: center;
   color: white;
   flex-shrink: 0;
+  font-size: 1.1rem;
 }
 
-.contact-details h6 {
+.soporte-contact-details h6 {
   color: var(--dark-color);
   font-weight: 600;
   margin-bottom: 0.25rem;
 }
 
-.contact-details p {
+.soporte-contact-details p {
   color: var(--text-color);
   margin-bottom: 0;
 }
 
-/* Canales rápidos */
-.channels-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+.soporte-extra-info {
+  background: linear-gradient(135deg, rgba(40, 167, 69, 0.05), rgba(32, 201, 151, 0.05));
+  border-left: 4px solid var(--primary-color);
 }
 
-.channel-btn {
-  border-radius: 15px;
-  padding: 1.5rem 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  border: 2px solid var(--primary-color);
-  color: var(--primary-color);
+/* Tarjeta de ayuda */
+.soporte-help-card {
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  color: white;
+}
+
+.soporte-help-card .soporte-card-title {
+  color: white;
+  border-bottom-color: rgba(255, 255, 255, 0.5);
+}
+
+.soporte-help-icon {
+  font-size: 3rem;
+}
+
+.soporte-whatsapp-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid white;
+  border-radius: 25px;
+  padding: 0.75rem 1.5rem;
   font-weight: 600;
+  color: white;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   transition: all 0.3s ease;
 }
 
-.channel-btn:hover {
-  background-color: var(--primary-color);
-  color: white;
+.soporte-whatsapp-btn:hover {
+  background: white;
+  color: #25D366;
   transform: translateY(-2px);
 }
 
-/* Preguntas frecuentes */
-.accordion-button {
-  color: var(--dark-color);
-  font-weight: 600;
-  background-color: rgba(156, 39, 176, 0.05);
+/* Acordeón de preguntas frecuentes */
+.soporte-accordion {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.soporte-accordion-item {
   border: none;
-  padding: 1rem 1.25rem;
+  margin-bottom: 0.5rem;
+  border-radius: 10px !important;
+  overflow: hidden;
 }
 
-.accordion-button:not(.collapsed) {
-  color: var(--primary-color);
-  background-color: rgba(156, 39, 176, 0.1);
-  box-shadow: none;
+.soporte-accordion-header {
+  background: linear-gradient(135deg, rgba(40, 167, 69, 0.05), rgba(32, 201, 151, 0.05));
+  border: none;
+  padding: 1.25rem 1.5rem;
+  font-weight: 600;
+  color: var(--dark-color);
+  transition: all 0.3s ease;
 }
 
-.accordion-button:focus {
+.soporte-accordion-header:not(.collapsed) {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+}
+
+.soporte-accordion-header:not(.collapsed) .bi-question-lg {
+  color: white !important;
+}
+
+.soporte-accordion-header:focus {
   box-shadow: none;
   border-color: var(--primary-color);
 }
 
-.accordion-body {
+.soporte-accordion-body {
+  background: rgba(40, 167, 69, 0.02);
   color: var(--text-color);
   line-height: 1.6;
-  background-color: rgba(156, 39, 176, 0.02);
+  padding: 1.5rem;
+  border-top: 1px solid rgba(40, 167, 69, 0.1);
 }
 
 /* Formulario de contacto */
-.form-label {
+.soporte-form-label {
   color: var(--dark-color);
   font-weight: 600;
+  display: flex;
+  align-items: center;
 }
 
-.form-control,
-.form-select {
+.soporte-form-control,
+.soporte-form-select,
+.soporte-form-textarea {
   border-radius: 10px;
   border: 2px solid #e9ecef;
   padding: 0.75rem 1rem;
   transition: all 0.3s ease;
+  font-size: 1rem;
 }
 
-.form-control:focus,
-.form-select:focus {
+.soporte-form-control:focus,
+.soporte-form-select:focus,
+.soporte-form-textarea:focus {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 0.2rem rgba(156, 39, 176, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
 }
 
-.btn-enviar {
+.soporte-form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.soporte-form-help {
+  color: var(--text-color);
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+/* Botón de enviar */
+.soporte-btn-enviar {
   background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   border: none;
-  border-radius: 25px;
-  padding: 0.75rem 2rem;
+  border-radius: 50px;
+  padding: 1rem 2rem;
   font-weight: 600;
+  font-size: 1.1rem;
   transition: all 0.3s ease;
 }
 
-.btn-enviar:hover {
+.soporte-btn-enviar:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(156, 39, 176, 0.4);
+  box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
 }
 
-/* Responsive */
+.soporte-btn-enviar:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Alertas */
+.soporte-alert-success {
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #d4edda, #c3e6cb);
+  color: #155724;
+  border-left: 4px solid #28a745;
+}
+
+.soporte-alert-success h6 {
+  color: #155724;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+/* ===== ANIMACIONES ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.soporte-contact-info-card,
+.soporte-help-card,
+.soporte-faq-card,
+.soporte-contact-form-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.soporte-accordion-item {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .channels-grid {
-    grid-template-columns: 1fr;
+  .soporte-page-title {
+    font-size: 2rem;
   }
   
-  .contact-item {
+  .soporte-page-subtitle {
+    font-size: 1rem;
+  }
+  
+  .soporte-contact-item {
     flex-direction: column;
     text-align: center;
     gap: 0.5rem;
   }
   
-  .contact-icon {
+  .soporte-contact-icon {
     align-self: center;
   }
+  
+  .soporte-accordion-header {
+    padding: 1rem 1.25rem;
+    font-size: 0.9rem;
+  }
+  
+  .soporte-accordion-body {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .soporte-page-header {
+    padding: 1rem 0;
+  }
+  
+  .soporte-page-title {
+    font-size: 1.75rem;
+  }
+  
+  .soporte-contact-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  .soporte-btn-enviar {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .soporte-help-icon {
+    font-size: 2.5rem;
+  }
+}
+
+/* Estados de carga */
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Mejoras de accesibilidad */
+.soporte-btn-enviar:focus,
+.soporte-form-control:focus,
+.soporte-form-select:focus,
+.soporte-form-textarea:focus,
+.soporte-accordion-header:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.25);
+}
+
+/* Efectos de hover mejorados */
+.soporte-contact-item:hover {
+  background: rgba(40, 167, 69, 0.02);
+  border-radius: 8px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.soporte-accordion-item:hover {
+  transform: translateX(5px);
+  transition: transform 0.3s ease;
 }

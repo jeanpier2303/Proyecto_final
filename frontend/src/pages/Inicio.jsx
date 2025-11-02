@@ -318,7 +318,7 @@ const Inicio = () => {
                   <Col lg={6} className="carousel-content">
                     <div className={`content-wrapper ${index === activeCarouselIndex ? 'active' : ''} ${animateElements ? 'animated' : ''}`}>
                       <Badge bg="light" text="dark" className="hero-badge mb-3 floating">
-                        <i className="fas fa-crown me-2"></i>
+                        <i className="bi bi-star-fill me-2"></i>
                         ¡Bienvenido {getUserName()}!
                       </Badge>
                       <h1 className="hero-title slide-in-top">{item.title}</h1>
@@ -334,7 +334,7 @@ const Inicio = () => {
                           className="btn-hero-secondary glow-on-hover"
                           onClick={() => handleNavigate("/ofertas")}
                         >
-                          <i className="fas fa-bolt me-2"></i>
+                          <i className="bi bi-lightning me-2"></i>
                           Ofertas Flash
                         </Button>
                       </div>
@@ -402,7 +402,7 @@ const Inicio = () => {
                   <div className="recent-order-card mt-4 slide-in-left">
                     <div className="d-flex justify-content-between align-items-center mb-2">
                       <h6 className="mb-0">
-                        <i className="fas fa-clock me-2"></i>
+                        <i className="bi bi-clock me-2"></i>
                         Tu último pedido
                       </h6>
                       <Badge bg="success" className="pulse-slow">{recentOrder.status}</Badge>
@@ -426,7 +426,7 @@ const Inicio = () => {
                   <Col md={6} className="mb-3">
                     <div className="feature-card fade-in-up delay-2">
                       <div className="feature-icon floating-slow">
-                        <i className="fas fa-bolt"></i>
+                        <i className="bi bi-lightning"></i>
                       </div>
                       <h6>Entrega Express</h6>
                       <p className="small">En menos de 45 min</p>
@@ -435,7 +435,7 @@ const Inicio = () => {
                   <Col md={6} className="mb-3">
                     <div className="feature-card fade-in-up delay-3">
                       <div className="feature-icon floating-slow">
-                        <i className="fas fa-gift"></i>
+                        <i className="bi bi-gift"></i>
                       </div>
                       <h6>Puntos Kahua</h6>
                       <p className="small">Acumula y canjea</p>
@@ -444,7 +444,7 @@ const Inicio = () => {
                   <Col md={6} className="mb-3">
                     <div className="feature-card fade-in-up delay-4">
                       <div className="feature-icon floating-slow">
-                        <i className="fas fa-heart"></i>
+                        <i className="bi bi-heart"></i>
                       </div>
                       <h6>Tus Favoritos</h6>
                       <p className="small">Acceso rápido</p>
@@ -453,7 +453,7 @@ const Inicio = () => {
                   <Col md={6} className="mb-3">
                     <div className="feature-card fade-in-up delay-5">
                       <div className="feature-icon floating-slow">
-                        <i className="fas fa-history"></i>
+                        <i className="bi bi-arrow-repeat"></i>
                       </div>
                       <h6>Pedir de nuevo</h6>
                       <p className="small">En 1 clic</p>
@@ -473,7 +473,7 @@ const Inicio = () => {
             <div className="d-flex justify-content-between align-items-center">
               <div>
                 <h2 className="section-title slide-in-left">
-                  <i className="fas fa-bolt me-2"></i>
+                  <i className="bi bi-lightning me-2"></i>
                   Pedido Rápido
                 </h2>
                 <p className="section-subtitle slide-in-left delay-1">Tus productos más pedidos</p>
@@ -498,7 +498,7 @@ const Inicio = () => {
                     <Col xs={6}>
                       <h6 className="mb-1">{producto.nombre}</h6>
                       <p className="text-muted small mb-1">
-                        <i className="fas fa-shopping-cart me-1"></i>
+                        <i className="bi bi-cart me-1"></i>
                         {producto.vecesComprado} veces
                       </p>
                       <p className="text-primary fw-bold mb-0">${producto.precio.toLocaleString()}</p>
@@ -510,7 +510,7 @@ const Inicio = () => {
                         className=" btn-quick-add bounce-on-hover"
                         onClick={() => handleQuickAdd(producto)}
                       >
-                        <i className="fas fa-plus"></i>
+                        <i className="bi bi-plus"></i>
                       </Button>
                     </Col>
                   </Row>
@@ -526,7 +526,7 @@ const Inicio = () => {
         <Container>
           <div className="section-header text-center mb-5">
             <h2 className="section-title fade-in-up">
-              <i className="fas fa-magic me-2"></i>
+              <i className="bi bi-stars me-2"></i>
               Recomendados para Ti
             </h2>
             <p className="section-subtitle fade-in-up delay-1">Productos que creemos que te encantarán</p>
@@ -549,20 +549,20 @@ const Inicio = () => {
                     )}
                     {producto.stock < 5 && (
                       <div className="product-badge stock-warning">
-                        <i className="fas fa-exclamation-circle me-1"></i>
+                        <i className="bi bi-exclamation-triangle me-1"></i>
                         Últimas unidades
                       </div>
                     )}
                     <button 
                       className={`favorite-btn ${producto.esFavorito ? 'active' : ''} bounce-on-hover`}
                     >
-                      <i className="fas fa-heart"></i>
+                      <i className="bi bi-heart"></i>
                     </button>
 
                     {/* Información rápida */}
                     <div className="quick-info">
                       <div className="prep-time">
-                        <i className="fas fa-clock"></i>
+                        <i className="bi bi-clock"></i>
                         {producto.tiempoPreparacion}
                       </div>
                     </div>
@@ -595,7 +595,7 @@ const Inicio = () => {
                     {/* Stock info */}
                     <div className="product-stock mb-2">
                       <small className={producto.stock < 5 ? 'text-danger' : 'text-success'}>
-                        <i className="fas fa-box me-1"></i>
+                        <i className="bi bi-box me-1"></i>
                         {producto.stock < 5 ? 'Últimas unidades' : 'En stock'}
                       </small>
                     </div>
@@ -608,12 +608,12 @@ const Inicio = () => {
                     >
                       {producto.stock === 0 ? (
                         <>
-                          <i className="fas fa-times-circle me-2"></i>
+                          <i className="bi bi-x-circle me-2"></i>
                           Agotado
                         </>
                       ) : (
                         <>
-                          <i className="fas fa-shopping-cart me-2"></i>
+                          <i className="bi bi-cart me-2"></i>
                           Agregar al Carrito
                         </>
                       )}
@@ -651,7 +651,7 @@ const Inicio = () => {
                   <div className="category-meta">
                     <span className="product-count">{categoria.productos} productos</span>
                     <div className="category-arrow bounce-on-hover">
-                      <i className="fas fa-arrow-right"></i>
+                      <i className="bi bi-arrow-right"></i>
                     </div>
                   </div>
                 </div>
@@ -666,7 +666,7 @@ const Inicio = () => {
         <Container>
           <div className="section-header text-center mb-5">
             <h2 className="section-title fade-in-up">
-              <i className="fas fa-bolt me-2"></i>
+              <i className="bi bi-lightning me-2"></i>
               Ofertas Especiales para Ti
             </h2>
             <p className="section-subtitle fade-in-up delay-1">Descuentos exclusivos por tu nivel {getUserTier()}</p>
@@ -678,10 +678,6 @@ const Inicio = () => {
                   <Row className="align-items-center">
                     <Col md={6}>
                       <div className="offer-content">
-                        <Badge bg="danger" className="offer-badge mb-3 floating-slow">
-                          <i className="fas fa-crown me-1"></i>
-                          Exclusivo Nivel {getUserTier()}
-                        </Badge>
                         <h3 className="offer-title">{oferta.titulo}</h3>
                         <p className="offer-description">
                           {oferta.descripcion}
@@ -701,7 +697,7 @@ const Inicio = () => {
                         </div>
                         <div className="offer-stock mb-3">
                           <small className={oferta.stock < 3 ? 'text-danger' : 'text-success'}>
-                            <i className="fas fa-box me-1"></i>
+                            <i className="bi bi-box me-1"></i>
                             {oferta.stock < 3 ? 'Últimas unidades disponibles' : `${oferta.stock} disponibles`}
                           </small>
                         </div>
@@ -713,12 +709,12 @@ const Inicio = () => {
                         >
                           {oferta.stock === 0 ? (
                             <>
-                              <i className="fas fa-times me-2"></i>
+                              <i className="bi bi-x me-2"></i>
                               Oferta Agotada
                             </>
                           ) : (
                             <>
-                              <i className="fas fa-bolt me-2"></i>
+                              <i className="bi bi-lightning me-2"></i>
                               Aprovechar Oferta
                             </>
                           )}
@@ -767,7 +763,7 @@ const Inicio = () => {
                 className="fade-in-up delay-4"
                 onClick={() => handleNavigate("/comunidad")}
               >
-                <i className="fas fa-users me-2"></i>
+                <i className="bi bi-people me-2"></i>
                 Ver Comunidad
               </Button>
             </Col>
@@ -792,7 +788,7 @@ const Inicio = () => {
       <Modal show={showCartModal} onHide={handleCloseModal} centered className="cart-modal zoom-in">
         <Modal.Header closeButton className="border-0">
           <Modal.Title>
-            <i className="fas fa-check-circle text-success me-2"></i>
+            <i className="bi bi-check-circle text-success me-2"></i>
             ¡Producto agregado!
           </Modal.Title>
         </Modal.Header>
@@ -819,11 +815,11 @@ const Inicio = () => {
         </Modal.Body>
         <Modal.Footer className="border-0 justify-content-center">
           <Button variant="outline-primary" onClick={handleContinueShopping} className="me-2 bounce-on-hover">
-            <i className="fas fa-arrow-left me-1"></i>
+            <i className="bi bi-arrow-left me-1"></i>
             Seguir comprando
           </Button>
           <Button variant="primary" onClick={handleGoToCart} className="pulse-on-hover">
-            <i className="fas fa-shopping-cart me-1"></i>
+            <i className="bi bi-cart me-1"></i>
             Ver carrito
           </Button>
         </Modal.Footer>

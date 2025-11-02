@@ -16,10 +16,12 @@ import Comunidad from "./pages/Comunidad/Comunidad";
 import Soporte from "./pages/Soporte";
 import Carrito from "./pages/Carrito";
 import Checkout from "./pages/Checkout";
-import OrderConfirmation from "./components/OrderConfirmation";
+/* import Perfil from "./pages/Perfil/Perfil"; */
+import CategoryProducts from "./components/CategoryProducts"; // Nueva página para productos por categoría
 import Perfil from "./pages/Perfil/Perfil";
 //import FacturaView from "./pages/Admin/Facturacion/FacturaView";
 //import FacturaView from "./pages/Admin/Facturacion/FacturaView";
+
 
 
 function App() {
@@ -30,7 +32,7 @@ function App() {
           <Routes>
             {/* Rutas principales */}
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<Inicio />} />
             <Route path="/register" element={<Register />} />
 
             {/* Rutas privadas o internas */}
@@ -46,10 +48,10 @@ function App() {
             <Route path="/Home" element={<Home />} />
             <Route path="/Carrito" element={<Carrito />} />
             <Route path="/Checkout" element={<Checkout />} />
-            <Route path="/OrderConfirmation" element={<OrderConfirmation />} />
+            {/* <Route path="/OrderConfirmation" element={<OrderConfirmation />} /> */}
+            {/* <Route path="/Perfil" element={<Perfil />} /> */}
+            <Route path="/categoria/:categoryId" element={<CategoryProducts />} />
             {/* <Route path="/admin/factura/:id" element={<FacturaView />} /> */}
-
-            
           </Routes>
         </Router>
       </AuthProvider>

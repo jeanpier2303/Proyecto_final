@@ -70,6 +70,7 @@ table.items tbody td{padding:12px 10px;border-bottom:1px solid #f0ecf6;font-size
   text-transform: uppercase;
   letter-spacing: 10px;
   pointer-events: none;
+  -webkit-user-select: none;
   user-select: none;
   z-index: 50;
 }
