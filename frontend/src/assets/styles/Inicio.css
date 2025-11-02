@@ -1,23 +1,10 @@
- /* ===== VARIABLES CSS ===== */
-/* :root {
-  --primary-color: #9C27B0;
-  --secondary-color: #673AB7;
-  --success-color: #28a745;
-  --warning-color: #ffc107;
-  --danger-color: #dc3545;
-     --accent-color: #FF9800;
-    --dark-color: #4A148C; 
-    --light-color: #F3E5F5; 
-    --text-color: #6A1B9A;
-} 
- */
-/* ===== ESTILOS GENERALES ===== */
+/* ===== ESTILOS GENERALES MEJORADOS ===== */
 
 .hero-inicio, 
 .hero-carousel-item {
   margin-top: 0 !important;
   padding-top: 0 !important;
-  height: calc(110vh - 80px); /* ajusta según el alto real de tu nav */
+  height: calc(110vh - 80px);
   min-height: 600px;
 }
 
@@ -47,12 +34,6 @@
 }
 
 .content-wrapper {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s ease;
-}
-
-.content-wrapper.active {
   opacity: 1;
   transform: translateY(0);
 }
@@ -158,11 +139,6 @@
   line-height: 1.6;
 }
 
-.user-tier-badge {
-  font-size: 0.7rem;
-  vertical-align: middle;
-}
-
 .user-quick-stats {
   margin: 2rem 0;
 }
@@ -188,7 +164,7 @@
 
 .stat-label {
   font-size: 0.8rem;
-  color: var(--text-color);
+  background-color: #4A148C;;
   margin-top: 0.5rem;
 }
 
@@ -367,31 +343,6 @@
   font-size: 0.9rem;
   color: var(--text-color);
   line-height: 1.5;
-}
-
-.product-rating {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.stars {
-  display: flex;
-  gap: 0.1rem;
-}
-
-.stars i {
-  color: #ddd;
-  font-size: 0.8rem;
-}
-
-.stars i.active {
-  color: var(--warning-color);
-}
-
-.rating-value {
-  font-size: 0.8rem;
-  color: var(--text-color);
 }
 
 .product-price-container {
@@ -624,91 +575,33 @@
   object-fit: cover;
 }
 
-/* ===== SECCIÓN DE COMUNIDAD ===== */
-.community-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--dark-color);
-  margin-bottom: 1rem;
-}
-
-.community-description {
-  font-size: 1.1rem;
-  color: var(--text-color);
-  line-height: 1.6;
-  margin-bottom: 2rem;
-}
-
-.community-stats {
+/* ===== BOTÓN FLOTANTE TELEGRAM ===== */
+.telegram-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #0088cc;
+  border-radius: 50%;
+  width: 65px;
+  height: 65px;
   display: flex;
-  gap: 2rem;
-  margin-bottom: 2rem;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  box-shadow: 0 4px 10px rgba(0, 136, 204, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
-.stat {
-  text-align: center;
+.telegram-float:hover {
+  transform: scale(1.1);
+  background-color: #007ab8;
+  box-shadow: 0 6px 15px rgba(0, 136, 204, 0.6);
 }
 
-.stat-number {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--primary-color);
-  line-height: 1;
-}
-
-.stat-label {
-  font-size: 0.9rem;
-  color: var(--text-color);
-}
-
-.testimonial-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  position: relative;
-}
-
-.testimonial-card::before {
-  content: '"';
-  position: absolute;
-  top: 10px;
-  left: 20px;
-  font-size: 4rem;
-  color: var(--primary-color);
-  opacity: 0.2;
-  font-family: serif;
-}
-
-.testimonial-content {
-  font-size: 1.1rem;
-  font-style: italic;
-  color: var(--text-color);
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-  position: relative;
-  z-index: 2;
-}
-
-.testimonial-author {
-  display: flex;
-  flex-direction: column;
-}
-
-.testimonial-author strong {
-  color: var(--dark-color);
-}
-
-.testimonial-author span {
-  font-size: 0.9rem;
-  color: var(--text-color);
-}
-
-/* ===== ALERTAS ===== */
-.user-alert {
-  border-radius: 15px;
-  border: none;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+.telegram-float-icon {
+  width: 35px;
+  height: 35px;
+  filter: brightness(0) invert(1);
 }
 
 /* ===== RESPONSIVE ===== */
@@ -753,11 +646,6 @@
     padding: 1.5rem;
   }
   
-  .community-stats {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
   .offer-price {
     flex-direction: column;
     align-items: flex-start;
@@ -786,34 +674,4 @@
   .user-quick-stats {
     margin: 1rem 0;
   }
-}
-
-/* boton telegramm */
-/* === BOTÓN FLOTANTE TELEGRAM === */
-.telegram-float {
-  position: fixed;
-  bottom: 20px;          /* 👈 distancia desde la parte inferior */
-  right: 20px;           /* 👈 distancia desde el borde derecho */
-  background-color: #0088cc;
-  border-radius: 50%;
-  width: 65px;
-  height: 65px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;         /* 👈 garantiza que esté por encima de todo */
-  box-shadow: 0 4px 10px rgba(0, 136, 204, 0.4);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-}
-
-.telegram-float:hover {
-  transform: scale(1.1);
-  background-color: #007ab8;
-  box-shadow: 0 6px 15px rgba(0, 136, 204, 0.6);
-}
-
-.telegram-float-icon {
-  width: 35px;
-  height: 35px;
-  filter: brightness(0) invert(1);
 }

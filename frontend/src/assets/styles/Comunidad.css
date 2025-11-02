@@ -1,37 +1,50 @@
-.comunidad-page {
-  background-color: var(--light-color);
+/* ===== ESTILOS ESPECÍFICOS PARA COMUNIDAD ===== */
+.comunidad-kahua {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   min-height: 100vh;
 }
 
+/* Header de la página */
 .page-header {
   padding: 2rem 0;
 }
 
-.page-title {
+.page-title-comunidad {
   color: var(--dark-color);
   font-weight: 700;
   margin-bottom: 1rem;
+  font-size: 2.5rem;
 }
 
-.page-subtitle {
+.page-subtitle-comunidad {
   color: var(--text-color);
   font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-.comunidad-tabs .nav-link {
+/* Tabs personalizados */
+.comunidad-tabs-kahua .nav-link {
   color: var(--text-color);
   font-weight: 600;
   border: none;
   padding: 1rem 2rem;
+  transition: all 0.3s ease;
 }
 
-.comunidad-tabs .nav-link.active {
+.comunidad-tabs-kahua .nav-link:hover {
+  color: var(--primary-color);
+  background: rgba(40, 167, 69, 0.1);
+}
+
+.comunidad-tabs-kahua .nav-link.active {
   color: var(--primary-color);
   border-bottom: 3px solid var(--primary-color);
   background: transparent;
 }
 
-.section-subtitle {
+/* Subtítulos de sección */
+.section-subtitle-comunidad {
   color: var(--dark-color);
   font-weight: 600;
   border-bottom: 2px solid var(--primary-color);
@@ -39,226 +52,250 @@
   display: inline-block;
 }
 
-/* Estilos para Recetas */
-.receta-card {
+/* ===== FORMULARIO DE TESTIMONIO ===== */
+.formulario-testimonio-card {
   border: none;
   border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
-.receta-img-container {
-  height: 200px;
-  overflow: hidden;
+.formulario-testimonio-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  border: none;
+  padding: 1.5rem;
 }
 
-.receta-img {
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.receta-card:hover .receta-img {
-  transform: scale(1.05);
-}
-
-.receta-titulo {
-  color: var(--dark-color);
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-.receta-meta {
-  font-size: 0.9rem;
-  color: var(--text-color);
-}
-
-.receta-autor {
+.formulario-testimonio-header h3 {
+  margin: 0;
   font-weight: 600;
-  margin-right: 1rem;
 }
 
-.receta-descripcion {
+.alert-testimonio {
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #d4edda, #c3e6cb);
+  color: #155724;
+  font-weight: 500;
+}
+
+.input-testimonio,
+.textarea-testimonio {
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.input-testimonio:focus,
+.textarea-testimonio:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+/* Selector de rating */
+.rating-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.estrella-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #dee2e6;
+  transition: all 0.2s ease;
+  padding: 0.25rem;
+}
+
+.estrella-btn:hover {
+  transform: scale(1.2);
+  color: #ffc107;
+}
+
+.estrella-btn.activa {
+  color: #ffc107;
+}
+
+.rating-text {
+  font-weight: 600;
+  color: var(--dark-color);
+}
+
+/* Botón de publicar */
+.btn-publicar-testimonio {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  border: none;
+  border-radius: 50px;
+  padding: 1rem 2rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.btn-publicar-testimonio:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+}
+
+/* Tips del testimonio */
+.tips-testimonio ul {
+  padding-left: 1.5rem;
+  margin-bottom: 0;
+}
+
+.tips-testimonio li {
+  margin-bottom: 0.5rem;
   color: var(--text-color);
-  line-height: 1.5;
 }
 
-.receta-stats {
-  font-size: 0.9rem;
-  color: var(--text-color);
-}
-
-.btn-ver-receta {
+/* Botón nuevo testimonio */
+.btn-nuevo-testimonio {
   border-radius: 25px;
   padding: 0.5rem 1.5rem;
   font-weight: 600;
+  border: 2px solid var(--primary-color);
 }
 
-.nueva-receta-card {
-  border: 2px dashed var(--primary-color);
-  border-radius: 15px;
-  background: rgba(156, 39, 176, 0.05);
-  height: 100%;
-}
-
-.btn-compartir-receta {
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-  border: none;
-  border-radius: 25px;
-  padding: 0.75rem 1.5rem;
-  font-weight: 600;
-}
-
-/* Estilos para Testimonios */
-.testimonio-card {
+/* ===== TARJETAS DE TESTIMONIOS ===== */
+.testimonio-card-comunidad {
   border: none;
   border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  overflow: hidden;
 }
 
-.testimonio-card:hover {
+.testimonio-card-comunidad:hover {
   transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
-.testimonio-img-container {
+.testimonio-img-container-comunidad {
   width: 80px;
   height: 80px;
   margin: 0 auto;
   border-radius: 50%;
   overflow: hidden;
   border: 3px solid var(--primary-color);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
 }
 
-.testimonio-img {
+.testimonio-img-comunidad {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.rating {
-  font-size: 0.9rem;
+.rating-comunidad {
+  font-size: 1rem;
 }
 
-.testimonio-contenido {
+.testimonio-contenido-comunidad {
   color: var(--text-color);
   font-style: italic;
   line-height: 1.6;
-}
-
-/* Estilos para Eventos */
-.evento-card {
-  border: none;
-  border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-  transition: transform 0.3s ease;
-}
-
-.evento-card:hover {
-  transform: translateY(-5px);
-}
-
-.evento-img-container {
-  position: relative;
-  overflow: hidden;
-}
-
-.evento-img {
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.evento-card:hover .evento-img {
-  transform: scale(1.05);
-}
-
-.evento-fecha {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  background: var(--primary-color);
-  color: white;
-  padding: 0.5rem;
-  border-radius: 10px;
-  text-align: center;
-  min-width: 60px;
-}
-
-.evento-dia {
-  font-size: 1.2rem;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.evento-mes {
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-.evento-titulo {
-  color: var(--dark-color);
-  font-weight: 700;
   margin-bottom: 1rem;
 }
 
-.evento-info {
-  font-size: 0.9rem;
-  color: var(--text-color);
+/* ===== ANIMACIONES ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.evento-hora, .evento-lugar {
-  margin-bottom: 0.5rem;
+.testimonio-card-comunidad {
+  animation: fadeInUp 0.6s ease-out;
 }
 
-.evento-descripcion {
-  color: var(--text-color);
-  line-height: 1.5;
+.formulario-testimonio-card {
+  animation: fadeInUp 0.8s ease-out;
 }
 
-.evento-cupos .progress {
-  height: 8px;
-  border-radius: 4px;
-  margin-bottom: 0.5rem;
-}
-
-.evento-cupos .progress-bar {
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-}
-
-.btn-inscribirse {
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-  border: none;
-  border-radius: 25px;
-  padding: 0.75rem 1.5rem;
-  font-weight: 600;
-  width: 100%;
-}
-
-.btn-inscribirse:disabled {
-  background: #6c757d;
-}
-
-/* Responsive */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .comunidad-tabs .nav-link {
+  .comunidad-tabs-kahua .nav-link {
     padding: 0.75rem 1rem;
     font-size: 0.9rem;
   }
   
-  .receta-card .row {
+  .page-title-comunidad {
+    font-size: 2rem;
+  }
+  
+  .page-subtitle-comunidad {
+    font-size: 1rem;
+  }
+  
+  .btn-nuevo-testimonio {
+    width: 100%;
+    margin-top: 1rem;
+  }
+  
+  .d-flex.justify-content-between.align-items-center.mb-4 {
     flex-direction: column;
+    align-items: flex-start;
   }
   
-  .receta-img-container {
-    height: 150px;
+  .section-subtitle-comunidad {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .rating-selector {
+    flex-wrap: wrap;
+    gap: 0.25rem;
   }
   
-  .evento-card .row {
-    flex-direction: column;
+  .estrella-btn {
+    font-size: 1.25rem;
   }
   
-  .evento-img-container {
-    height: 200px;
+  .formulario-testimonio-header h3 {
+    font-size: 1.25rem;
   }
+  
+  .btn-publicar-testimonio {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+/* Estados vacíos */
+.text-muted.display-1 {
+  font-size: 4rem;
+}
+
+/* Mejoras de accesibilidad */
+.btn:focus,
+.form-control:focus,
+.estrella-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.25);
+}
+
+/* Transiciones suaves */
+.testimonio-card-comunidad,
+.formulario-testimonio-card,
+.btn {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Efectos de hover mejorados */
+.testimonio-card-comunidad:hover .testimonio-img-comunidad {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.testimonio-img-comunidad {
+  transition: transform 0.3s ease;
 }

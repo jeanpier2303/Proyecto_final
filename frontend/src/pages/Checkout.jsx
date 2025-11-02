@@ -16,6 +16,10 @@ const Checkout = () => {
     total: 0
   });
 
+  // Nuevos estados para la confirmación del pedido
+  const [orderCompleted, setOrderCompleted] = useState(false);
+  const [orderData, setOrderData] = useState(null);
+
   // Datos de departamentos y ciudades de Colombia
   const colombiaData = useMemo(() => ({
     "Bogotá D.C.": ["Bogotá"],
@@ -239,15 +243,91 @@ const Checkout = () => {
         },
         items: cartItems,
         total: orderSummary.total,
-        date: new Date().toISOString()
+        date: new Date().toISOString(),
+        status: "confirmado"
       };
 
       const existingOrders = JSON.parse(localStorage.getItem('kahuaOrders') || '[]');
       localStorage.setItem('kahuaOrders', JSON.stringify([...existingOrders, orderData]));
       localStorage.removeItem('kahuaCart');
-      navigate(`/order-confirmation/${orderData.orderId}`);
+      
+      // En lugar de navegar, mostramos la confirmación
+      setOrderData(orderData);
+      setOrderCompleted(true);
     }, 1500);
-  }, [formData, cartItems, orderSummary, navigate, validateForm, errors]);
+  }, [formData, cartItems, orderSummary, validateForm, errors]);
+
+  // Nueva función para imprimir factura
+  const handlePrintInvoice = useCallback(() => {
+    const invoiceContent = document.getElementById('invoice-content');
+    const printWindow = window.open('', '_blank');
+    
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Factura - ${orderData.orderId}</title>
+          <style>
+            body { 
+              font-family: Arial, sans-serif; 
+              margin: 20px; 
+              color: #333;
+            }
+            .invoice-header { 
+              text-align: center; 
+              margin-bottom: 30px;
+              border-bottom: 2px solid #9C27B0;
+              padding-bottom: 20px;
+            }
+            .invoice-details { 
+              margin: 20px 0; 
+            }
+            .invoice-table { 
+              width: 100%; 
+              border-collapse: collapse; 
+              margin: 20px 0;
+            }
+            .invoice-table th, .invoice-table td { 
+              border: 1px solid #ddd; 
+              padding: 12px; 
+              text-align: left;
+            }
+            .invoice-table th { 
+              background-color: #f5f5f5; 
+            }
+            .total-section { 
+              text-align: right; 
+              margin-top: 20px;
+              font-weight: bold;
+            }
+            .status-badge {
+              padding: 5px 10px;
+              border-radius: 15px;
+              font-weight: bold;
+              background-color: #9C27B0;
+              color: white;
+            }
+            @media print {
+              body { margin: 0; }
+              .no-print { display: none; }
+            }
+          </style>
+        </head>
+        <body>
+          ${invoiceContent.innerHTML}
+        </body>
+      </html>
+    `);
+    
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+  }, [orderData]);
+
+  // Nueva función para continuar comprando
+  const handleContinueShopping = useCallback(() => {
+    navigate("/productos");
+  }, [navigate]);
 
   const handleBackToCart = useCallback(() => {
     navigate("/carrito");
@@ -261,6 +341,255 @@ const Checkout = () => {
           <div className="loading-spinner">
             <div className="spinner"></div>
             <p>Cargando checkout...</p>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  // Mostrar confirmación de pedido si orderCompleted es true
+  if (orderCompleted && orderData) {
+    return (
+      <>
+        <NavPrivate />
+        <div className="order-confirmation">
+          <div className="confirmation-container">
+            <div className="confirmation-header">
+              <div className="confirmation-icon">
+                <i className="bi bi-check-circle-fill"></i>
+              </div>
+              <h1>¡Pedido Confirmado!</h1>
+              <p>Tu pedido ha sido procesado exitosamente</p>
+            </div>
+
+            <div className="confirmation-details">
+              <div className="order-info-card">
+                <h3>
+                  <i className="bi bi-info-circle"></i>
+                  Información del Pedido
+                </h3>
+                <div className="info-grid">
+                  <div className="info-item">
+                    <span className="info-label">Número de Pedido:</span>
+                    <span className="info-value">{orderData.orderId}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">Fecha:</span>
+                    <span className="info-value">
+                      {new Date(orderData.date).toLocaleDateString('es-CO', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">Estado:</span>
+                    <span className="info-value status-confirmed">
+                      <i className="bi bi-check-circle"></i>
+                      Confirmado
+                    </span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">Total:</span>
+                    <span className="info-value total-amount">
+                      ${orderData.total.toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="shipping-info-card">
+                <h3>
+                  <i className="bi bi-truck"></i>
+                  Información de Envío
+                </h3>
+                <div className="shipping-details">
+                  <p><strong>{orderData.customer.firstName} {orderData.customer.lastName}</strong></p>
+                  <p>{orderData.shipping.address}</p>
+                  <p>{orderData.shipping.city}, {orderData.shipping.state}</p>
+                  <p>{orderData.shipping.country} - {orderData.shipping.zipCode}</p>
+                  <p>
+                    <i className="bi bi-telephone"></i>
+                    {orderData.customer.phone}
+                  </p>
+                  <p>
+                    <i className="bi bi-envelope"></i>
+                    {orderData.customer.email}
+                  </p>
+                </div>
+              </div>
+
+              <div className="order-summary-card">
+                <h3>
+                  <i className="bi bi-receipt"></i>
+                  Resumen del Pedido
+                </h3>
+                <div className="order-items-summary">
+                  {orderData.items.map((item) => (
+                    <div key={item.id} className="order-summary-item">
+                      <div className="item-image">
+                        <img 
+                          src={item.imagen} 
+                          alt={item.nombre}
+                          onError={(e) => {
+                            e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhmOWZhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzY2NjY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlbiBubyBlbmNvbnRyYWRhPC90ZXh0Pjwvc3ZnPg==';
+                          }}
+                        />
+                      </div>
+                      <div className="item-details">
+                        <div className="item-name">{item.nombre}</div>
+                        <div className="item-quantity">Cantidad: {item.cantidad}</div>
+                      </div>
+                      <div className="item-price">
+                        ${(item.precio * item.cantidad).toLocaleString()}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="order-totals-summary">
+                  <div className="total-row">
+                    <span>Subtotal:</span>
+                    <span>${orderSummary.subtotal.toLocaleString()}</span>
+                  </div>
+                  {orderSummary.discount > 0 && (
+                    <div className="total-row discount">
+                      <span>Descuento:</span>
+                      <span>-${orderSummary.discount.toLocaleString()}</span>
+                    </div>
+                  )}
+                  <div className="total-row">
+                    <span>Envío:</span>
+                    <span>Gratis</span>
+                  </div>
+                  <div className="total-row grand-total">
+                    <span>Total:</span>
+                    <span>${orderSummary.total.toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Contenido de la factura (oculto en pantalla, solo para imprimir) */}
+            <div id="invoice-content" className="invoice-content">
+              <div className="invoice-header">
+                <h1>Factura</h1>
+                <p>Kahua - Jugos Naturales</p>
+              </div>
+              
+              <div className="invoice-details">
+                <div className="invoice-info">
+                  <p><strong>Número de Factura:</strong> {orderData.orderId}</p>
+                  <p><strong>Fecha:</strong> {new Date(orderData.date).toLocaleDateString()}</p>
+                  <p><strong>Estado:</strong> <span className="status-badge">Confirmado</span></p>
+                </div>
+                
+                <div className="invoice-customer">
+                  <h3>Información del Cliente</h3>
+                  <p><strong>Nombre:</strong> {orderData.customer.firstName} {orderData.customer.lastName}</p>
+                  <p><strong>Email:</strong> {orderData.customer.email}</p>
+                  <p><strong>Teléfono:</strong> {orderData.customer.phone}</p>
+                  <p><strong>Dirección:</strong> {orderData.shipping.address}, {orderData.shipping.city}, {orderData.shipping.state}</p>
+                </div>
+              </div>
+
+              <table className="invoice-table">
+                <thead>
+                  <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orderData.items.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.nombre}</td>
+                      <td>{item.cantidad}</td>
+                      <td>${item.precio.toLocaleString()}</td>
+                      <td>${(item.precio * item.cantidad).toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              <div className="total-section">
+                <p><strong>Subtotal:</strong> ${orderSummary.subtotal.toLocaleString()}</p>
+                {orderSummary.discount > 0 && (
+                  <p><strong>Descuento:</strong> -${orderSummary.discount.toLocaleString()}</p>
+                )}
+                <p><strong>Envío:</strong> $0</p>
+                <p><strong>TOTAL:</strong> ${orderSummary.total.toLocaleString()}</p>
+              </div>
+
+              <div className="invoice-footer">
+                <p><strong>Método de Pago:</strong> {orderData.payment.method === 'card' ? 'Tarjeta de Crédito/Débito' : 'Contra Entrega'}</p>
+                <p>¡Gracias por tu compra!</p>
+              </div>
+            </div>
+
+            <div className="confirmation-actions">
+              <button 
+                className="btn btn-outline"
+                onClick={handleContinueShopping}
+              >
+                <i className="bi bi-bag"></i>
+                Seguir Comprando
+              </button>
+              <button 
+                className="btn btn-primary"
+                onClick={handlePrintInvoice}
+              >
+                <i className="bi bi-printer"></i>
+                Imprimir Factura
+              </button>
+            </div>
+
+            <div className="next-steps">
+              <h3>Próximos Pasos</h3>
+              <div className="steps-timeline">
+                <div className="step completed">
+                  <div className="step-icon">
+                    <i className="bi bi-check-lg"></i>
+                  </div>
+                  <div className="step-content">
+                    <h4>Pedido Confirmado</h4>
+                    <p>Tu pedido ha sido recibido y confirmado</p>
+                  </div>
+                </div>
+                <div className="step pending">
+                  <div className="step-icon">
+                    <i className="bi bi-clock"></i>
+                  </div>
+                  <div className="step-content">
+                    <h4>En Preparación</h4>
+                    <p>Estamos preparando tu pedido</p>
+                  </div>
+                </div>
+                <div className="step pending">
+                  <div className="step-icon">
+                    <i className="bi bi-truck"></i>
+                  </div>
+                  <div className="step-content">
+                    <h4>En Camino</h4>
+                    <p>Tu pedido está en camino a tu dirección</p>
+                  </div>
+                </div>
+                <div className="step pending">
+                  <div className="step-icon">
+                    <i className="bi bi-house-check"></i>
+                  </div>
+                  <div className="step-content">
+                    <h4>Entregado</h4>
+                    <p>Pedido entregado satisfactoriamente</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <Footer />

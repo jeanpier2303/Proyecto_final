@@ -18,6 +18,7 @@ import Carrito from "./pages/Carrito";
 import Checkout from "./pages/Checkout";
 /* import OrderConfirmation from "./components/OrderConfirmation"; */
 /* import Perfil from "./pages/Perfil/Perfil"; */
+import CategoryProducts from "./components/CategoryProducts"; // Nueva página para productos por categoría
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
             <Route path="/Checkout" element={<Checkout />} />
             {/* <Route path="/OrderConfirmation" element={<OrderConfirmation />} /> */}
             {/* <Route path="/Perfil" element={<Perfil />} /> */}
+            <Route path="/categoria/:categoryId" element={<CategoryProducts />} />
           </Routes>
         </Router>
       </AuthProvider>
