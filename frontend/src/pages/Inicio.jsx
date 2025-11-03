@@ -8,6 +8,11 @@ import Carrusel1 from "../assets/images/categorias/Carrusel1.png";
 import Carrusel2 from "../assets/images/categorias/Carrusel2.png";
 import Carrusel3 from "../assets/images/categorias/Carrusel3.png";
 import { FaTelegramPlane } from 'react-icons/fa';
+import JugoMango from "../assets/images/Productos/Jugo_Mango.png"
+import JugoMangoGuayabaNaranja from "../assets/images/Productos/Jugo_MangoGuayabaNaranja.png";
+import JugoLulo from "../assets/images/Productos/Jugo_lulo.png";
+import JugoChontaduro from "../assets/images/Productos/Jugo_Chontaduro.png"
+import JugoCombo02 from "../assets/images/Productos/Jugos_combo02.png"
 
 const Inicio = () => {
   const navigate = useNavigate();
@@ -81,60 +86,56 @@ const Inicio = () => {
       precioOriginal: 9500,
       categoria: "clasicos",
       categoriaNombre: "Jugos Clásicos",
-      imagen: "https://images.unsplash.com/photo-1622964318678-1b0f243d258b?auto=format&fit=crop&w=500&q=80",
+      imagen: JugoMango,
       descripcion: "Delicioso jugo 100% natural de mango, rico en vitamina C y antioxidantes",
       oferta: true,
       descuento: 11,
       vendidos: 124,
-      esFavorito: true,
       stock: 15,
       tiempoPreparacion: "5 min"
     },
     {
       id: 2,
-      nombre: "Jugo de Maracuyá Tropical",
+      nombre: "Jugo de Lulo",
       precio: 9000,
       precioOriginal: 9000,
-      categoria: "naturales",
-      categoriaNombre: "Jugos Naturales",
-      imagen: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=500&q=80",
+      categoria: "Verdes",
+      categoriaNombre: "Jugos Verdes",
+      imagen: JugoLulo,
       descripcion: "Refrescante jugo de maracuyá con un toque tropical que te transportará",
       oferta: false,
       descuento: 0,
       vendidos: 98,
-      esFavorito: false,
       stock: 12,
       tiempoPreparacion: "6 min"
     },
     {
       id: 3,
-      nombre: "Batido Energético de Fresa",
+      nombre: "Mezcla Tropical de Mango Guayaba y Naranja",
       precio: 10500,
       precioOriginal: 12000,
-      categoria: "batidos",
-      categoriaNombre: "Batidos Energéticos",
-      imagen: "https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=500&q=80",
-      descripcion: "Batido cremoso de fresa con leche de almendras y miel orgánica",
+      categoria: "Tropicales",
+      categoriaNombre: "Mezclas Tropicales",
+      imagen: JugoMangoGuayabaNaranja,
+      descripcion: "Exótica combinación de mango, guayaba y naranja para un boost de sabor y vitaminas",
       oferta: true,
       descuento: 13,
       vendidos: 156,
-      esFavorito: true,
       stock: 8,
       tiempoPreparacion: "7 min"
     },
     {
       id: 4,
-      nombre: "Jugo Verde Detox",
+      nombre: "Jugo Energizante de Chontaduro",
       precio: 12000,
       precioOriginal: 12000,
-      categoria: "detox",
-      categoriaNombre: "Jugos Detox",
-      imagen: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=500&q=80",
-      descripcion: "Mezcla revitalizante de espinaca, piña, pepino y jengibre fresco",
+      categoria: "Energizantes",
+      categoriaNombre: "Jugos Energizantes",
+      imagen: JugoChontaduro,
+      descripcion: "Potente jugo de chontaduro, rico en nutrientes y energía natural para tu día a día",
       oferta: false,
       descuento: 0,
       vendidos: 87,
-      esFavorito: false,
       stock: 10,
       tiempoPreparacion: "8 min"
     }
@@ -144,23 +145,23 @@ const Inicio = () => {
   const productosFrecuentes = [
     {
       id: 5,
-      nombre: "Jugo de Naranja Natural",
-      precio: 7500,
-      imagen: "https://images.unsplash.com/photo-1622964318678-1b0f243d258b?auto=format&fit=crop&w=500&q=80",
+      nombre: "Jugo de Mango Natural",
+      precio: 8500,
+      imagen: JugoMango,
       vecesComprado: 3,
       ultimaCompra: "Hace 2 días",
       stock: 20,
-      categoria: "clasicos"
+      categoria: "Clasicos"
     },
     {
       id: 6,
-      nombre: "Batido de Banano",
-      precio: 9500,
-      imagen: "https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&w=500&q=80",
+      nombre: "Jugo Energizante de Chontaduro",
+      precio: 12000,
+      imagen: JugoChontaduro,
       vecesComprado: 2,
       ultimaCompra: "Hace 1 semana",
       stock: 15,
-      categoria: "energizantes"
+      categoria: "Energizantes"
     }
   ];
 
@@ -209,11 +210,11 @@ const Inicio = () => {
     {
       id: 1,
       titulo: "Combo Desayuno Energético",
-      descripcion: "2 jugos naturales + 1 batido + 1 snack saludable",
+      descripcion: "2 jugos naturales + 1 snack saludable",
       precio: 22000,
       precioOriginal: 28000,
       ahorro: 6000,
-      imagen: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=500&q=80",
+      imagen: JugoCombo02,
       tiempoRestante: "05:45:30",
       stock: 5
     }

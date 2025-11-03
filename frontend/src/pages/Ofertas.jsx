@@ -4,6 +4,16 @@ import { useNavigate } from "react-router-dom";
 import NavPrivate from "../components/NavPrivate";
 import Footer from "../components/Footer";
 import "../assets/styles/Ofertas.css";
+import ChicaJugo from "../assets/images/Productos/Jugos_Fondo.png";
+import JugoFresa from "../assets/images/Productos/Jugo_fresa.png";
+import JugoMango from "../assets/images/Productos/Jugo_Mango.png";
+import JugoPiña from "../assets/images/Productos/Jugo_Piña.png";
+import JugoNaranja from "../assets/images/Productos/Jugo_naranja.png";
+import JugoDetox from "../assets/images/Productos/Jugo_Detox.png";
+import JugoMora from "../assets/images/Productos/Jugo_Mora.png";
+import JugoChontaduro from "../assets/images/Productos/Jugo_Chontaduro.png";
+import JugosCombo1 from "../assets/images/Productos/Jugos_combo01.png";
+
 
 const Ofertas = () => {
   const navigate = useNavigate();
@@ -24,8 +34,8 @@ const Ofertas = () => {
       precio: 7200,
       precioOriginal: 9000,
       descuento: 20,
-      categoria: "naturales",
-      imagen: "/images/ofertas/jugo-fresa.jpg",
+      categoria: "Naturales",
+      imagen: JugoFresa,
       tiempoRestante: "12:45:30",
       stock: 8,
       vendidos: 45,
@@ -41,8 +51,8 @@ const Ofertas = () => {
       precio: 10200,
       precioOriginal: 12000,
       descuento: 15,
-      categoria: "detox",
-      imagen: "/images/ofertas/jugo-verde.jpg",
+      categoria: "Verdes",
+      imagen: JugoDetox,
       tiempoRestante: "08:20:15",
       stock: 5,
       vendidos: 32,
@@ -53,13 +63,13 @@ const Ofertas = () => {
     },
     {
       id: 3,
-      nombre: "Smoothie Energético de Mora",
-      descripcion: "Smoothie cremoso de mora con yogurt griego y avena para energía duradera",
+      nombre: "Jugo Clásico de Mora",
+      descripcion: "Refrescante jugo de mora natural Rico en fibra y antioxidantes",
       precio: 8400,
       precioOriginal: 12000,
       descuento: 30,
-      categoria: "batidos",
-      imagen: "/images/ofertas/smoothie-mora.jpg",
+      categoria: "Naturales",
+      imagen: JugoMora,
       tiempoRestante: "23:15:40",
       stock: 12,
       vendidos: 67,
@@ -75,8 +85,8 @@ const Ofertas = () => {
       precio: 8100,
       precioOriginal: 9000,
       descuento: 10,
-      categoria: "tropicales",
-      imagen: "/images/ofertas/jugo-mango.jpg",
+      categoria: "Tropicales",
+      imagen: JugoMango,
       tiempoRestante: "15:30:25",
       stock: 15,
       vendidos: 28,
@@ -87,19 +97,19 @@ const Ofertas = () => {
     },
     {
       id: 5,
-      nombre: "Batido de Proteína Vegetal",
-      descripcion: "Batido nutritivo con proteína de guisante, plátano y mantequilla de almendras",
+      nombre: "Jugo Energizante de Chontaduro",
+      descripcion: "Batido proteico con chontaduro. Ideal para energía y recuperación muscular",
       precio: 11200,
       precioOriginal: 14000,
       descuento: 20,
-      categoria: "batidos",
-      imagen: "/images/ofertas/batido-proteina.jpg",
+      categoria: "Energizantes",
+      imagen: JugoChontaduro,
       tiempoRestante: "06:45:10",
       stock: 3,
       vendidos: 41,
       popularidad: 78,
       esExclusivo: true,
-      ingredientes: ["Proteína vegetal", "Plátano", "Mantequilla de almendras", "Leche de almendras"],
+      ingredientes: ["Chontaduro", "Leche de almendra", "Proteína en polvo", "Banana", "Miel"],
       beneficios: ["Proteína", "Energía", "Recuperación"]
     },
     {
@@ -109,8 +119,8 @@ const Ofertas = () => {
       precio: 9600,
       precioOriginal: 12000,
       descuento: 20,
-      categoria: "detox",
-      imagen: "/images/ofertas/jugo-piña.jpg",
+      categoria: "Verdes",
+      imagen: JugoPiña,
       tiempoRestante: "18:20:35",
       stock: 7,
       vendidos: 53,
@@ -122,29 +132,29 @@ const Ofertas = () => {
     {
       id: 7,
       nombre: "Combo Familiar Energético",
-      descripcion: "4 jugos naturales + 2 batidos + 2 snacks saludables - Perfecto para toda la familia",
+      descripcion: "2 jugos naturales + 2 Jugos verdes- Perfecto para toda la familia",
       precio: 35000,
       precioOriginal: 45000,
       descuento: 22,
-      categoria: "combos",
-      imagen: "/images/ofertas/combo-familiar.jpg",
+      categoria: "Combos",
+      imagen: JugosCombo1,
       tiempoRestante: "02:15:50",
       stock: 6,
       vendidos: 24,
       popularidad: 95,
       esExclusivo: true,
-      ingredientes: ["Variedad de frutas", "Verduras frescas", "Snacks saludables"],
+      ingredientes: ["Variedad de frutas", "Verduras frescas"],
       beneficios: ["Ahorro", "Variedad", "Familiar"]
     },
     {
       id: 8,
-      nombre: "Jugo Antioxidante de Arándanos",
-      descripcion: "Poderoso antioxidante natural con arándanos, granada y té verde",
+      nombre: "Jugo Natural de Naranja",
+      descripcion: "Refrescante jugo de naranja 100% natural, rico en vitamina C y antioxidantes",
       precio: 10800,
       precioOriginal: 13500,
       descuento: 20,
-      categoria: "naturales",
-      imagen: "/images/ofertas/jugo-arandanos.jpg",
+      categoria: "Naturales",
+      imagen: JugoNaranja,
       tiempoRestante: "11:40:20",
       stock: 10,
       vendidos: 38,
@@ -331,7 +341,7 @@ const Ofertas = () => {
                   </div>
                 </div>
                 <img 
-                  src="/images/ofertas/hero-ofertas.jpg" 
+                  src={ChicaJugo} 
                   alt="Ofertas Kahua"
                   className="hero-image"
                 />

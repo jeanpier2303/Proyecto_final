@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Button, Form, Tab, Tabs } from "react-bootst
 import NavPrivate from "../components/NavPrivate";
 import Footer from "../components/Footer";
 import "../assets/styles/Comunidad.css";
+import JugoChica from "../assets/images/Productos/ChicaJugo.png"
 
 const Comunidad = () => {
   const [activeTab, setActiveTab] = useState("recetas");
@@ -41,7 +42,7 @@ const Comunidad = () => {
       id: 1,
       nombre: "Ana Martínez",
       ubicacion: "Cali, Colombia",
-      imagen: "/images/comunidad/testimonio1.jpg",
+      imagen: JugoChica,
       contenido: "Los jugos de Kahua han transformado mi rutina matutina. Me siento con más energía y mi piel luce radiante.",
       rating: 5
     },

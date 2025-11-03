@@ -19,6 +19,7 @@ import Checkout from "./pages/Checkout";
 /* import Perfil from "./pages/Perfil/Perfil"; */
 import CategoryProducts from "./components/CategoryProducts"; // Nueva página para productos por categoría
 import Perfil from "./pages/Perfil/Perfil";
+import Pedidos from "./pages/Perfil/Pedidos";
 //import FacturaView from "./pages/Admin/Facturacion/FacturaView";
 //import FacturaView from "./pages/Admin/Facturacion/FacturaView";
 
@@ -42,6 +43,7 @@ function App() {
             <Route path="/Inicio" element={<Inicio />} />
             <Route path="/Ofertas" element={<Ofertas />} />
             <Route path="/Perfil" element={<Perfil />} />
+            <Route path="/Pedidos" element={<Pedidos />} />
             <Route path="/Productos" element={<Productos />} />
             <Route path="/Comunidad" element={<Comunidad />} />
             <Route path="/Soporte" element={<Soporte />} />

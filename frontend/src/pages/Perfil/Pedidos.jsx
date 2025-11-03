@@ -1,8 +1,11 @@
 import React from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import NavPrivate from "../components/NavPrivate";
-import Footer from "../components/Footer";
-import "../assets/styles/Pedidos.css";
+import NavPrivate from "../../components/NavPrivate";
+import Footer from "../../components/Footer";
+import "../../assets/styles/Pedidos.css";
+import JugoMango from "../../assets/images/Productos/Jugo_Mango.png"
+import JugoLulo from "../../assets/images/Productos/Jugo_lulo.png"
+import JugoFresa from "../../assets/images/Productos/Jugo_Fresa.png"
 
 const Pedidos = () => {
   return (
@@ -29,7 +32,7 @@ const Pedidos = () => {
                   <Col xs={4}>
                     {/* 👉 Aquí colocas una imagen del producto */}
                     <img
-                      src="ruta/a/tu/imagen-pedido1.jpg"
+                      src={JugoMango}
                       alt="Pedido 1"
                       className="pedido-img"
                     />
@@ -42,9 +45,7 @@ const Pedidos = () => {
                       <span className="estado-pedido entregado">Entregado</span>
                     </div>
                     <div className="pedido-actions mt-3">
-                      <Button variant="outline-primary" size="sm">
-                        Ver Detalles
-                      </Button>{" "}
+                      
                       <Button variant="primary" size="sm">
                         Comprar de nuevo
                       </Button>
@@ -60,22 +61,20 @@ const Pedidos = () => {
                 <Row className="align-items-center">
                   <Col xs={4}>
                     <img
-                      src="ruta/a/tu/imagen-pedido2.jpg"
+                      src={JugoFresa}
                       alt="Pedido 2"
                       className="pedido-img"
                     />
                   </Col>
                   <Col xs={8}>
                     <div className="pedido-info">
-                      <h5 className="pedido-producto">Smoothie de Fresa</h5>
+                      <h5 className="pedido-producto">Jugo de Fresa</h5>
                       <p className="pedido-fecha">Fecha: 2 Octubre 2025</p>
                       <p className="pedido-total">Total: <strong>$12.000</strong></p>
                       <span className="estado-pedido en-proceso">En proceso</span>
                     </div>
                     <div className="pedido-actions mt-3">
-                      <Button variant="outline-primary" size="sm">
-                        Ver Detalles
-                      </Button>{" "}
+                      
                       <Button variant="primary" size="sm">
                         Comprar de nuevo
                       </Button>
@@ -91,22 +90,20 @@ const Pedidos = () => {
                 <Row className="align-items-center">
                   <Col xs={4}>
                     <img
-                      src="ruta/a/tu/imagen-pedido3.jpg"
+                      src={JugoLulo}
                       alt="Pedido 3"
                       className="pedido-img"
                     />
                   </Col>
                   <Col xs={8}>
                     <div className="pedido-info">
-                      <h5 className="pedido-producto">Jugo Verde Detox</h5>
+                      <h5 className="pedido-producto">Jugo Verde Lulo</h5>
                       <p className="pedido-fecha">Fecha: 28 Septiembre 2025</p>
                       <p className="pedido-total">Total: <strong>$15.000</strong></p>
                       <span className="estado-pedido cancelado">Cancelado</span>
                     </div>
                     <div className="pedido-actions mt-3">
-                      <Button variant="outline-primary" size="sm">
-                        Ver Detalles
-                      </Button>{" "}
+                      
                       <Button variant="primary" size="sm">
                         Comprar de nuevo
                       </Button>
