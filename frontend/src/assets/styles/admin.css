@@ -114,7 +114,7 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 .stat-icon.orange { background: linear-gradient(135deg, #FF8C42, #FFA500); }
 .stat-icon.green { background: linear-gradient(135deg, #10B981, #059669); }
 .stat-icon.blue { background: linear-gradient(135deg, #3B82F6, #2563EB); }
-.stat-details .stat-label { color:var(--gray); font-size:14px; margin-bottom:6px; }
+.stat-details .stat-labell { color:var(--gray); font-size:14px; margin-bottom:6px; }
 .stat-details .stat-value { font-size:24px; font-weight:700; color:var(--dark); }
 
 /* Charts & table */

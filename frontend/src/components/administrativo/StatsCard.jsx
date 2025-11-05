@@ -44,7 +44,7 @@ const StatsCard = ({ color = "purple", label, endpoint, field, sublabel }) => {
         <i className={`fas fa-${getIcon(label)}`}></i>
       </div>
       <div className="stat-details">
-        <div className="stat-label">{label}</div>
+        <div className="stat-labell">{label}</div>
         <div className="stat-value">
           {loading ? "..." : value}
           {field === "sales_total" && !loading && " COP"}

@@ -378,11 +378,6 @@
   border-left: 4px solid var(--primary-color);
 }
 
-.benefit-icon {
-  font-size: 1.5rem;
-  color: var(--primary-color);
-}
-
 /* Tarjeta de Estadísticas */
 .rewards-stats-card {
   border: none;
