@@ -49,7 +49,7 @@ const BenefitsSection = () => {
           <h2>Beneficios Kahua</h2>
           <p>Nuestros productos están diseñados para brindarte lo mejor de la naturaleza en cada botella</p>
         </div>
-        <div className="benefits-grid">
+        <div className="benefits-gridd">
           {benefits.map((benefit, index) => (
             <BenefitCard
               key={index}

@@ -983,7 +983,7 @@ section {
   animation: fadeInUp 1s ease-out 0.8s both;
 }
 
-.benefits-grid {
+.benefits-gridd {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 40px;
