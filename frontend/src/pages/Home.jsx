@@ -48,8 +48,8 @@ export default function Home() {
       <Particles />
       <NavbarApp />
       <HeroSection />
-      <BenefitsSection />
       <Categories />
+      <BenefitsSection />
       <CTASection />
       <Footer />
     </div>

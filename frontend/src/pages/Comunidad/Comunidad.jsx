@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Button, Form, Tab, Tabs, Alert } from "react
 import NavPrivate from "../../components/NavPrivate";
 import Footer from "../../components/Footer";
 import "../../assets/styles/Comunidad.css";
+import perfil from "../../assets/images/categorias/Carrusel3.png"
 
 const Comunidad = () => {
   const [activeTab, setActiveTab] = useState("testimonios");
@@ -22,7 +23,7 @@ const Comunidad = () => {
       id: 1,
       nombre: "Ana Martínez",
       ubicacion: "Cali, Colombia",
-      imagen: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80",
+      imagen: perfil,
       contenido: "Los jugos de Kahua han transformado mi rutina matutina. Me siento con más energía y mi piel luce radiante.",
       rating: 5,
       fecha: "2024-03-15"
