@@ -99,7 +99,7 @@ import JugoLulo from "../assets/images/Productos/Jugo_lulo.png";
 import JugoMangoMaracuya from "../assets/images/Productos/Jugo_Mango&Maracuyá.png";
 import JugoBorojó from "../assets/images/Productos/Jugo_borojo.png";
 
-const CategoryCard = ({ icon, title, description, delay, categoryId, product }) => {
+const CategoryCard = ({ /* icon */ title, description, delay, categoryId, product }) => {
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -112,9 +112,9 @@ const CategoryCard = ({ icon, title, description, delay, categoryId, product }) 
       style={{ animationDelay: `${delay}ms` }}
     >
       <div className="category-card text-center h-100 d-flex flex-column">
-        <div className="category-icon mb-3">
+{/*         <div className="category-icon mb-3">
           <i className={icon}></i>
-        </div>
+        </div> */}
         
         {/* Producto destacado */}
         {product && (
