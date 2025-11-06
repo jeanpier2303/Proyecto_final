@@ -41,7 +41,7 @@ const LoginPage = () => {
       if (response?.data?.user) {
         const userData = response.data.user;
 
-        // ✅ Guardamos usuario globalmente
+        // ✅ Guardamos usuario globalmente en el contexto
         login(userData);
 
         Swal.fire({

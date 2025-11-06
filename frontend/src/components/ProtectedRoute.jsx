@@ -9,14 +9,17 @@ const ProtectedRoute = ({ children }) => {
 
   useEffect(() => {
     if (!loading && !user) {
-      Swal.fire({
-        icon: "warning",
-        title: "Acceso denegado",
-        text: "Debes iniciar sesión para acceder a esta sección.",
-        confirmButtonText: "Entendido",
-      }).then(() => {
-        navigate("/login");
-      });
+      // Evitar redirección múltiple
+      if (window.location.pathname !== '/login') {
+        Swal.fire({
+          icon: "warning",
+          title: "Acceso denegado",
+          text: "Debes iniciar sesión para acceder a esta sección.",
+          confirmButtonText: "Entendido",
+        }).then(() => {
+          navigate("/login", { replace: true });
+        });
+      }
     }
   }, [user, loading, navigate]);
 
