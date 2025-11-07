@@ -44,6 +44,7 @@ function App() {
             <Route path="/Carrito" element={<Carrito />} />
             <Route path="/Checkout" element={<Checkout />} />
             <Route path="/categoria/:categoryId" element={<CategoryProducts />} />
+            <Route path="/ProtectedRoute" element={<ProtectedRoute />} />
           </Routes>
         </Router>
       </AuthProvider>
@@ -133,7 +134,6 @@ function App() {
 
 export default App; */
 
-
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -156,6 +156,7 @@ import Checkout from "./pages/Checkout";
 import CategoryProducts from "./components/CategoryProducts"; 
 import Perfil from "./pages/Perfil/Perfil";
 import Pedidos from "./pages/Perfil/Pedidos";
+import Error404 from "./pages/Error404/Error404";
 
 function App() {
   return (
@@ -268,6 +269,9 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
+            <Route path="*" element={<Error404 />} />
+
           </Routes>
         </Router>
       </AuthProvider>
