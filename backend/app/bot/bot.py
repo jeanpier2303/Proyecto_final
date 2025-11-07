@@ -156,10 +156,40 @@ async def get_product(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 parse_mode="Markdown"
             )
 
+    # --- Mostrar botón de cancelar ---
+    keyboard = [[InlineKeyboardButton("❌ Cancelar y volver al menú", callback_data="cancelar_menu")]]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
     await update.message.reply_text(
-        f"¿Cuántas unidades deseas? (Máximo {MAX_CANTIDAD})"
+        f"¿Cuántas unidades deseas? (Máximo {MAX_CANTIDAD})",
+        reply_markup=reply_markup
     )
     return QUANTITY
+
+# ---------------------------------------------------------------------
+# ---------------------------------------------------------------------
+async def cancelar_seleccion(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+
+    user = context.user_data.get("user")
+    productos = context.user_data.get("productos", [])
+
+    if not productos:
+        productos = requests.get(f"{API_URL}/api/productos/").json()[:10]
+        context.user_data["productos"] = productos
+
+    lista = "\n".join([
+        f"{p['id']}. {p.get('name') or p.get('nombre')} - ${p.get('price') or p.get('precio')}"
+        for p in productos
+    ])
+
+    # Enviar mensaje con los productos disponibles
+    await query.message.reply_text(
+        f"🛍 No hay problema {user['first_name'] if user else ''}, elige otro producto:\n\n{lista}\n\n👉 Escribe el número del producto que deseas."
+    )
+    return PRODUCT
+
 
 # ---------------------------------------------------------------------
 async def get_quantity(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -299,7 +329,11 @@ def main():
         entry_points=[CommandHandler("start", start)],
         states={
             PRODUCT: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_product)],
-            QUANTITY: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_quantity)],
+            QUANTITY: [
+            MessageHandler(filters.TEXT & ~filters.COMMAND, get_quantity),
+            CallbackQueryHandler(cancelar_seleccion, pattern="cancelar_menu")
+        ],
+
             PAYMENT: [
                         CallbackQueryHandler(continuar_pago, pattern="continuar_pago"),
                         CallbackQueryHandler(nueva_compra, pattern="nueva_compra"),
