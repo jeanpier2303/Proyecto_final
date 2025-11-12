@@ -1,127 +1,175 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { API_URL } from "../../config";
-import { Button, Form, Table, InputGroup } from "react-bootstrap";
+import { useAuth } from "../../contexts/AuthContext";
+import { Table, Form, Button, InputGroup, Modal } from "react-bootstrap";
+import { Search, Trash2, Save } from "lucide-react";
 import Swal from "sweetalert2";
+import FacturaCard from "../../pages/Admin/Facturacion/FacturaCard";
 import "../../assets/styles/vendedor.css";
 
-const VendedorVenta = ({ vendedor }) => {
+export default function VendedorVenta() {
+  const { user } = useAuth();
   const [productos, setProductos] = useState([]);
   const [busqueda, setBusqueda] = useState("");
-  const [carrito, setCarrito] = useState([]);
+  const [itemsVenta, setItemsVenta] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [facturaId, setFacturaId] = useState(null);
+  const [mostrarFactura, setMostrarFactura] = useState(false);
 
-  // Cargar productos
+  const vendedor_id = user?.id;
+
   useEffect(() => {
-    axios.get(`${API_URL}/api/productos/`)
+    axios.get(`${API_URL}/productos/`)
       .then(res => setProductos(res.data))
       .catch(err => console.error(err));
   }, []);
 
-  // Filtrar productos
-  const filtrados = productos.filter(p =>
+  const productosFiltrados = productos.filter(p =>
     p.name.toLowerCase().includes(busqueda.toLowerCase())
   );
 
   const agregarProducto = (producto) => {
-    const existe = carrito.find(p => p.id === producto.id);
+    const existe = itemsVenta.find(item => item.product_id === producto.id);
     if (existe) {
-      setCarrito(carrito.map(p =>
-        p.id === producto.id ? { ...p, qty: p.qty + 1 } : p
-      ));
-    } else {
-      setCarrito([...carrito, { ...producto, qty: 1 }]);
-    }
-  };
-
-  const cambiarCantidad = (id, delta) => {
-    setCarrito(carrito.map(p =>
-      p.id === id
-        ? { ...p, qty: Math.max(1, p.qty + delta) }
-        : p
-    ));
-  };
-
-  const eliminarProducto = (id) => {
-    setCarrito(carrito.filter(p => p.id !== id));
-  };
-
-  const subtotal = carrito.reduce((acc, p) => acc + p.qty * p.price, 0);
-
-  const registrarVenta = async () => {
-    if (carrito.length === 0) {
-      Swal.fire("Sin productos", "Agrega productos antes de registrar la venta", "warning");
+      Swal.fire("Ya agregado", "El producto ya está en la lista.", "warning");
       return;
     }
 
+    setItemsVenta([...itemsVenta, {
+      product_id: producto.id,
+      name: producto.name,
+      unit_price: producto.price,
+      qty: 1,
+      subtotal: producto.price
+    }]);
+  };
+
+  const actualizarCantidad = (id, nuevaCantidad) => {
+    setItemsVenta(prev =>
+      prev.map(item =>
+        item.product_id === id
+          ? { ...item, qty: nuevaCantidad, subtotal: nuevaCantidad * item.unit_price }
+          : item
+      )
+    );
+  };
+
+  const eliminarProducto = (id) => {
+    setItemsVenta(prev => prev.filter(item => item.product_id !== id));
+  };
+
+  const totalVenta = itemsVenta.reduce((sum, item) => sum + item.subtotal, 0);
+
+  const registrarVenta = async () => {
+    if (itemsVenta.length === 0) {
+      Swal.fire("Sin productos", "Agrega al menos un producto antes de registrar la venta.", "info");
+      return;
+    }
+
+    setLoading(true);
     try {
       const payload = {
-        vendedor_id: vendedor.id,
-        items: carrito.map(p => ({
-          product_id: p.id,
-          qty: p.qty,
-          unit_price: p.price
+        vendedor_id,
+        status: "Pagado", // ✅ siempre pagado
+        items: itemsVenta.map(i => ({
+          product_id: i.product_id,
+          qty: i.qty,
+          unit_price: i.unit_price
         })),
-        note: "Venta realizada desde el panel del vendedor"
+        note: "Venta en tienda física (pagada)",
       };
 
-      const res = await axios.post(`${API_URL}/api/seller/orders`, payload);
-      Swal.fire("Venta registrada", `Venta #${res.data.order_id} por $${res.data.total.toLocaleString()}`, "success");
-      setCarrito([]);
+      const res = await axios.post(`${API_URL}/seller/sales`, payload);
+      const orderId = res.data.order_id;
+
+      setItemsVenta([]);
+      setBusqueda("");
+
+      Swal.fire({
+        title: "✅ Venta registrada",
+        text: `La venta #${orderId} fue guardada correctamente.`,
+        icon: "success",
+        showCancelButton: true,
+        confirmButtonText: "Descargar factura",
+        cancelButtonText: "Cerrar",
+      }).then((r) => {
+        if (r.isConfirmed) {
+          setFacturaId(orderId);
+          setMostrarFactura(true);
+        }
+      });
     } catch (err) {
       console.error(err);
-      Swal.fire("Error", "No se pudo registrar la venta", "error");
+      Swal.fire("Error", "No se pudo registrar la venta.", "error");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="content-area">
-      <h2 className="mb-4">Punto de Venta</h2>
+      <h3 className="mb-3 text-primary fw-bold">🧾 Nueva Venta (Tienda Física)</h3>
 
-      <InputGroup className="mb-3">
+      {/* Buscador */}
+      <InputGroup className="mb-3 shadow-sm rounded">
+        <InputGroup.Text><Search size={18} /></InputGroup.Text>
         <Form.Control
+          type="text"
           placeholder="Buscar producto..."
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
         />
       </InputGroup>
 
-      <div className="productos-grid mb-4">
-        {filtrados.map(p => (
-          <div key={p.id} className="producto-card" onClick={() => agregarProducto(p)}>
-            <img src={p.image_url || "/placeholder.png"} alt={p.name} />
-            <div className="producto-info">
-              <h6>{p.name}</h6>
-              <p>${p.price.toLocaleString()}</p>
+      {/* Resultados */}
+      {busqueda && (
+        <div className="productos-lista mb-4">
+          {productosFiltrados.slice(0, 6).map(p => (
+            <div key={p.id} className="producto-item" onClick={() => agregarProducto(p)}>
+              <div>
+                <strong>{p.name}</strong>
+                <p className="m-0 text-muted">${p.price.toLocaleString()}</p>
+              </div>
+              <Button size="sm" variant="outline-success">Agregar</Button>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+          {productosFiltrados.length === 0 && <p className="text-muted">No se encontraron productos</p>}
+        </div>
+      )}
 
-      <h4>Carrito</h4>
-      <Table striped bordered hover responsive>
-        <thead>
+      {/* Tabla */}
+      <Table bordered hover responsive className="table-vendedor">
+        <thead className="table-light">
           <tr>
             <th>Producto</th>
-            <th>Cantidad</th>
-            <th>Precio</th>
-            <th>Subtotal</th>
+            <th style={{ width: "120px" }}>Precio</th>
+            <th style={{ width: "100px" }}>Cantidad</th>
+            <th style={{ width: "140px" }}>Subtotal</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          {carrito.map((p) => (
-            <tr key={p.id}>
-              <td>{p.name}</td>
+          {itemsVenta.map(item => (
+            <tr key={item.product_id}>
+              <td>{item.name}</td>
+              <td>${item.unit_price.toLocaleString()}</td>
               <td>
-                <Button size="sm" onClick={() => cambiarCantidad(p.id, -1)}>-</Button>{" "}
-                {p.qty}{" "}
-                <Button size="sm" onClick={() => cambiarCantidad(p.id, 1)}>+</Button>
+                <Form.Control
+                  type="number"
+                  min="1"
+                  value={item.qty}
+                  onChange={(e) => actualizarCantidad(item.product_id, parseInt(e.target.value))}
+                />
               </td>
-              <td>${p.price.toLocaleString()}</td>
-              <td>${(p.qty * p.price).toLocaleString()}</td>
+              <td>${item.subtotal.toLocaleString()}</td>
               <td>
-                <Button variant="danger" size="sm" onClick={() => eliminarProducto(p.id)}>
-                  <i className="bi bi-trash"></i>
+                <Button
+                  variant="outline-danger"
+                  size="sm"
+                  onClick={() => eliminarProducto(item.product_id)}
+                >
+                  <Trash2 size={16} />
                 </Button>
               </td>
             </tr>
@@ -129,12 +177,31 @@ const VendedorVenta = ({ vendedor }) => {
         </tbody>
       </Table>
 
-      <div className="text-end">
-        <h5>Total: ${subtotal.toLocaleString()}</h5>
-        <Button variant="success" onClick={registrarVenta}>Registrar Venta</Button>
+      {/* Total */}
+      <div className="text-end mt-3">
+        <h5 className="fw-bold">Total a pagar: ${totalVenta.toLocaleString()}</h5>
       </div>
+
+      {/* Botón */}
+      <div className="text-end mt-3">
+        <Button
+          className="btn-vendedor"
+          onClick={registrarVenta}
+          disabled={loading}
+        >
+          <Save size={18} className="me-1" /> {loading ? "Guardando..." : "Registrar y pagar"}
+        </Button>
+      </div>
+
+      {/* Modal factura */}
+      <Modal show={mostrarFactura} onHide={() => setMostrarFactura(false)} size="lg" centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Factura de Venta #{facturaId}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {facturaId && <FacturaCard orderId={facturaId} />}
+        </Modal.Body>
+      </Modal>
     </div>
   );
-};
-
-export default VendedorVenta;
+}

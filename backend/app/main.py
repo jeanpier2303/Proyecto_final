@@ -9,6 +9,12 @@ from app.routers import auth, cart, orders, admin, categorias, productos
 from app.routers import pedidos
 #from app.routers import invoice_routes
 from app.routers import invoice_routes
+from app.routers.seller_orders import router as seller_orders_router
+from app.routers.seller_sales import router as seller_sales_router
+from app.routers.seller_history import router as seller_history_router
+
+
+
 
 app = FastAPI(title="Proyecto_end - FastAPI")
 
@@ -37,6 +43,12 @@ app.include_router(admin.router, prefix="/api/admin")
 app.include_router(categorias.router, prefix="/api/categorias") 
 app.include_router(pedidos.router)
 app.include_router(orders.router)
+
+# Rutas de ventas de vendedores
+app.include_router(seller_orders_router)
+app.include_router(seller_sales_router)
+app.include_router(seller_history_router)
+
 
 # Rutas de facturación
 #app.include_router(invoice_routes.router)

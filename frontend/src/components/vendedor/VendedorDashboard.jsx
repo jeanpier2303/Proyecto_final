@@ -1,90 +1,89 @@
-import React from "react";
-import { Row, Col, Table } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { API_URL } from "../../config";
+import { Card, Row, Col, Spinner } from "react-bootstrap";
+import { DollarSign, ShoppingCart, Package, TrendingUp } from "lucide-react";
 import "../../assets/styles/vendedor.css";
 
 export default function VendedorDashboard() {
-  const ventas = [
-    { id: 1001, productos: "Jugo Verde, Batido Fresa", total: 5500, estado: "Listo" },
-    { id: 1002, productos: "Sándwich Vegano, Jugo Naranja", total: 7200, estado: "En Prep." },
-    { id: 1003, productos: "Acaí Bowl", total: 4800, estado: "Pendiente" },
-  ];
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get(`${API_URL}/admin/stats`)
+
+        setStats(res.data);
+      } catch (err) {
+        console.error("Error al cargar estadísticas:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="text-center py-5">
+        <Spinner animation="border" />
+        <p className="mt-3">Cargando métricas...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="content-area">
-      <div className="stats-grid mb-4">
-        <div className="stat-card">
-          <div>
-            <div className="stat-value">$ 245,800</div>
-            <div className="stat-label">Ventas Hoy</div>
-          </div>
-          <div className="stat-icon purple">
-            <i className="bi bi-cash-coin"></i>
-          </div>
-        </div>
+      <h3 className="mb-4 text-primary">Resumen de Actividad</h3>
 
-        <div className="stat-card warning">
-          <div>
-            <div className="stat-value">18</div>
-            <div className="stat-label">Pedidos Activos</div>
-          </div>
-          <div className="stat-icon orange">
-            <i className="bi bi-cart-check"></i>
-          </div>
-        </div>
+      <Row className="g-3">
+        <Col md={3}>
+          <Card className="stat-card">
+            <Card.Body>
+              <DollarSign className="icon" />
+              <h5>Total Ventas</h5>
+              <h3>${stats?.sales_total?.toLocaleString() || "0"}</h3>
+              <small className="text-muted">Ventas registradas</small>
+            </Card.Body>
+          </Card>
+        </Col>
 
-        <div className="stat-card success">
-          <div>
-            <div className="stat-value">42</div>
-            <div className="stat-label">Clientes Atendidos</div>
-          </div>
-          <div className="stat-icon green">
-            <i className="bi bi-people"></i>
-          </div>
-        </div>
+        <Col md={3}>
+          <Card className="stat-card">
+            <Card.Body>
+              <ShoppingCart className="icon" />
+              <h5>Órdenes Totales</h5>
+              <h3>{stats?.orders_count || 0}</h3>
+              <small className="text-muted">Pedidos realizados</small>
+            </Card.Body>
+          </Card>
+        </Col>
 
-        <div className="stat-card danger">
-          <div>
-            <div className="stat-value">3</div>
-            <div className="stat-label">Productos Bajo Stock</div>
-          </div>
-          <div className="stat-icon blue">
-            <i className="bi bi-exclamation-triangle"></i>
-          </div>
-        </div>
-      </div>
+        <Col md={3}>
+          <Card className="stat-card">
+            <Card.Body>
+              <Package className="icon" />
+              <h5>Productos</h5>
+              <h3>{stats?.products_count || 0}</h3>
+              <small className="text-muted">En inventario</small>
+            </Card.Body>
+          </Card>
+        </Col>
 
-      <div className="dashboard-section">
-        <div className="section-header d-flex justify-content-between align-items-center mb-3">
-          <h3 className="section-title">Pedidos Recientes</h3>
-        </div>
-
-        <div className="table-responsive">
-          <Table className="table-vendedor">
-            <thead>
-              <tr>
-                <th># Pedido</th>
-                <th>Productos</th>
-                <th>Total</th>
-                <th>Estado</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ventas.map((v) => (
-                <tr key={v.id}>
-                  <td>#{v.id}</td>
-                  <td>{v.productos}</td>
-                  <td>$ {v.total.toLocaleString()}</td>
-                  <td>
-                    <span className={`badge-vendedor ${
-                      v.estado === "Listo" ? "badge-listo" : v.estado.includes("Prep") ? "badge-preparacion" : "badge-pendiente"
-                    }`}>{v.estado}</span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </div>
-      </div>
+        <Col md={3}>
+          <Card className="stat-card">
+            <Card.Body>
+              <TrendingUp className="icon" />
+              <h5>Usuarios activos</h5>
+              <h3>{stats?.users_active || 0}</h3>
+              <small className="text-muted">Clientes registrados</small>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
     </div>
   );
 }
