@@ -156,6 +156,7 @@ import Checkout from "./pages/Checkout";
 import CategoryProducts from "./components/CategoryProducts"; 
 import Perfil from "./pages/Perfil/Perfil";
 import Pedidos from "./pages/Perfil/Pedidos";
+import VendedorPage from "./pages/VendedorPage"; /* ventas fisicas */
 import Error404 from "./pages/Error404/Error404";
 
 function App() {
@@ -179,6 +180,15 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/vendedor/*"
+              element={
+                <ProtectedRoute>
+                  <VendedorPage />
+                </ProtectedRoute>
+              }
+            />
+
 
             <Route
               path="/Inicio"

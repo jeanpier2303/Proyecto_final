@@ -54,3 +54,15 @@ def obtener_usuario(user_id: int):
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     return dict(result._mapping)
 
+#------------------------------------------------------------------------------------------------------------
+# Registro de vendedores
+@router.post("/register-seller")
+def register_seller(user: UserRegister):
+    """
+    Crea un nuevo usuario con rol de Vendedor (role_id = 7)
+    """
+    try:
+        new_user = create_user(user, role_id=7)
+        return {"success": True, "data": new_user}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al registrar vendedor: {str(e)}")

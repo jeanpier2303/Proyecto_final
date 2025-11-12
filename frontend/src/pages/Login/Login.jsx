@@ -301,15 +301,19 @@ const LoginPage = () => {
           // Administrador
           navigate("/admin", { replace: true });
         } else if (userData.role_id === 5) {
-          // Cliente - redirige a donde intentaba ir o a Inicio
+          // Cliente
           if (from !== "/login" && from !== "/") {
             navigate(from, { replace: true });
           } else {
             navigate("/Inicio", { replace: true });
           }
+        } else if (userData.role_id === 7) {
+          // 🟣 Vendedor
+          navigate("/vendedor", { replace: true });
         } else {
-          navigate(from, { replace: true });
+          navigate("/", { replace: true });
         }
+
       } else {
         Swal.fire({
           icon: "error",

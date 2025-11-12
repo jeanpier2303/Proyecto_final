@@ -1,0 +1,20 @@
+:root {
+  /* usa variables del admin */
+  --primary: #5b1fae;
+  --secondary: #A855B8;
+  --accent-color: #FF8C42;
+}
+
+/* Ejemplo de integración */
+.btn-vendedor {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+.btn-vendedor:hover {
+  background: var(--secondary);
+}

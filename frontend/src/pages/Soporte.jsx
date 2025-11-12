@@ -150,7 +150,7 @@ const Soporte = () => {
                     </div>
                     <div className="soporte-contact-details">
                       <h6>Dirección</h6>
-                      <p>Calle 123 #45-67, Cali, Colombia</p>
+                      <p>Calle 29-30, Quibdó, Colombia</p>
                     </div>
                   </div>
 
