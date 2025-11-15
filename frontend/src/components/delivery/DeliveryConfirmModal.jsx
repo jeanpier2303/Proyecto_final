@@ -7,13 +7,12 @@ function DeliveryConfirmModal({ order, onClose, onConfirm }) {
   const [monto, setMonto] = useState(order.total);
 
   const handleConfirm = () => {
-    const updated = {
-      ...order,
-      estado: "entregado",
-      pagoConfirmado: order.formaPago === "contraentrega",
+    onConfirm({
+      id: order.id,
+      status_id: 4, // entregado
+      pagoConfirmado,
       montoRecibido: order.formaPago === "contraentrega" ? monto : null,
-    };
-    onConfirm(updated);
+    });
   };
 
   return (
@@ -23,14 +22,10 @@ function DeliveryConfirmModal({ order, onClose, onConfirm }) {
       </Modal.Header>
 
       <Modal.Body className="text-center">
-        <i
-          className="bi bi-check-circle text-success"
-          style={{ fontSize: "3rem" }}
-        ></i>
+        <i className="bi bi-check-circle text-success" style={{ fontSize: "3rem" }}></i>
 
         <p className="mt-3">
-          ¿Estás seguro de que quieres confirmar la entrega del pedido #
-          {order.id}?
+          ¿Estás seguro de que quieres confirmar la entrega del pedido #{order.id}?
         </p>
 
         {order.formaPago === "contraentrega" && (

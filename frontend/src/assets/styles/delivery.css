@@ -297,3 +297,39 @@ body {
         flex-direction: column;
     }
 }
+
+/* === FIX TARJETAS QUE SE CORTAN === */
+.pedido-card {
+    display: block;
+    height: auto !important;
+}
+
+/* Permitir que los botones se vean completos */
+.pedido-acciones {
+    margin-top: 1rem !important;
+    flex-wrap: wrap;
+}
+
+/* Asegurar que la tarjeta crece con contenido */
+.pedido-info {
+    min-height: 80px;
+}
+
+/* Evitar overflow oculto en columnas */
+.pedidos-section {
+    height: auto !important;
+    overflow: visible !important;
+}
+
+.pedidos-lista {
+    max-height: none !important;
+    overflow: visible !important;
+}
+
+/* Quitar límites del contenedor padre */
+.delivery-container,
+.repartidor-main,
+.repartidor-container {
+    height: auto !important;
+    overflow: visible !important;
+}

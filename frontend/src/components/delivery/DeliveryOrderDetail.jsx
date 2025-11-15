@@ -11,6 +11,16 @@ function DeliveryOrderDetail({ order }) {
     );
   }
 
+  const productos = Array.isArray(order.productos) ? order.productos : [];
+
+  const estadoMap = {
+    1: "Pendiente",
+    2: "En camino",
+    4: "Entregado",
+  };
+
+  const estadoNombre = estadoMap[order.status_id] || "Pendiente";
+
   const pagoClass =
     order.formaPago === "online" ? "pago-online" : "pago-contraentrega";
 
@@ -20,7 +30,6 @@ function DeliveryOrderDetail({ order }) {
 
       <div className="detalle-content activo">
         <div className="detalle-grid">
-
           <div className="detalle-item">
             <span className="detalle-label">ID del Pedido</span>
             <span className="detalle-value">#{order.id}</span>
@@ -38,8 +47,8 @@ function DeliveryOrderDetail({ order }) {
 
           <div className="detalle-item">
             <span className="detalle-label">Estado</span>
-            <span className={`pedido-estado estado-${order.estado}`}>
-              {order.estado}
+            <span className="pedido-estado estado-pendiente">
+              {estadoNombre}
             </span>
           </div>
 
@@ -55,17 +64,19 @@ function DeliveryOrderDetail({ order }) {
             <span className="detalle-value">{order.direccion}</span>
           </div>
 
-          <div className="detalle-item">
-            <span className="detalle-label">Tiempo estimado</span>
-            <span className="detalle-value">{order.tiempoEstimado}</span>
-          </div>
+          {order.tiempoEstimado && (
+            <div className="detalle-item">
+              <span className="detalle-label">Tiempo estimado</span>
+              <span className="detalle-value">{order.tiempoEstimado}</span>
+            </div>
+          )}
         </div>
 
         {/* Productos */}
         <div className="detalle-item">
           <span className="detalle-label">Productos</span>
           <ul className="productos-lista">
-            {order.productos.map((p, i) => (
+            {productos.map((p, i) => (
               <li key={i} className="producto-item">
                 <span className="producto-nombre">
                   {p.cantidad}x {p.nombre}
@@ -84,7 +95,6 @@ function DeliveryOrderDetail({ order }) {
           <span className="detalle-value">${order.total.toLocaleString()}</span>
         </div>
 
-        {/* Notas */}
         {order.notas && (
           <div className="detalle-item">
             <span className="detalle-label">Notas</span>

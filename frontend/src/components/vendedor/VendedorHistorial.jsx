@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { API_URL } from "../../config";
-import { Table, Spinner, Button, Badge } from "react-bootstrap";
+import { Table, Spinner, Button, Badge, Form } from "react-bootstrap";
 import { useAuth } from "../../contexts/AuthContext";
 import { Eye } from "lucide-react";
 import Swal from "sweetalert2";
@@ -9,34 +9,55 @@ import Swal from "sweetalert2";
 export default function VendedorHistorial() {
   const { user } = useAuth();
   const vendedorId = user?.id;
+
   const [ordenes, setOrdenes] = useState([]);
+  const [filtered, setFiltered] = useState([]);
+  const [search, setSearch] = useState("");
+
+  // Pagination
   const [page, setPage] = useState(1);
-  const [pages, setPages] = useState(1);
-  const [total, setTotal] = useState(0);
+  const limit = 10;
+
   const [loading, setLoading] = useState(false);
 
-  const fetchOrdenes = async (p = 1) => {
+  useEffect(() => {
+    fetchOrdenes();
+  }, [vendedorId]);
+
+  const fetchOrdenes = async () => {
     if (!vendedorId) return;
+
     setLoading(true);
     try {
       const res = await axios.get(`${API_URL}/seller/orders`, {
-        params: { vendedor_id: vendedorId, page: p, limit: 10 },
+        params: { vendedor_id: vendedorId },
       });
+
       setOrdenes(res.data.items || []);
-      setPage(res.data.page || p);
-      setPages(res.data.pages || 1);
-      setTotal(res.data.total || 0);
+      setFiltered(res.data.items || []);
+
     } catch (err) {
       console.error(err);
       setOrdenes([]);
+      setFiltered([]);
     } finally {
       setLoading(false);
     }
   };
 
+  // Search filter
   useEffect(() => {
-    fetchOrdenes(1);
-  }, [vendedorId]);
+    const f = ordenes.filter((o) =>
+      o.id.toString().includes(search) ||
+      o.status.toLowerCase().includes(search.toLowerCase())
+    );
+    setFiltered(f);
+    setPage(1);
+  }, [search]);
+
+  // Pagination logic
+  const totalPages = Math.ceil(filtered.length / limit);
+  const paginated = filtered.slice((page - 1) * limit, page * limit);
 
   const verDetalle = (orden) => {
     const itemsHtml = orden.items
@@ -73,19 +94,30 @@ export default function VendedorHistorial() {
     <div className="content-area">
       <h3 className="text-primary mb-4">Historial de Ventas</h3>
 
+      {/* Search */}
+      <Form.Control
+        type="text"
+        placeholder="Buscar por ID o estado..."
+        className="mb-3"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+
       {loading ? (
         <div className="text-center py-5">
-          <Spinner animation="border" variant="primary" />
+          <Spinner animation="border" />
         </div>
       ) : (
         <>
-          <div className="mb-3 text-muted">Total de ventas: {total}</div>
+          <div className="mb-2 text-muted">
+            Total de ventas: <b>{filtered.length}</b>
+          </div>
 
-          {ordenes.length > 0 ? (
-            <Table bordered hover responsive className="table-vendedor shadow-sm">
+          {filtered.length > 0 ? (
+            <Table bordered hover responsive className="shadow-sm">
               <thead className="table-light">
                 <tr>
-                  <th>ID</th>
+                  <th>#</th>
                   <th>Fecha</th>
                   <th>Total</th>
                   <th>Estado</th>
@@ -93,15 +125,15 @@ export default function VendedorHistorial() {
                 </tr>
               </thead>
               <tbody>
-                {ordenes.map((o) => (
+                {paginated.map((o, index) => (
                   <tr key={o.id}>
-                    <td>{o.id}</td>
+                    <td>{(page - 1) * limit + index + 1}</td>
                     <td>{new Date(o.created_at).toLocaleString()}</td>
                     <td>${o.total.toLocaleString()}</td>
                     <td>
                       <Badge
                         bg={
-                          o.status?.toLowerCase().includes("entregado")
+                          o.status.toLowerCase().includes("entregado")
                             ? "success"
                             : "secondary"
                         }
@@ -115,7 +147,7 @@ export default function VendedorHistorial() {
                         size="sm"
                         onClick={() => verDetalle(o)}
                       >
-                        <Eye size={16} /> Ver
+                        <Eye size={14} /> Ver
                       </Button>
                     </td>
                   </tr>
@@ -123,34 +155,32 @@ export default function VendedorHistorial() {
               </tbody>
             </Table>
           ) : (
-            <div className="text-center text-muted py-5">
+            <div className="text-center text-muted py-4">
               No hay ventas registradas.
             </div>
           )}
 
-          <div className="d-flex justify-content-between align-items-center mt-3">
-            <small className="text-muted">
-              Página {page} de {pages}
-            </small>
-            <div>
-              <Button
-                variant="outline-primary"
-                size="sm"
-                disabled={page <= 1}
-                onClick={() => fetchOrdenes(page - 1)}
-              >
-                Anterior
-              </Button>{" "}
-              <Button
-                variant="outline-primary"
-                size="sm"
-                disabled={page >= pages}
-                onClick={() => fetchOrdenes(page + 1)}
-              >
-                Siguiente
-              </Button>
+          {/* Pagination UI */}
+          {totalPages > 1 && (
+            <div className="d-flex justify-content-center mt-3">
+
+              <div className="pagination">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (n) => (
+                    <Button
+                      key={n}
+                      size="sm"
+                      variant={n === page ? "primary" : "outline-primary"}
+                      className="mx-1"
+                      onClick={() => setPage(n)}
+                    >
+                      {n}
+                    </Button>
+                  )
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </>
       )}
     </div>

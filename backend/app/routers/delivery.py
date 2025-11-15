@@ -100,3 +100,14 @@ def assign_order(order_id: int, delivery_id: int, db: Session = Depends(get_db))
 
 
 
+#-------------------------------------------------
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from app.db import get_db
+from app.services.delivery_service import get_orders_for_delivery
+
+router = APIRouter(prefix="/api/delivery", tags=["Delivery"])
+
+@router.get("/orders")
+def get_delivery_orders(delivery_id: int, db: Session = Depends(get_db)):
+    return get_orders_for_delivery(db, delivery_id)
