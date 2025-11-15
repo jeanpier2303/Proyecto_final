@@ -263,7 +263,7 @@ const Productos = () => {
     },
     {
       id: 13,
-      nombre: "Jugo Energizante Vive 100",
+      nombre: "XJugo Energizante Vive 100",
       precio: 13800,
       precioOriginal: 15500,
       categoria: "energizantes",
@@ -281,7 +281,7 @@ const Productos = () => {
     },
     {
       id: 14,
-      nombre: "Jugo Energgizante Amper",
+      nombre: "XJugo Energgizante Amper",
       precio: 13800,
       precioOriginal: 15500,
       categoria: "energizantes",
@@ -299,7 +299,7 @@ const Productos = () => {
     },
     {
       id: 15,
-      nombre: "Jugo Energizante Gatorade",
+      nombre: "XJugo Energizante Gatorade",
       precio: 13800,
       precioOriginal: 15500,
       categoria: "energizantes",
@@ -317,7 +317,7 @@ const Productos = () => {
     },
     {
       id: 16,
-      nombre: "Big Cola Naranja",
+      nombre: "XBig Cola Naranja",
       precio: 13800,
       precioOriginal: 15500,
       categoria: "clasicos",
@@ -335,7 +335,7 @@ const Productos = () => {
     },
     {
       id: 17,
-      nombre: "Quatro Toronja",
+      nombre: "XQuatro Toronja",
       precio: 13800,
       precioOriginal: 15500,
       categoria: "clasicos",
@@ -353,7 +353,7 @@ const Productos = () => {
     },
     {
       id: 18,
-      nombre: "Big Cola Manazana",
+      nombre: "XBig Cola Manazana",
       precio: 13800,
       precioOriginal: 15500,
       categoria: "clasicos",
@@ -371,7 +371,7 @@ const Productos = () => {
     },
     {
       id: 19,
-      nombre: "Mezcla Tropical Cifrut Punch",
+      nombre: "XMezcla Tropical Cifrut Punch",
       precio: 13800,
       precioOriginal: 15500,
       categoria: "tropicales",
@@ -389,7 +389,7 @@ const Productos = () => {
     },
     {
       id: 20,
-      nombre: "Mezcla Tropical Cifrut Yellow Punch",
+      nombre: "XMezcla Tropical Cifrut Yellow Punch",
       precio: 13800,
       precioOriginal: 15500,
       categoria: "tropicales",
@@ -407,7 +407,7 @@ const Productos = () => {
     },
     {
       id: 21,
-      nombre: "Mezcla Tropical Postobon Colombiana",
+      nombre: "XMezcla Tropical Postobon Colombiana",
       precio: 13800,
       precioOriginal: 15500,
       categoria: "tropicales",
@@ -425,7 +425,7 @@ const Productos = () => {
     },
     {
       id: 22,
-      nombre: "Postobon Manzana",
+      nombre: "XPostobon Manzana",
       precio: 13800,
       precioOriginal: 15500,
       categoria: "verdes",
@@ -443,7 +443,7 @@ const Productos = () => {
     },
     {
       id: 23,
-      nombre: "Postobon Colombiana",
+      nombre: "XPostobon Colombiana",
       precio: 13800,
       precioOriginal: 15500,
       categoria: "verdes",
@@ -461,7 +461,7 @@ const Productos = () => {
     },
     {
       id: 24,
-      nombre: "Big Cola Manzana Grande",
+      nombre: "XBig Cola Manzana Grande",
       precio: 13800,
       precioOriginal: 15500,
       categoria: "verdes",
