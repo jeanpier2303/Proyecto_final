@@ -16,6 +16,17 @@ const ProductosAdmin = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [file, setFile] = useState(null);
+
+
+  const handleFile = (e) => {
+    const selectedFile = e.target.files[0];
+    if (!selectedFile) return;
+
+    setFile(selectedFile);
+    setPreview(URL.createObjectURL(selectedFile));};
+  
 
   const [newProduct, setNewProduct] = useState({
     name: "",
@@ -198,7 +209,7 @@ const ProductosAdmin = () => {
       {/*  Modal para agregar producto */}
       <Modal show={showAddModal} onHide={() => setShowAddModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>🆕 Nuevo Producto</Modal.Title>
+          <Modal.Title> Nuevo Producto</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -208,6 +219,31 @@ const ProductosAdmin = () => {
                 value={newProduct.name}
                 onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
               />
+
+              <Button className="mb3 mt-2">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setFile(e.target.files[0])}
+            />
+              </Button>
+
+              {/* <Button
+                type="button"
+                className="btn btn-outline-primary mt-3"
+                onClick={() => document.getElementById("fileInput").click()}
+              >
+                Seleccionar imagen
+              </Button>
+
+              <input
+                id="fileInput"
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={(e) => setFile(e.target.files[0])}
+              /> */}
+
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Precio</Form.Label>
