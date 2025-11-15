@@ -297,22 +297,18 @@ const LoginPage = () => {
         const from = location.state?.from?.pathname || "/";
         
         // --------------------------- Redirección según el rol
-        if (userData.role_id === 4) {
-          // Administrador
-          navigate("/admin", { replace: true });
-        } else if (userData.role_id === 5) {
-          // Cliente
-          if (from !== "/login" && from !== "/") {
-            navigate(from, { replace: true });
-          } else {
-            navigate("/Inicio", { replace: true });
-          }
-        } else if (userData.role_id === 7) {
-          // 🟣 Vendedor
-          navigate("/vendedor", { replace: true });
-        } else {
-          navigate("/", { replace: true });
-        }
+      if (userData.role_id === 4) {
+        navigate("/admin", { replace: true });
+      } else if (userData.role_id === 5) {
+        navigate("/Inicio", { replace: true });
+      } else if (userData.role_id === 7) {
+        navigate("/vendedor", { replace: true });
+      } else if (userData.role_id === 8) {
+        navigate("/delivery", { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
+
 
       } else {
         Swal.fire({

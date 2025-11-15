@@ -1,6 +1,4 @@
-# ==========================
 #  FRONTEND (React / Vite)
-# ==========================
 node_modules/
 dist/
 dist-ssr/
@@ -30,9 +28,8 @@ Thumbs.db
 .env.test.local
 .env.production.local
 
-# ==========================
 #  BACKEND (FastAPI / Python)
-# ==========================
+
 __pycache__/
 *.py[cod]
 *.pyo
@@ -60,10 +57,7 @@ env.bak/
 .env
 .env.*
 
-# ==========================
-#  General project ignores
-# ==========================
-# OS generated files
+
 .DS_Store
 Thumbs.db
 desktop.ini
@@ -74,9 +68,7 @@ desktop.ini
 *.swp
 *.swo
 
-# ==========================
-# 🧑 IDE / Editor config
-# ==========================
+# IDE / Editor config
 .vscode/*
 !.vscode/extensions.json
 .idea/

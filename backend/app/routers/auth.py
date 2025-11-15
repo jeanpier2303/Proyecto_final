@@ -66,3 +66,15 @@ def register_seller(user: UserRegister):
         return {"success": True, "data": new_user}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al registrar vendedor: {str(e)}")
+
+# Registro de repartidores
+@router.post("/register-delivery")
+def register_delivery(user: UserRegister):
+    """
+    Crea un usuario con rol de Repartidor (role_id = 8)
+    """
+    try:
+        new_user = create_user(user, role_id=8)
+        return {"success": True, "data": new_user}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al registrar repartidor: {str(e)}")

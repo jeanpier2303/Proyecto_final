@@ -12,6 +12,8 @@ from app.routers import invoice_routes
 from app.routers.seller_orders import router as seller_orders_router
 from app.routers.seller_sales import router as seller_sales_router
 from app.routers.seller_history import router as seller_history_router
+from app.routers import delivery
+
 
 
 
@@ -53,6 +55,10 @@ app.include_router(seller_history_router)
 # Rutas de facturación
 #app.include_router(invoice_routes.router)
 app.include_router(invoice_routes.router)
+
+# Rutas de delivery
+app.include_router(delivery.router)
+
 
 
 

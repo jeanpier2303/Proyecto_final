@@ -63,10 +63,10 @@ const HeaderAdmin = ({ title = "Dashboard Principal" }) => {
           <input placeholder="Buscar..." />
         </div>
 
-        <div className="notification-btn">
+        {/* <div className="notification-btn">
           <i className="fas fa-bell"></i>
           <div className="badge">5</div>
-        </div>
+        </div> */}
 
         {/* === Menú de Usuario estilo NavPrivate === */}
         <NavDropdown

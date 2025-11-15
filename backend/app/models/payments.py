@@ -4,7 +4,7 @@ from app.db import Base
 
 class Payment(Base):
     __tablename__ = "payments"
-    __table_args__ = {"extend_existing": True}  # 👈 evita la redefinición
+    __table_args__ = {"extend_existing": True}  #  evita la redefinición
 
     id = Column(Integer, primary_key=True, index=True)
     order_id = Column(Integer, ForeignKey("orders.id"), nullable=False)

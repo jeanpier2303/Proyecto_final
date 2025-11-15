@@ -157,6 +157,7 @@ import CategoryProducts from "./components/CategoryProducts";
 import Perfil from "./pages/Perfil/Perfil";
 import Pedidos from "./pages/Perfil/Pedidos";
 import VendedorPage from "./pages/VendedorPage"; /* ventas fisicas */
+import DeliveryPage from "./pages/Delivery/DeliveryPage"; /* Repartidor */
 import Error404 from "./pages/Error404/Error404";
 
 function App() {
@@ -279,6 +280,16 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
+            <Route
+              path="/delivery/*"
+              element={
+                <ProtectedRoute>
+                  <DeliveryPage />
+                </ProtectedRoute>
+              }
+            />
+
 
             <Route path="*" element={<Error404 />} />
 

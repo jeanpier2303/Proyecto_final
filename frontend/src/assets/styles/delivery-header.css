@@ -1,0 +1,106 @@
+.delivery-header {
+  background: linear-gradient(135deg, #9C27B0, #673AB7);
+  padding: 12px 25px;
+  color: white;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+}
+
+/* LOGO */
+.delivery-logo {
+  height: 40px;
+}
+
+.delivery-title {
+  color: white;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* ALINEAR DERECHA */
+.delivery-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Trigger (avatar + nombre + flecha) */
+.delivery-user-trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.delivery-avatar {
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: white;
+  font-size: 1rem;
+}
+
+.delivery-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Dropdown */
+.delivery-user-dropdown .dropdown-toggle::after {
+  display: none !important;
+  color: white;
+}
+
+.delivery-user-dropdown .dropdown-menu {
+  border-radius: 12px;
+  min-width: 220px;
+  overflow: hidden;
+}
+
+.dropdown-user-header {
+  background: #f7f7f7;
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  font-size: 0.9rem;
+}
+
+.logout-item {
+  color: #d9534f;
+  font-weight: 600;
+}
+
+.logout-item:hover {
+  background: rgba(217, 83, 79, 0.12);
+}
+
+/* --- FORZAR TEXTO BLANCO EN EL HEADER --- */
+.delivery-user-trigger,
+.delivery-user-trigger * {
+  color: #fff !important;
+}
+
+/* Icono flecha blanco */
+.delivery-user-trigger i {
+  color: white !important;
+}
+
+/* Nombre del repartidor blanco */
+.delivery-name {
+  color: white !important;
+}
+
+/* Avatar más brillante */
+.delivery-avatar {
+  background: rgba(255, 255, 255, 0.35) !important;
+  color: white !important;
+}
+
+.delivery-logo {
+  height: 110px !important;
+  width: auto;
+  object-fit: contain;
+}
